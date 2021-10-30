@@ -14,11 +14,7 @@ USER node
 # Stage 2
 FROM registry1.dso.mil/ironbank/opensource/nginx/nginx:1.21.1
 
-# USER 0
-
-COPY --from=builder --chown=appuser:appuser /app/build /var/www
-
-# USER appuser
+COPY --from=builder --chown=nginx:nginx /app/build /var/www
 
 EXPOSE 8080
 
