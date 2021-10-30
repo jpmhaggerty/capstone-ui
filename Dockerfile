@@ -12,7 +12,7 @@ RUN npm run build
 USER node
 
 # Stage 2
-FROM registry1.dso.mil/ironbank/opensource/nginx/nginx:1.21.1
+FROM registry1.dso.mil/ironbank/opensource/nginx/nginx:1.21.3
 
 COPY --from=builder --chown=nginx:nginx /app/build /var/www
 
