@@ -14,8 +14,11 @@ USER node
 # Stage 2
 FROM registry.il2.dso.mil/platform-one/devops/pipeline-templates/base-image/harden-nginx-20:1.20.1
 
-COPY --from=builder --chown=nginx:nginx /app/build /var/www
+USER appuser
+
+COPY --from=builder --chown=appuser:appuser /app/build /var/www
 
 EXPOSE 8080
 
 CMD [ "nginx", "-g", "daemon off;" ]
+
