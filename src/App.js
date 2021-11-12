@@ -1,4 +1,5 @@
 import './App.css';
+import BasicGrid from './components/BasicGrid.js';
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       </header>
       <body>
         {/* box/ container/ grid */}
-
+        <BasicGrid />
       </body>
     </div>
   );
