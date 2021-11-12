@@ -5,6 +5,7 @@ function App() {
   return (
     <div>
       Some text here
+      Another line
     </div>
   );
 }
