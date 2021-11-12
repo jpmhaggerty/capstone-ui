@@ -1,11 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div>
-      Some text here
-      Another line
+      <header>
+        {/* navbar */}
+      </header>
+      <body>
+        {/* box/ container/ grid */}
+
+      </body>
     </div>
   );
 }
