@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import CustomizedDialogs from './CustomizedDialogs.js';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -16,7 +17,8 @@ export default function BasicGrid() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <Item>xs=4</Item>
+          <CustomizedDialogs />
+          {/* <Item>xs=4</Item> */}
         </Grid>
         <Grid item xs={4}>
           <Item>xs=4</Item>

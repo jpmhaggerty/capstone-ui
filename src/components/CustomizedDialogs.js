@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -10,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import RecipeReviewCard from './RecipeReviewCard.js';
+import BasicCard from './BasicCard.js';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -65,7 +64,7 @@ export default function CustomizedDialogs() {
       <Button variant="outlined" onClick={handleClickOpen}>
         Open dialog
       </Button>
-      <RecipeReviewCard onClick={handleClickOpen} />
+      <BasicCard handleClickOpen={handleClickOpen} />
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
