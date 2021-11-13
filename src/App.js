@@ -1,5 +1,6 @@
 import './App.css';
 import BasicGrid from './components/BasicGrid.js';
+import CustomizedDialogs from './components/CutomizedDialogs.js'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <body>
         {/* box/ container/ grid */}
         <BasicGrid />
+        <CustomizedDialogs />
       </body>
     </div>
   );
