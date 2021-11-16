@@ -21,7 +21,7 @@ let ruleSet = [
 let gridFill = [];
 for(let i = 0; i < ruleSet.length; i++) {
   gridFill.push(
-    <Grid item xs={4} key={i}>
+    <Grid item xs={2} key={i}>
     <CustomizedDialogs ruleCriteria={ruleSet[i]}/>
   </Grid>
   )
