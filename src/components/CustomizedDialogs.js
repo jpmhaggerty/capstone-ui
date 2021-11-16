@@ -1,21 +1,22 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
-import BasicCard from './BasicCard.js';
+import * as React from "react";
+import PropTypes from "prop-types";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import BasicCard from "./BasicCard.js";
+import TextField from "@mui/material/TextField";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
-  '& .MuiDialogActions-root': {
+  "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
 }));
@@ -31,7 +32,7 @@ const BootstrapDialogTitle = (props) => {
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -49,8 +50,9 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CustomizedDialogs() {
+export default function CustomizedDialogs({ ruleCriteria }) {
   const [open, setOpen] = React.useState(false);
+  const [name, setName] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,35 +61,69 @@ export default function CustomizedDialogs() {
     setOpen(false);
   };
 
+    let diagContent = ruleCriteria.environData.map((element, index) => (
+      <Typography gutterBottom>
+        <span>{Object.keys(element)[0].toUpperCase()}</span>
+      <TextField
+        required
+        key={index}
+        label="Required"
+        defaultValue="Enter a value"
+        onChange={(event) => {
+          setName(event.target.value);
+        }}
+      />
+        {console.log("Input dialogs: ", name)}
+    </Typography>
+
+    ))
+
+
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open dialog
-      </Button>
-      <BasicCard handleClickOpen={handleClickOpen} />
+      <BasicCard ruleCriteria={ruleCriteria} handleClickOpen={handleClickOpen} />
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
+        <BootstrapDialogTitle
+          id="customized-dialog-title"
+          onClose={handleClose}
+        >
+          {ruleCriteria.name}
         </BootstrapDialogTitle>
         <DialogContent dividers>
+          {diagContent}
+          {/* <Typography gutterBottom>
+            <TextField
+              required
+              id="rule1-criterion1"
+              label="Required"
+              defaultValue="Hello World"
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
+            />
+          </Typography>
+          {console.log("Name: ", name)}
           <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
+            <TextField
+              required
+              id="rule1-criterion2"
+              label="Required"
+              defaultValue="Hello World"
+            />
           </Typography>
           <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
-          </Typography>
+            <TextField
+              required
+              id="rule1-criterion3"
+              label="Required"
+              defaultValue="Hello World"
+            />
+          </Typography> */}
+
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>

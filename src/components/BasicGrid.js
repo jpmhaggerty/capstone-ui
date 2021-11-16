@@ -1,37 +1,47 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import CustomizedDialogs from './CustomizedDialogs.js';
 
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+//generate criteria list from database, run criteria tests and build array of objects
+
+let ruleSet = [
+  {name: 'Lightning'},
+  {name: 'Surface Electric Fields'},
+  {name: 'Cumulus Clouds'},
+  {name: 'Attached Anvil Clouds'},
+  {name: 'Detached Anvil CLouds'},
+  {name: 'Debris Clouds'},
+  {name: 'Disturbed Weather'},
+  {name: 'Thick Layer Clouds'},
+  {name: 'Smoke Plumes'},
+  {name: 'Triboelectrification'}
+]
+
+let gridFill = [];
+for(let i = 0; i < ruleSet.length; i++) {
+  gridFill.push(
+    <Grid item xs={4} key={i}>
+    <CustomizedDialogs ruleCriteria={ruleSet[i]}/>
+  </Grid>
+  )
+}
+
+for (let j = 0; j < ruleSet.length; j++) {
+  ruleSet[j].status = 'Passed';
+  ruleSet[j].dtg = Date();
+  ruleSet[j].primeFactor = "Temperature";
+  ruleSet[j].environData = [{name: "Cloud Temperature"}, {location: "GPS Coords"}, {eFieldStrength: 100}]
+}
+
+
+
 
 export default function BasicGrid() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <CustomizedDialogs />
-          {/* <Item>xs=4</Item> */}
-        </Grid>
-        <Grid item xs={4}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid item xs={4}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid item xs={4}>
-          <Item>xs=4</Item>
-        </Grid>
-        <Grid item xs={8}>
-          <Item>xs=8</Item>
-        </Grid>
+        {gridFill}
       </Grid>
     </Box>
   );
