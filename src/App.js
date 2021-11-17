@@ -1,6 +1,7 @@
 import './App.css';
 import BasicGrid from './components/BasicGrid.js';
 import ButtonAppBar from './components/ButtonAppBar.js';
+import RuleLightening from './components/RuleLightening.js';
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
         <ButtonAppBar />
       </header>
       <body>
-        <BasicGrid />
+        {/* <BasicGrid /> */}
+        <RuleLightening />
       </body>
     </div>
   );
