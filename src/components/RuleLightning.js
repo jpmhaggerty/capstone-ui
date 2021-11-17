@@ -60,16 +60,16 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function RuleLightening() {
+export default function RuleLightning() {
+  //stub data to be obtained from backend
   const infoFromDatabase = {
     ruleName: "lightning",
-    clearToLaunch: false,
     llccFlightPathRadius: 10,
     llccStrikeTimeDelay: 30,
     strikeDistToFlightPath: 0,
     llccMaxCloudDistToFlightPath: 10,
     cloudDistToFlightPath: 0,
-    strikeTime: Date(),
+    strikeTime: Date.now() - 6 * 60 * 60 * 1000,
     // llccMinStrikeDistToClosestFieldMill: 2,
     // strikeDistToClosestFieldMill: 0,
     strikeDistNearFieldMill: false,
@@ -84,36 +84,67 @@ export default function RuleLightening() {
   const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
   const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
+  //returns string with first letter capitalized
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  //open and close user input dialog
+  const handleModal = () => {
+    setOpen(!open);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  //call the date/time picker
   const handleTimeChange = (newTime) => {
-    setRuleSet(ruleSet => ({ ...ruleSet, strikeTime: newTime }));
-    console.log(
-      "Time delta: ",
-      (Date.now() - ruleSet.strikeTime) / (1000 * 60)
-    );
+    setRuleSet((ruleSet) => ({ ...ruleSet, strikeTime: newTime }));
+    // console.log(
+    //   "Time delta: ",
+    //   (Date.now() - ruleSet.strikeTime) / (1000 * 60)
+    // );
     checkForClearance();
   };
 
+
+  const toggleHiddenClass = (className) => {
+    let p = document.getElementsByClassName(className);
+    if (p && clearToLaunch) {
+      for (let i = 0; i < p.length; i++) {
+        p[i].setAttribute("hidden", "true");
+      } } else {
+      for (let i = 0; i < p.length; i++) {
+        p[i].removeAttribute("hidden");
+      }
+    }
+  }
+
+  //rule logic- would this be best served as a separate component?
   const checkForClearance = () => {
     setClearToLaunch(false);
+    //was bolt within range of fp?
+    //yes- , ensure clearance is false, unhide exceptions, set long-term update promise?
+    //no- , ensure clearance is true, hide exceptions
     if (
-      ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius &&
+      ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius ||
       (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
         ruleSet.llccStrikeTimeDelay
     ) {
       setClearToLaunch(true);
+      // toggleHiddenClass('exception');
+      let p = document.getElementsByClassName("exception");
+      if (p) {
+        for (let i = 0; i < p.length; i++) {
+          p[i].setAttribute("hidden", "true");
+        }
+      }
     } else {
+      // toggleHiddenClass('exception');
+      let p = document.getElementsByClassName("exception");
+      if (p) {
+        for (let i = 0; i < p.length; i++) {
+          p[i].removeAttribute("hidden");
+        }
+      }
+
       if (
         ruleSet.cloudDistToFlightPath > ruleSet.llccMaxCloudDistToFlightPath &&
         ruleSet.strikeDistNearFieldMill &&
@@ -122,24 +153,24 @@ export default function RuleLightening() {
         setClearToLaunch(true);
       }
     }
-    console.log("From checkforclearance:", ruleSet)
+    console.log("From checkforclearance:", ruleSet);
   };
 
   React.useEffect(() => {
     checkForClearance();
-  },[ruleSet])
+  }, [ruleSet]);
 
   return (
     <div>
       <Card
-        sx={{ minWidth: 275, bgcolor: ruleSet.clearToLaunch ? "green" : "red" }}
+        sx={{ minWidth: 275, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       >
         <CardContent>
-          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+          <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
             {properCase(ruleSet.ruleName)} Rule
           </Typography>
           <Typography variant="h5" component="div">
-            {ruleSet.clearToLaunch ? "Clear" : "Violation"}
+            {clearToLaunch ? "Clear" : "Violation"}
           </Typography>
           <CardMedia
             component="img"
@@ -148,27 +179,39 @@ export default function RuleLightening() {
             alt=""
           />
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Placeholder
+            Strike distance to flight path: {ruleSet.strikeDistToFlightPath}
           </Typography>
-          <Typography variant="body2">Placeholder</Typography>
+          {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            Time of last strike: {ruleSet.strikeTime ?? false ? ruleSet.strikeTime : "N/A"}
+          </Typography> */}
+          {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            Expected time of clearance: {(ruleSet.strikeTime)} Add 30 mins
+          </Typography> */}
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={() => handleClickOpen()}>
+          <Button size="small" onClick={() => handleModal()}>
             Change Environmental Data
           </Button>
         </CardActions>
       </Card>
       <BootstrapDialog
-        onClose={handleClose}
+        onClose={handleModal}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
-          onClose={handleClose}
+          onClose={handleModal}
         >
           {properCase(ruleSet.ruleName)} Rule
         </BootstrapDialogTitle>
+        <div id="strike-time">
+          <h3>Time of last strike: </h3>
+          <DateTime
+            dateTime={ruleSet.strikeTime}
+            handleTimeChange={handleTimeChange}
+          />
+        </div>
         <div id="dist-to-fp">
           <h3>Distance of lightning to flight path: </h3>
           <TextField
@@ -188,11 +231,7 @@ export default function RuleLightening() {
             }}
           />
         </div>
-        <div id="strike-time">
-          <h3>Time of last strike: </h3>
-          <DateTime dateTime={ruleSet.strikeTime} handleTimeChange={handleTimeChange} />
-        </div>
-        <div id="dist-to-cloud">
+        <div class="exception" id="dist-to-cloud" hidden>
           <h3>
             Is the cloud which produced the lightning within 10 nm of the flight
             path?{" "}
@@ -201,7 +240,7 @@ export default function RuleLightening() {
             id="dist-to-cloud-reply"
             defaultValue="first"
             onChange={(event) => {
-              setRuleSet(ruleSet => ({
+              setRuleSet((ruleSet) => ({
                 ...ruleSet,
                 cloudDistToFlightPath: event.target.value,
               }));
@@ -212,13 +251,13 @@ export default function RuleLightening() {
             <FormControlLabel value="false" label="No" control={<Radio />} />
           </RadioGroup>
         </div>
-        <div id="close-fm">
+        <div class="exception" id="close-fm" hidden>
           <h3>Is a working field mill within 5 nm of the lightning strike? </h3>
           <RadioGroup
             id="close-fm-reply"
             defaultValue="first"
             onChange={(event) => {
-              setRuleSet(ruleSet => ({
+              setRuleSet((ruleSet) => ({
                 ...ruleSet,
                 strikeDistNearFieldMill: event.target.value,
               }));
@@ -229,7 +268,7 @@ export default function RuleLightening() {
             <FormControlLabel value="false" label="No" control={<Radio />} />
           </RadioGroup>
         </div>
-        <div id="low-em-field">
+        <div class="exception" id="low-em-field" hidden>
           <h3>
             Highest absolute value of any field mill within 5 nm of flight path
             or lightning strike within last 15 minutes:{" "}
@@ -238,7 +277,7 @@ export default function RuleLightening() {
             id="low-em-field-reply"
             defaultValue="first"
             onChange={(event) => {
-              setRuleSet(ruleSet => ({
+              setRuleSet((ruleSet) => ({
                 ...ruleSet,
                 fieldStrengthLow: event.target.value,
               }));
@@ -250,7 +289,7 @@ export default function RuleLightening() {
           </RadioGroup>
         </div>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleModal}>
             Save changes
           </Button>
         </DialogActions>
