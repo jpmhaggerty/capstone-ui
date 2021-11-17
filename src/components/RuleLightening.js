@@ -96,7 +96,7 @@ export default function RuleLightening() {
   };
 
   const handleTimeChange = (newTime) => {
-    setRuleSet({ ...ruleSet, strikeTime: newTime });
+    setRuleSet(ruleSet => ({ ...ruleSet, strikeTime: newTime }));
     console.log(
       "Time delta: ",
       (Date.now() - ruleSet.strikeTime) / (1000 * 60)
@@ -111,16 +111,17 @@ export default function RuleLightening() {
       (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
         ruleSet.llccStrikeTimeDelay
     ) {
-      setRuleSet({ ...ruleSet, clearToLaunch: true });
+      setRuleSet(ruleSet => ({ ...ruleSet, clearToLaunch: true }));
     } else {
       if (
         ruleSet.cloudDistToFlightPath > ruleSet.llccMaxCloudDistToFlightPath &&
         ruleSet.strikeDistNearFieldMill &&
         ruleSet.fieldStrengthLow
       ) {
-        setRuleSet({ ...ruleSet, clearToLaunch: true });
+        setRuleSet(ruleSet => ({ ...ruleSet, clearToLaunch: true }));
       }
     }
+    console.log(ruleSet)
   };
 
   return (
@@ -174,10 +175,10 @@ export default function RuleLightening() {
               endAdornment: <InputAdornment position="end">nm</InputAdornment>,
             }}
             onChange={(event) => {
-              setRuleSet({
+              setRuleSet(ruleSet => ({
                 ...ruleSet,
                 strikeDistToFlightPath: event.target.value,
-              });
+              }));
               checkForClearance();
             }}
           />
@@ -195,10 +196,10 @@ export default function RuleLightening() {
             id="dist-to-cloud-reply"
             defaultValue="first"
             onChange={(event) => {
-              setRuleSet({
+              setRuleSet(ruleSet => ({
                 ...ruleSet,
                 cloudDistToFlightPath: event.target.value,
-              });
+              }));
               checkForClearance();
             }}
           >
@@ -212,10 +213,10 @@ export default function RuleLightening() {
             id="close-fm-reply"
             defaultValue="first"
             onChange={(event) => {
-              setRuleSet({
+              setRuleSet(ruleSet => ({
                 ...ruleSet,
                 strikeDistNearFieldMill: event.target.value,
-              });
+              }));
               checkForClearance();
             }}
           >
@@ -232,10 +233,10 @@ export default function RuleLightening() {
             id="low-em-field-reply"
             defaultValue="first"
             onChange={(event) => {
-              setRuleSet({
+              setRuleSet(ruleSet => ({
                 ...ruleSet,
                 fieldStrengthLow: event.target.value,
-              });
+              }));
               checkForClearance();
             }}
           >
