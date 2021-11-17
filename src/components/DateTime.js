@@ -5,8 +5,9 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 
-export default function DateTime({handleTimeChange}) {
-  const [value, setValue] = React.useState(new Date('2021-11-17T21:00:00'));
+export default function DateTime({dateTime, handleTimeChange }) {
+  console.log("DTG: ", dateTime)
+  const [value, setValue] = React.useState(new Date(dateTime));
 
   const handleChange = (newValue) => {
     setValue(newValue);

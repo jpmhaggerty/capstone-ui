@@ -82,6 +82,7 @@ export default function RuleLightening() {
 
   const [open, setOpen] = React.useState(false);
   const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
+  const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
@@ -105,24 +106,28 @@ export default function RuleLightening() {
   };
 
   const checkForClearance = () => {
-    setRuleSet({ ...ruleSet, clearToLaunch: false });
+    setClearToLaunch(false);
     if (
       ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius &&
       (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
         ruleSet.llccStrikeTimeDelay
     ) {
-      setRuleSet(ruleSet => ({ ...ruleSet, clearToLaunch: true }));
+      setClearToLaunch(true);
     } else {
       if (
         ruleSet.cloudDistToFlightPath > ruleSet.llccMaxCloudDistToFlightPath &&
         ruleSet.strikeDistNearFieldMill &&
         ruleSet.fieldStrengthLow
       ) {
-        setRuleSet(ruleSet => ({ ...ruleSet, clearToLaunch: true }));
+        setClearToLaunch(true);
       }
     }
-    console.log(ruleSet)
+    console.log("From checkforclearance:", ruleSet)
   };
+
+  React.useEffect(() => {
+    checkForClearance();
+  },[ruleSet])
 
   return (
     <div>
@@ -170,22 +175,22 @@ export default function RuleLightening() {
             required
             id="dist-to-fp-reply"
             label="Required"
-            defaultValue="10"
+            defaultValue={ruleSet.strikeDistToFlightPath}
             InputProps={{
               endAdornment: <InputAdornment position="end">nm</InputAdornment>,
             }}
             onChange={(event) => {
-              setRuleSet(ruleSet => ({
+              setRuleSet({
                 ...ruleSet,
                 strikeDistToFlightPath: event.target.value,
-              }));
+              });
               checkForClearance();
             }}
           />
         </div>
         <div id="strike-time">
           <h3>Time of last strike: </h3>
-          <DateTime handleTimeChange={handleTimeChange} />
+          <DateTime dateTime={ruleSet.strikeTime} handleTimeChange={handleTimeChange} />
         </div>
         <div id="dist-to-cloud">
           <h3>
