@@ -5,6 +5,7 @@ const baseURL = 'https://localhost:3000';
 
 const Homepage = () => {
   const [LxCriteria, setLxCriteria] = useState(null);
+  const [cumulusC, setLxCriteria] = useState(null);
 
   const apiCall = async (url) => {
     const result = await fetch(baseURL + url);
