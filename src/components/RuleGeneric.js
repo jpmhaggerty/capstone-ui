@@ -4,10 +4,10 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import ModalLightning from "./ModalLightning.js";
+import ModalGeneric from "./ModalGeneric.js";
 import Typography from "@mui/material/Typography";
 
-export default function RuleLightning() {
+export default function RuleGeneric() {
   const infoFromDatabase = {
     ruleName: "lightning",
     llccFlightPathRadius: 10,
@@ -106,7 +106,7 @@ export default function RuleLightning() {
           </Button>
         </CardActions>
       </Card>
-      <ModalLightning
+      <ModalGeneric
         open={open}
         ruleSet={ruleSet}
         handleModal={handleModal}
