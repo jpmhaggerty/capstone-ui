@@ -115,7 +115,7 @@ export default function RuleLightning() {
           </Button>
         </CardActions>
       </Card>
-      <LightningModal upperOpeninfoFromDatabase={infoFromDatabase} handleModal={handleModal} />
+      <LightningModal upperOpen={open} infoFromDatabase={infoFromDatabase} handleModal={handleModal} />
     </div>
   );
 }

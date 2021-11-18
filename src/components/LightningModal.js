@@ -54,9 +54,9 @@ BootstrapDialogTitle.propTypes = {
 };
 
 
-export default function LightningModal({infoFromDatabase, handleModal}) {
+export default function LightningModal({upperOpen, infoFromDatabase, handleModal}) {
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(upperOpen);
   const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
   const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
