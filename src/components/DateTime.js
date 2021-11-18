@@ -6,7 +6,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 
 export default function DateTime({dateTime, handleTimeChange }) {
-  console.log("DTG: ", dateTime)
   const [value, setValue] = React.useState(new Date(dateTime));
 
   const handleChange = (newValue) => {
@@ -18,7 +17,7 @@ export default function DateTime({dateTime, handleTimeChange }) {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
         <DateTimePicker
-          label="Date&Time picker"
+          label="Date & Time"
           value={value}
           onChange={handleChange}
           renderInput={(params) => <TextField {...params} />}
