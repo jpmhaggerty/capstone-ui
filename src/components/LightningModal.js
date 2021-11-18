@@ -53,27 +53,60 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-
-export default function LightningModal({upperOpen, infoFromDatabase, handleModal}) {
-
-  const [open, setOpen] = React.useState(upperOpen);
+export default function LightningModal({
+  open,
+  infoFromDatabase,
+  handleClearToLaunch,
+  handleModal,
+  handleDataSet,
+}) {
   const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
-  const [clearToLaunch, setClearToLaunch] = React.useState(false);
+  // const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
   const handleTimeChange = (newTime) => {
     setRuleSet((ruleSet) => ({ ...ruleSet, strikeTime: newTime }));
   };
 
-  // const handleModal = () => {
-  //   setOpen(!open);
+  // const handleCheck = (event) => {
+  //   handleDataSet(event.target.name, event.target.value);
+  //   setRuleSet({
+  //     ...ruleSet,
+  //     [event.target.name]: event.target.checked,
+  //   });
   // };
 
-  const handleCheck = (event) => {
-    setRuleSet({
-      ...ruleSet,
-      [event.target.name]: event.target.checked,
-    });
+  const showByClass = (name, show) => {
+    let classArray = document.getElementsByClassName(name);
+    if (classArray) {
+      for (let i = 0; i < classArray.length; i++) {
+        classArray[i].removeAttribute("hidden");
+      }
+    }
+    if (classArray && !show) {
+      for (let i = 0; i < classArray.length; i++) {
+        classArray[i].setAttribute("hidden", "true");
+      }
+    }
   };
+
+  React.useEffect(() => {
+    const isRuleClear = () => {
+      showByClass("exception", false);
+      let rule1 = ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius;
+      let rule2 =
+        (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
+        ruleSet.llccStrikeTimeDelay;
+      let except1 =
+        ruleSet.cloudDistToFlightPath &&
+        ruleSet.strikeDistNearFieldMill &&
+        ruleSet.fieldStrengthLow;
+      console.log("Logic: ", rule1, rule2, except1);
+      showByClass("exception", !(rule1 || rule2));
+      return rule1 || rule2 || except1;
+    };
+
+    handleClearToLaunch(isRuleClear);
+  }, [ruleSet]);
 
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
@@ -92,32 +125,31 @@ export default function LightningModal({upperOpen, infoFromDatabase, handleModal
       >
         {properCase(ruleSet.ruleName)} Rule
       </BootstrapDialogTitle>
-      <div id="dist-to-fp">
+      <div>
         <h3>Distance of lightning to flight path: </h3>
         <TextField
           required
-          id="dist-to-fp-reply"
+          name="strikeDistToFlightPath"
           label="Distance (Nautical Miles)"
           defaultValue={ruleSet.strikeDistToFlightPath}
           InputProps={{
             endAdornment: <InputAdornment position="end">nm</InputAdornment>,
           }}
-          onChange={(event) =>
-            setRuleSet({
-              ...ruleSet,
-              strikeDistToFlightPath: event.target.value,
-            })
-          }
+          onChange={(event) => handleDataSet(event.target.name, event.target.value)}
         />
       </div>
-      <div id="strike-time">
+      <div>
         <h3>Time of last close strike: </h3>
         <DateTime
           dateTime={ruleSet.strikeTime}
-          handleTimeChange={handleTimeChange}
+          name="strikeTime"
+          handleTimeChange={(event) => {
+            console.log("DTG:", "strikeTime", event);
+            handleDataSet("strikeTime", Date(event));
+          }}
         />
       </div>
-      <div className="exception" hidden>
+      <div className="exception">
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormLabel component="legend">Rule Exceptions</FormLabel>
           <FormGroup>
@@ -125,9 +157,9 @@ export default function LightningModal({upperOpen, infoFromDatabase, handleModal
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={ruleSet.cloudDistToFlightPath}
-                  onChange={handleCheck}
+                  // checked={ruleSet.cloudDistToFlightPath}
                   name="cloudDistToFlightPath"
+                  onChange={(event) => handleDataSet(event.target.name, event.target.checked)}
                 />
               }
               label="Is the non-transparent part of the cloud that produced the lightning
@@ -137,9 +169,9 @@ export default function LightningModal({upperOpen, infoFromDatabase, handleModal
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={ruleSet.strikeDistNearFieldMill}
-                  onChange={handleCheck}
+                  // checked={ruleSet.strikeDistNearFieldMill}
                   name="strikeDistNearFieldMill"
+                  onChange={(event) => handleDataSet(event.target.name, event.target.checked)}
                 />
               }
               label="Is there at least one working field mill within a horizontal
@@ -149,9 +181,9 @@ export default function LightningModal({upperOpen, infoFromDatabase, handleModal
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={ruleSet.fieldStrengthLow}
-                  onChange={handleCheck}
+                  // checked={ruleSet.fieldStrengthLow}
                   name="fieldStrengthLow"
+                  onChange={(event) => handleDataSet(event.target.name, event.target.checked)}
                 />
               }
               label="Have the absolute values of all electric field measurements within a

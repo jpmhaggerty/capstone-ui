@@ -7,6 +7,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import LightningModal from "./LightningModal.js";
 
+const RuleSetContext = React.createContext({});
+
 export default function RuleLightning() {
   const infoFromDatabase = {
     ruleName: "lightning",
@@ -32,6 +34,15 @@ export default function RuleLightning() {
     setOpen(!open);
   };
 
+  const handleDataSet = (name, value) => {
+    setRuleSet({...ruleSet, [name]: value})
+    console.log("Handle DataSet: ", name, value, ruleSet)
+  }
+
+  const handleClearToLaunch = (launchBoolean) => {
+    setClearToLaunch(launchBoolean);
+  }
+
   const showByClass = (name, show) => {
     let classArray = document.getElementsByClassName(name);
     if (classArray) {
@@ -39,7 +50,6 @@ export default function RuleLightning() {
         classArray[i].removeAttribute("hidden");
       }
     }
-
     if (classArray && !show) {
       for (let i = 0; i < classArray.length; i++) {
         classArray[i].setAttribute("hidden", "true");
@@ -47,23 +57,16 @@ export default function RuleLightning() {
     }
   };
 
-  const handleCheck = (event) => {
-    setRuleSet({
-      ...ruleSet,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  // const { cloudDistToFlightPath, strikeDistNearFieldMill, fieldStrengthLow } =
-  //   ruleSet;
-  // const error =
-  //   [cloudDistToFlightPath, strikeDistNearFieldMill, fieldStrengthLow].filter(
-  //     (v) => v
-  //   ).length !== 2;
+  // const handleCheck = (event) => {
+  //   setRuleSet({
+  //     ...ruleSet,
+  //     [event.target.name]: event.target.checked,
+  //   });
+  // };
 
   React.useEffect(() => {
     const isRuleClear = () => {
-      showByClass("exception", false);
+      // showByClass("exception", false);
       let rule1 = ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius;
       let rule2 =
         (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
@@ -73,12 +76,13 @@ export default function RuleLightning() {
         ruleSet.strikeDistNearFieldMill &&
         ruleSet.fieldStrengthLow;
 
-      showByClass("exception", !(rule1 || rule2));
+      // showByClass("exception", !(rule1 || rule2));
       return rule1 || rule2 || except1;
     };
 
     setClearToLaunch(isRuleClear());
   }, [ruleSet]);
+
 
   return (
     <div>
@@ -115,7 +119,15 @@ export default function RuleLightning() {
           </Button>
         </CardActions>
       </Card>
-      <LightningModal upperOpen={open} infoFromDatabase={infoFromDatabase} handleModal={handleModal} />
+      <RuleSetContext.Provider value={ruleSet}>
+        <LightningModal
+          open={open}
+          infoFromDatabase={ruleSet}
+          handleModal={handleModal}
+          handleDataSet={handleDataSet}
+          handleClearToLaunch={handleClearToLaunch}
+        />
+      </RuleSetContext.Provider>
     </div>
   );
 }
