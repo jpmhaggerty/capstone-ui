@@ -53,6 +53,7 @@ describe('The app\'s homepage', () => {
         global.fetch = mockGet('http://localhost:3000/weatherApp');
     });
     expect(mockGet.mock.calls.length).toBe(2);
+    expect(mockGet).toHaveBeenCalled()
   });
 
 });

@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import ModalGeneric from "./ModalGeneric.js";
 import Typography from "@mui/material/Typography";
 
-export default function RuleGeneric() {
+export default function RuleGeneric({criteria}) {
   const infoFromDatabase = {
     ruleName: "lightning",
     llccFlightPathRadius: 10,
@@ -19,6 +19,7 @@ export default function RuleGeneric() {
     strikeDistNearFieldMill: false,
     fieldStrengthLow: false,
   };
+  console.log(criteria);
 
   const [open, setOpen] = React.useState(false);
   const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
