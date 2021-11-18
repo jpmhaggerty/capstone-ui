@@ -33,7 +33,8 @@ let apiCallData = [
     }
 ];
 
-let mockGet = jest.fn((url) => Promise.resolve(apiCallData))
+let mockGet = jest.fn()
+mockGet.mockReturnValue(apiCallData);
 
 describe('The app\'s homepage', () => {
   test('The title of the app should be on the opening page', () => {
@@ -51,9 +52,7 @@ describe('The app\'s homepage', () => {
         render(<Homepage />)
         global.fetch = mockGet('http://localhost:3000/weatherApp');
     });
-
-    expect(fetch).toHaveBeenCalledTimes(1);
-    const cards = screen.getAllByRole('combobox')
+    expect(mockGet.mock.calls.length).toBe(2);
   });
 
 });
