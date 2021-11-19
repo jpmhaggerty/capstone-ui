@@ -46,20 +46,30 @@ export default function RuleLightning() {
 
   //ruleName = table.name
 
-  //llccFlightPathRadius = table[0].constraint_parameter_integer
+  //derive input style from constraint_parameter (i.e. if ...integer is !null then make it an integer field)
+  //use null field check to steer constraint and user fields
 
+  // to add => table[0].constraint_name
+  //llccFlightPathRadius = table[0].constraint_parameter_integer
   //strikeDistToFlightPath = table[0].user_input_integer
 
+  // to add => table[1].constraint_name
   //llccStrikeTimeDelay = table[1].constraint_parameter_integer
-
   //strikeTime = table[1].user_input_integer
 
+  // to add => table[2].constraint_name
+  // to add => table[2].constraint_parameter_boolean
   //cloudDistToFlightPath = table[2].user_input_boolean
 
+  // to add => table[3].constraint_name
+  // to add => table[3].constraint_parameter_boolean
   //strikeDistNearFieldMill = table[3].user_input_boolean
 
+  // to add => table[4].constraint_name
+  // to add => table[4].constraint_parameter_boolean
   //fieldStrengthLow= table[4].user_input_boolean
 
+//looks like only three fields required per modal input line => good opportunity for mapping
 
 
   const [open, setOpen] = React.useState(false);
@@ -121,11 +131,13 @@ export default function RuleLightning() {
       >
         <CardContent>
           <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
+            {/* get from table name */}
             {properCase(ruleSet.ruleName)} Rule
           </Typography>
           <Typography variant="h5" component="div">
             {clearToLaunch ? "Clear" : "Violation"}
           </Typography>
+          {/* drop all graphics into folder and name according to table... call by reference */}
           <CardMedia
             component="img"
             height="194"
@@ -148,6 +160,7 @@ export default function RuleLightning() {
           </Button>
         </CardActions>
       </Card>
+      {/* if logic scheme is coded into rule object, then modal can be generic */}
       <ModalLightning
         open={open}
         ruleSet={ruleSet}

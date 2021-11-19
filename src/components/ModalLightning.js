@@ -63,23 +63,11 @@ export default function ModalLightning({
     handleDataSet("strikeTime", newTime);
   };
 
-  // const showByClass = (name, show) => {
-  //   let classArray = document.getElementsByClassName(name);
-  //   if (classArray) {
-  //     for (let i = 0; i < classArray.length; i++) {
-  //       classArray[i].removeAttribute("hidden");
-  //     }
-  //   }
-  //   if (classArray && !show) {
-  //     for (let i = 0; i < classArray.length; i++) {
-  //       classArray[i].setAttribute("hidden", "true");
-  //     }
-  //   }
-  // };
-
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
+
+  //pull from dataset the type of input and fields needed => map through table set and post 'hidden' for exceptions
 
   return (
     <BootstrapDialog

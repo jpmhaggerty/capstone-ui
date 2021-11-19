@@ -76,6 +76,7 @@ export default function RuleGeneric({criteria}) {
   return (
     <div>
       <Card
+        data-testid="card"
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       >
         <CardContent>
