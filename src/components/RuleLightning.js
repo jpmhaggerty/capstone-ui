@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import ModalLightning from "./ModalLightning.js";
 import Typography from "@mui/material/Typography";
+import fetch from 'cross-fetch';
 
 export default function RuleLightning() {
   const infoFromDatabase = {
@@ -19,6 +20,15 @@ export default function RuleLightning() {
     strikeDistNearFieldMill: false,
     fieldStrengthLow: false,
   };
+
+  const getAPIData = async () => {
+    console.log("Pre JSON")
+    const response = await fetch('http://localhost:8080/rules/lightning');
+    const result = await response.json();
+    console.log("JSON: ", result);
+  }
+
+  getAPIData();
 
   //set an array of objects for each rule
   // const backend = [
