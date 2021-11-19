@@ -44,8 +44,8 @@ function App() {
             </Grid>
             <Grid item xs={2}>
               <RuleGeneric />
-            </Grid>
-          </Grid> */}
+            </Grid> */}
+          </Grid>
         </Box>
       </body>
     </div>
