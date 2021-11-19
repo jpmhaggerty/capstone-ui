@@ -1,6 +1,6 @@
 describe('The Weather App', () => {
     it('/ should successfully load', () => {
-        cy.visit('/weatherApp')
+        cy.visit();
     });
 
     it('there should be clickable launch commit criteria', () => {
