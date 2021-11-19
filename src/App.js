@@ -18,7 +18,7 @@ function App() {
             <Grid item xs={2}>
               <RuleLightning />
             </Grid>
-            <Grid item xs={2}>
+            {/* <Grid item xs={2}>
               <RuleGeneric />
             </Grid>
             <Grid item xs={2}>
@@ -45,7 +45,7 @@ function App() {
             <Grid item xs={2}>
               <RuleGeneric />
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </body>
     </div>
