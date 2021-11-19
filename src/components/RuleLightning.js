@@ -12,13 +12,55 @@ export default function RuleLightning() {
     ruleName: "lightning",
     llccFlightPathRadius: 10,
     llccStrikeTimeDelay: 30,
-    llccMaxCloudDistToFlightPath: 10,
+    //llccMaxCloudDistToFlightPath: 10,
     strikeTime: Date.now() - 6 * 60 * 60 * 1000,
     strikeDistToFlightPath: 25,
     cloudDistToFlightPath: false,
     strikeDistNearFieldMill: false,
     fieldStrengthLow: false,
   };
+
+  //set an array of objects for each rule
+  // const backend = [
+  //   {
+  //     id: "auto-id for each rule question",
+  //     description: "text for rule question",
+  //     rule_int: "if rule is int based, limiting value-- otherwise null? or undefined?",
+  //     rule_bool:
+  //       "if rule is boolean based, pass or fail value-- otherwise null",
+  //     user_int: "user input for integer value",
+  //     user_bool: "user input for boolean value"
+  //   },
+  // ];
+
+
+  //is the table call returning an object or an array?
+
+  // "id": 1,
+  // "constraint_name": "What is the slant distance to the lightning strike? (nmi)",
+  // "constraint_parameter_integer": 10,
+  // "constraint_parameter_boolean": null,
+  // "user_input_integer": null,
+  // "user_input_boolean": null
+
+
+  //ruleName = table.name
+
+  //llccFlightPathRadius = table[0].constraint_parameter_integer
+
+  //strikeDistToFlightPath = table[0].user_input_integer
+
+  //llccStrikeTimeDelay = table[1].constraint_parameter_integer
+
+  //strikeTime = table[1].user_input_integer
+
+  //cloudDistToFlightPath = table[2].user_input_boolean
+
+  //strikeDistNearFieldMill = table[3].user_input_boolean
+
+  //fieldStrengthLow= table[4].user_input_boolean
+
+
 
   const [open, setOpen] = React.useState(false);
   const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
