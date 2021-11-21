@@ -60,42 +60,96 @@ export default function ModalGeneric({
   handleModal,
   handleDataSet,
 }) {
+  const [proMode, setProMode] = React.useState(false);
+
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
+  };
+
+  const handleProMode = () => {
+    setProMode(!proMode);
   };
 
   let ruleDialog = rule.map((element, index) => {
     if (element.constraint_parameter_boolean !== null) {
       return (
         <div key={index}>
-          <Divider />
-          <FormControlLabel
-            label={element.constraint_name}
-            control={
-              <div>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography sx={{ padding: "0px 0px 0px 20px" }}>
-                    No
-                  </Typography>
-                  <Switch
-                    checked={element.user_input_boolean}
-                    name="user_input_boolean"
-                    color="success"
-                    onChange={(event) =>
-                      handleDataSet(
-                        index,
-                        event.target.name,
-                        event.target.checked
-                      )
-                    }
-                  />
-                  <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                    Yes
-                  </Typography>
-                </Stack>
-              </div>
-            }
-          />
+          {proMode ? (
+            <div>
+              <Divider />
+              <Stack direction="row" spacing={1} alignItems="center">
+                <FormControlLabel
+                  label=""
+                  sx={{ color: "blue", bgcolor: "orange" }}
+                  control={
+                    <div>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                          No
+                        </Typography>
+                        <Switch
+                          checked={element.constraint_input_boolean}
+                          name="constraint_input_boolean"
+                          color="success"
+                          onChange={(event) =>
+                            handleDataSet(
+                              index,
+                              event.target.name,
+                              event.target.checked
+                            )
+                          }
+                        />
+                        <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                          Yes
+                        </Typography>
+                      </Stack>
+                    </div>
+                  }
+                />
+                <TextField
+                  fullWidth
+                  label="Default Rule"
+                  defaultValue={element.constraint_name}
+                  sx={{ color: "blue", bgcolor: "orange" }}
+                  name="constraint_name"
+                  onChange={(event) =>
+                    handleDataSet(index, event.target.name, event.target.value)
+                  }
+                />
+              </Stack>
+            </div>
+          ) : (
+            <div>
+              <Divider />
+              <FormControlLabel
+                label={element.constraint_name}
+                control={
+                  <div>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                        No
+                      </Typography>
+                      <Switch
+                        checked={element.user_input_boolean}
+                        name="user_input_boolean"
+                        color="success"
+                        onChange={(event) =>
+                          handleDataSet(
+                            index,
+                            event.target.name,
+                            event.target.checked
+                          )
+                        }
+                      />
+                      <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                        Yes
+                      </Typography>
+                    </Stack>
+                  </div>
+                }
+              />
+            </div>
+          )}
         </div>
       );
     } else {
@@ -105,21 +159,59 @@ export default function ModalGeneric({
       ) {
         return (
           <div key={index}>
-            <Divider />
-            <h3>{element.constraint_name}</h3>
-            <TextField
-              label="Enter distance"
-              defaultValue={element.user_input_integer}
-              name="user_input_integer"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">nm</InputAdornment>
-                ),
-              }}
-              onChange={(event) =>
-                handleDataSet(index, event.target.name, event.target.value)
-              }
-            />
+            {proMode ? (
+              <div>
+                <Divider />
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <TextField
+                    fullWidth
+                    label="Default Rule"
+                    defaultValue={element.constraint_name}
+                    sx={{ color: "blue", bgcolor: "orange" }}
+                    name="constraint_name"
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        event.target.name,
+                        event.target.value
+                      )
+                    }
+                  />
+                  <TextField
+                    fullWidth
+                    label="Default Value"
+                    defaultValue={element.constraint_parameter_integer}
+                    sx={{ color: "blue", bgcolor: "orange" }}
+                    name="constraint_name"
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        event.target.name,
+                        event.target.value
+                      )
+                    }
+                  />
+                </Stack>
+              </div>
+            ) : (
+              <div>
+                <Divider />
+                <h3>{element.constraint_name}</h3>
+                <TextField
+                  label="Enter distance"
+                  defaultValue={element.user_input_integer}
+                  name="user_input_integer"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">nm</InputAdornment>
+                    ),
+                  }}
+                  onChange={(event) =>
+                    handleDataSet(index, event.target.name, event.target.value)
+                  }
+                />
+              </div>
+            )}
           </div>
         );
       } else if (
@@ -128,20 +220,64 @@ export default function ModalGeneric({
       ) {
         return (
           <div key={index}>
-            <Divider />
-            <h3>{element.constraint_name}</h3>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <Stack spacing={3}>
-                <DateTimePicker
-                  label="Date & Time"
-                  value={Date(element.user_input_integer)}
-                  onChange={(event) =>
-                    handleDataSet(index, "user_input_integer", Date.parse(event))
-                  }
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </Stack>
-            </LocalizationProvider>
+            {proMode ? (
+              <div>
+                <Divider />
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <TextField
+                    fullWidth
+                    label="Default Rule"
+                    defaultValue={element.constraint_name}
+                    sx={{ color: "blue", bgcolor: "orange" }}
+                    name="constraint_name"
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        event.target.name,
+                        event.target.value
+                      )
+                    }
+                  />
+                  <TextField
+                    fullWidth
+                    label="Default Value"
+                    defaultValue={element.constraint_parameter_integer}
+                    sx={{ color: "blue", bgcolor: "orange" }}
+                    name="constraint_name"
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        event.target.name,
+                        event.target.value
+                      )
+                    }
+                  />
+                </Stack>
+              </div>
+            ) : (
+              <div>
+                <Divider />
+                <h3>{element.constraint_name}</h3>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  {console.log("Element: ", element.user_input_integer)}
+                  <Stack spacing={3}>
+                    <DateTimePicker
+                      label="Date & Time"
+                      value={+element.user_input_integer}
+                      openTo="hours"
+                      renderInput={(params) => <TextField {...params} />}
+                      onChange={(event) =>
+                        handleDataSet(
+                          index,
+                          "user_input_integer",
+                          Date.parse(event)
+                        )
+                      }
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              </div>
+            )}
           </div>
         );
       }
@@ -168,27 +304,26 @@ export default function ModalGeneric({
       </Button>
       <Typography align="right">
         <FormControlLabel
-            label={"Edit Rule"}
-            labelPlacement="top"
-            control={
-              <div>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography sx={{ padding: "0px 0px 0px 20px" }}>
-                    No
-                  </Typography>
-                  <Switch
-                    name="pro_mode"
-                    color="warning"
-                    size="small"
-                  />
-                  <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                    Yes
-                  </Typography>
-                </Stack>
-              </div>
-            }
-          />
-          </Typography>
+          label={"Edit Rule"}
+          labelPlacement="top"
+          control={
+            <div>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Typography sx={{ padding: "0px 0px 0px 20px" }}>No</Typography>
+                <Switch
+                  name="pro_mode"
+                  color="warning"
+                  size="small"
+                  onClick={handleProMode}
+                />
+                <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                  Yes
+                </Typography>
+              </Stack>
+            </div>
+          }
+        />
+      </Typography>
     </BootstrapDialog>
   );
 }
