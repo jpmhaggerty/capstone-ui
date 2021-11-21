@@ -8,7 +8,7 @@ import ModalGeneric from "./ModalGeneric.js";
 import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
 
-export default function RuleGeneric({ruleName}) {
+export default function RuleGeneric({ ruleName }) {
   const infoFromDatabase = {
     ruleName: "lightning",
     llccFlightPathRadius: 10,
@@ -103,11 +103,9 @@ export default function RuleGeneric({ruleName}) {
   };
 
   const handleDataSet = (index, name, value) => {
-    console.log("Name and value", index, name, value);
     let expandedRule = [...rule];
     expandedRule[index][name] = value;
     setRule(expandedRule);
-    // setRuleSet({ ...ruleSet, [name]: value });
   };
 
   const properCase = (stringVal) => {
@@ -133,24 +131,29 @@ export default function RuleGeneric({ruleName}) {
     //module should also reveal exception-based sections as appropriate
     //module should make provisions for resetting exceptions if they are not required for eval
     const isRuleClear = () => {
-      showByClass("exception", false);
-      let rule1 = ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius;
-      let rule2 =
-        (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
-        ruleSet.llccStrikeTimeDelay;
-      let except1 =
-        ruleSet.cloudDistToFlightPath &&
-        ruleSet.strikeDistNearFieldMill &&
-        ruleSet.fieldStrengthLow;
+      // showByClass("exception", false);
+      let rule1 =
+        rule[0].user_input_integer > rule[0].constraint_parameter_integer;
 
-      showByClass("exception", !(rule1 || rule2));
+      let rule2 = false;
+      // let rule2 =
+      //   (Date.now() - rule[1].user_input_integer) / (1000 * 60) >
+      //   rule[1].constraint_parameter_integer;
+
+      let except1 = false;
+      // let except1 =
+      // rule[3].user_input_boolean &&
+      // rule[4].user_input_boolean &&
+      // rule[5].user_input_boolean;
+
+      // showByClass("exception", !(rule1 || rule2));
       return rule1 || rule2 || except1;
     };
 
     // putAPIData(ruleName);
 
     setClearToLaunch(isRuleClear());
-  }, [ruleSet]);
+  }, [rule]);
 
   React.useEffect(() => {
     putAPIData(ruleName);
@@ -165,7 +168,6 @@ export default function RuleGeneric({ruleName}) {
       <Card
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       >
-        {console.log("Rule: ", rule)}
         <CardContent>
           <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
             {/* get from table name */}

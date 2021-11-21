@@ -1,19 +1,21 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import Checkbox from "@mui/material/Checkbox";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import DateTimePicker from "@mui/lab/DateTimePicker";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import PropTypes from "prop-types";
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -71,13 +73,28 @@ export default function ModalGeneric({
           <FormControlLabel
             label={element.constraint_name}
             control={
-              <Checkbox
-                checked={element.user_input_boolean}
-                name="user_input_boolean"
-                onChange={(event) =>
-                  handleDataSet(index, event.target.name, event.target.checked)
-                }
-              />
+              <div>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                    No
+                  </Typography>
+                  <Switch
+                    checked={element.user_input_boolean}
+                    name="user_input_boolean"
+                    color="success"
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        event.target.name,
+                        event.target.checked
+                      )
+                    }
+                  />
+                  <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                    Yes
+                  </Typography>
+                </Stack>
+              </div>
             }
           />
         </div>
@@ -119,7 +136,9 @@ export default function ModalGeneric({
                 <DateTimePicker
                   label="Date & Time"
                   value={element.user_input_integer}
-                  onChange={(event) => handleDataSet(index, "user_input_integer", event)}
+                  onChange={(event) =>
+                    handleDataSet(index, "user_input_integer", event)
+                  }
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Stack>
@@ -144,6 +163,33 @@ export default function ModalGeneric({
         {properCase(ruleName)} Rule
       </BootstrapDialogTitle>
       {ruleDialog}
+      <br></br>
+      <Button size="small" onClick={handleModal}>
+        Close
+      </Button>
+      <Typography align="right">
+        <FormControlLabel
+            label={"Edit Rule"}
+            labelPlacement="top"
+            control={
+              <div>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                    No
+                  </Typography>
+                  <Switch
+                    name="pro_mode"
+                    color="warning"
+                    size="small"
+                  />
+                  <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                    Yes
+                  </Typography>
+                </Stack>
+              </div>
+            }
+          />
+          </Typography>
     </BootstrapDialog>
   );
 }
