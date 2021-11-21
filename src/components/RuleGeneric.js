@@ -9,15 +9,13 @@ import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
 
 export default function RuleGeneric({ ruleName }) {
-  const infoFromDatabase = {
-    ruleName: "lightning",
-    llccFlightPathRadius: 10,
-    llccStrikeTimeDelay: 30,
-    strikeTime: Date.now() - 6 * 60 * 60 * 1000,
-    strikeDistToFlightPath: 25,
-    cloudDistToFlightPath: false,
-    strikeDistNearFieldMill: false,
-    fieldStrengthLow: false,
+  const stubData = {
+  "id": 10,
+  "constraint_name": "",
+  "constraint_parameter_integer": 0,
+  "constraint_parameter_boolean": false,
+  "user_input_integer": 0,
+  "user_input_boolean": false
   };
 
   const getAPIData = async (ruleName) => {
@@ -27,7 +25,7 @@ export default function RuleGeneric({ ruleName }) {
   };
 
   const putAPIData = async (ruleName) => {
-    console.log("Pre JSON", JSON.stringify(rule));
+    console.log("Put request content: ", rule)
     for (let i = 0; i < rule.length; i++) {
       const response = await fetch(`http://localhost:8080/rules/${ruleName}`, {
         method: "PUT",
@@ -37,69 +35,18 @@ export default function RuleGeneric({ ruleName }) {
         },
         body: JSON.stringify(rule[i]),
       });
+      //we could use the result for error checking
       const result = await response.json();
-      console.log("Put request:", result);
+      console.log("Put request result:", result);
     }
   };
 
-  //set an array of objects for each rule
-  // const backend = [
-  //   {
-  //     id: "auto-id for each rule question",
-  //     description: "text for rule question",
-  //     rule_int: "if rule is int based, limiting value-- otherwise null? or undefined?",
-  //     rule_bool:
-  //       "if rule is boolean based, pass or fail value-- otherwise null",
-  //     user_int: "user input for integer value",
-  //     user_bool: "user input for boolean value"
-  //   },
-  // ];
-
-  //is the table call returning an object or an array?
-
-  // "id": 1,
-  // "constraint_name": "What is the slant distance to the lightning strike? (nmi)",
-  // "constraint_parameter_integer": 10,
-  // "constraint_parameter_boolean": null,
-  // "user_input_integer": null,
-  // "user_input_boolean": null
-
-  //ruleName = table.name
-
-  //derive input style from constraint_parameter (i.e. if ...integer is !null then make it an integer field)
-  //use null field check to steer constraint and user fields
-
-  // to add => table[0].constraint_name
-  //llccFlightPathRadius = table[0].constraint_parameter_integer
-  //strikeDistToFlightPath = table[0].user_input_integer
-
-  // to add => table[1].constraint_name
-  //llccStrikeTimeDelay = table[1].constraint_parameter_integer
-  //strikeTime = table[1].user_input_integer
-
-  // to add => table[2].constraint_name
-  // to add => table[2].constraint_parameter_boolean
-  //cloudDistToFlightPath = table[2].user_input_boolean
-
-  // to add => table[3].constraint_name
-  // to add => table[3].constraint_parameter_boolean
-  //strikeDistNearFieldMill = table[3].user_input_boolean
-
-  // to add => table[4].constraint_name
-  // to add => table[4].constraint_parameter_boolean
-  //fieldStrengthLow= table[4].user_input_boolean
-
-  //looks like only three fields required per modal input line => good opportunity for mapping
-
-  const [open, setOpen] = React.useState(false);
-  //to be depricated
-  const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
-  // replaces ruleSet
-  const [rule, setRule] = React.useState([infoFromDatabase]);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [rule, setRule] = React.useState([stubData]);
   const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
   const handleModal = () => {
-    setOpen(!open);
+    setOpenModal(!openModal);
   };
 
   const handleDataSet = (index, name, value) => {
@@ -181,7 +128,7 @@ export default function RuleGeneric({ ruleName }) {
             component="img"
             height="194"
             image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
-            alt="ruleSet image link"
+            alt="image link"
           />
           {/* {rule.map((element, index) => (
             <Typography sx={{ mb: 1.5 }} color="text.secondary" key={index}>
@@ -196,10 +143,9 @@ export default function RuleGeneric({ ruleName }) {
         </CardActions>
       </Card>
       <ModalGeneric
-        open={open}
-        rule={rule}
+        openModal={openModal}
         ruleName={ruleName}
-        ruleSet={ruleSet}
+        rule={rule}
         handleModal={handleModal}
         handleDataSet={handleDataSet}
       />

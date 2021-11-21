@@ -55,7 +55,6 @@ export default function ModalLightning({
   open,
   rule,
   ruleName,
-  ruleSet,
   handleModal,
   handleDataSet,
 }) {

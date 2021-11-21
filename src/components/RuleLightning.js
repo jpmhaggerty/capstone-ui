@@ -93,9 +93,6 @@ export default function RuleLightning() {
   //looks like only three fields required per modal input line => good opportunity for mapping
 
   const [open, setOpen] = React.useState(false);
-  //to be depricated
-  const [ruleSet, setRuleSet] = React.useState(infoFromDatabase);
-  // replaces ruleSet
   const [rule, setRule] = React.useState([infoFromDatabase]);
   const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
@@ -108,7 +105,6 @@ export default function RuleLightning() {
     let expandedRule = [...rule];
     expandedRule[index][name] = value;
     setRule(expandedRule);
-    // setRuleSet({ ...ruleSet, [name]: value });
   };
 
   const properCase = (stringVal) => {
@@ -129,29 +125,29 @@ export default function RuleLightning() {
     }
   };
 
-  React.useEffect(() => {
-    //place card logic here.. module should return pass/ fail (i.e. true/ false) boolean
-    //module should also reveal exception-based sections as appropriate
-    //module should make provisions for resetting exceptions if they are not required for eval
-    const isRuleClear = () => {
-      showByClass("exception", false);
-      let rule1 = ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius;
-      let rule2 =
-        (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
-        ruleSet.llccStrikeTimeDelay;
-      let except1 =
-        ruleSet.cloudDistToFlightPath &&
-        ruleSet.strikeDistNearFieldMill &&
-        ruleSet.fieldStrengthLow;
+  // React.useEffect(() => {
+  //   //place card logic here.. module should return pass/ fail (i.e. true/ false) boolean
+  //   //module should also reveal exception-based sections as appropriate
+  //   //module should make provisions for resetting exceptions if they are not required for eval
+  //   const isRuleClear = () => {
+  //     showByClass("exception", false);
+  //     let rule1 = ruleSet.strikeDistToFlightPath > ruleSet.llccFlightPathRadius;
+  //     let rule2 =
+  //       (Date.now() - ruleSet.strikeTime) / (1000 * 60) >
+  //       ruleSet.llccStrikeTimeDelay;
+  //     let except1 =
+  //       ruleSet.cloudDistToFlightPath &&
+  //       ruleSet.strikeDistNearFieldMill &&
+  //       ruleSet.fieldStrengthLow;
 
-      showByClass("exception", !(rule1 || rule2));
-      return rule1 || rule2 || except1;
-    };
+  //     showByClass("exception", !(rule1 || rule2));
+  //     return rule1 || rule2 || except1;
+  //   };
 
-    // putAPIData(ruleName);
+  //   // putAPIData(ruleName);
 
-    setClearToLaunch(isRuleClear());
-  }, [ruleSet]);
+  //   setClearToLaunch(isRuleClear());
+  // }, [ruleSet]);
 
   React.useEffect(() => {
     putAPIData(ruleName);
@@ -180,7 +176,7 @@ export default function RuleLightning() {
             component="img"
             height="194"
             image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
-            alt="ruleSet image link"
+            alt="image link"
           />
           {/* {rule.map((element, index) => (
             <Typography sx={{ mb: 1.5 }} color="text.secondary" key={index}>
@@ -199,7 +195,6 @@ export default function RuleLightning() {
         open={open}
         rule={rule}
         ruleName={ruleName}
-        ruleSet={ruleSet}
         handleModal={handleModal}
         handleDataSet={handleDataSet}
       />

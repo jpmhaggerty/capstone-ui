@@ -54,10 +54,9 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function ModalGeneric({
-  open,
-  rule,
+  openModal,
   ruleName,
-  ruleSet,
+  rule,
   handleModal,
   handleDataSet,
 }) {
@@ -135,9 +134,9 @@ export default function ModalGeneric({
               <Stack spacing={3}>
                 <DateTimePicker
                   label="Date & Time"
-                  value={element.user_input_integer}
+                  value={Date(element.user_input_integer)}
                   onChange={(event) =>
-                    handleDataSet(index, "user_input_integer", event)
+                    handleDataSet(index, "user_input_integer", Date.parse(event))
                   }
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -153,7 +152,7 @@ export default function ModalGeneric({
     <BootstrapDialog
       onClose={handleModal}
       aria-labelledby="customized-dialog-title"
-      open={open}
+      open={openModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
