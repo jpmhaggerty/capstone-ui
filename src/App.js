@@ -4,9 +4,21 @@ import ButtonAppBar from "./components/ButtonAppBar.js";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import RuleGeneric from "./components/RuleGeneric.js";
-import RuleLightning from "./components/RuleLightning.js";
 
 function App() {
+  const ruleList = [
+    "lightning",
+    "sefm",
+    "cumulus",
+    "attached",
+    "detached",
+    "debris",
+    "disturbed",
+    "thick",
+    "smoke",
+    "tribo",
+  ];
+
   return (
     <div>
       <header>
@@ -15,36 +27,11 @@ function App() {
       <body>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
-            <Grid item xs={2}>
-              <RuleLightning />
-            </Grid>
-            {/* <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid>
-            <Grid item xs={2}>
-              <RuleGeneric />
-            </Grid> */}
+            {ruleList.map((element, index) => (
+              <Grid key={index} item xs={2}>
+                <RuleGeneric ruleName={element} />
+              </Grid>
+            ))}
           </Grid>
         </Box>
       </body>

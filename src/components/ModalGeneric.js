@@ -1,21 +1,19 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Checkbox from "@mui/material/Checkbox";
 import CloseIcon from "@mui/icons-material/Close";
-import DateTime from "./DateTime.js";
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import FormLabel from "@mui/material/FormLabel";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PropTypes from "prop-types";
-import TextField from "@mui/material/TextField";
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -55,31 +53,82 @@ BootstrapDialogTitle.propTypes = {
 
 export default function ModalGeneric({
   open,
+  rule,
+  ruleName,
   ruleSet,
   handleModal,
   handleDataSet,
 }) {
-  const handleTimeChange = (newTime) => {
-    handleDataSet("strikeTime", newTime);
-  };
-
-  // const showByClass = (name, show) => {
-  //   let classArray = document.getElementsByClassName(name);
-  //   if (classArray) {
-  //     for (let i = 0; i < classArray.length; i++) {
-  //       classArray[i].removeAttribute("hidden");
-  //     }
-  //   }
-  //   if (classArray && !show) {
-  //     for (let i = 0; i < classArray.length; i++) {
-  //       classArray[i].setAttribute("hidden", "true");
-  //     }
-  //   }
-  // };
-
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
+
+  let ruleDialog = rule.map((element, index) => {
+    if (element.constraint_parameter_boolean !== null) {
+      return (
+        <div key={index}>
+          <Divider />
+          <FormControlLabel
+            label={element.constraint_name}
+            control={
+              <Checkbox
+                checked={element.user_input_boolean}
+                name="user_input_boolean"
+                onChange={(event) =>
+                  handleDataSet(index, event.target.name, event.target.checked)
+                }
+              />
+            }
+          />
+        </div>
+      );
+    } else {
+      if (
+        element.constraint_name &&
+        element.constraint_name.includes("distance")
+      ) {
+        return (
+          <div key={index}>
+            <Divider />
+            <h3>{element.constraint_name}</h3>
+            <TextField
+              label="Enter distance"
+              defaultValue={element.user_input_integer}
+              name="user_input_integer"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">nm</InputAdornment>
+                ),
+              }}
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+          </div>
+        );
+      } else if (
+        element.constraint_name &&
+        element.constraint_name.includes("time")
+      ) {
+        return (
+          <div key={index}>
+            <Divider />
+            <h3>{element.constraint_name}</h3>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Stack spacing={3}>
+                <DateTimePicker
+                  label="Date & Time"
+                  value={element.user_input_integer}
+                  onChange={(event) => handleDataSet(index, "user_input_integer", event)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Stack>
+            </LocalizationProvider>
+          </div>
+        );
+      }
+    }
+  });
 
   return (
     <BootstrapDialog
@@ -92,84 +141,9 @@ export default function ModalGeneric({
         onClose={handleModal}
         sx={{ minWidth: 400 }}
       >
-        {properCase(ruleSet.ruleName)} Rule
+        {properCase(ruleName)} Rule
       </BootstrapDialogTitle>
-      <div>
-        <h3>Distance of lightning to flight path: </h3>
-        <TextField
-          name="strikeDistToFlightPath"
-          label="Distance (Nautical Miles)"
-          defaultValue={ruleSet.strikeDistToFlightPath}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">nm</InputAdornment>,
-          }}
-          onChange={(event) =>
-            handleDataSet(event.target.name, event.target.value)
-          }
-        />
-      </div>
-      <div>
-        <h3>Time of last close strike: </h3>
-        <DateTime
-          dateTime={ruleSet.strikeTime}
-          handleTimeChange={handleTimeChange}
-        />
-      </div>
-      <div className="exception">
-        <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-          <FormLabel component="legend">Rule Exceptions</FormLabel>
-          <FormGroup>
-            <Divider />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  // checked={ruleSet.cloudDistToFlightPath}
-                  name="cloudDistToFlightPath"
-                  onChange={(event) =>
-                    handleDataSet(event.target.name, event.target.checked)
-                  }
-                />
-              }
-              label="Is the non-transparent part of the cloud that produced the lightning
-  at a slant distance of greater than 10 nmi from the flight path?"
-            />
-            <Divider />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  // checked={ruleSet.strikeDistNearFieldMill}
-                  name="strikeDistNearFieldMill"
-                  onChange={(event) =>
-                    handleDataSet(event.target.name, event.target.checked)
-                  }
-                />
-              }
-              label="Is there at least one working field mill within a horizontal
-  distance of less than or equal to 5 nmi from lightning discharge?"
-            />
-            <Divider />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  // checked={ruleSet.fieldStrengthLow}
-                  name="fieldStrengthLow"
-                  onChange={(event) =>
-                    handleDataSet(event.target.name, event.target.checked)
-                  }
-                />
-              }
-              label="Have the absolute values of all electric field measurements within a
-  horizontal distance of less than or equal to 5 nmi from the flight
-  and discharge paths been less than 1000 V/m for at least 15 minutes?"
-            />
-          </FormGroup>
-        </FormControl>
-      </div>
-      <DialogActions>
-        <Button autoFocus onClick={handleModal}>
-          Close
-        </Button>
-      </DialogActions>
+      {ruleDialog}
     </BootstrapDialog>
   );
 }

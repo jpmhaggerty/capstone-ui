@@ -5,12 +5,12 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 
-export default function DateTime({dateTime, handleTimeChange }) {
-  const [value, setValue] = React.useState(new Date(dateTime));
+export default function DateTime({ userTimeValue, handleDataSet }) {
+  const [value, setValue] = React.useState(new Date(Date.now()));
 
   const handleChange = (newValue) => {
     setValue(newValue);
-    handleTimeChange(newValue);
+    handleDataSet(userTimeValue, newValue );
   };
 
   return (
