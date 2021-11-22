@@ -10,12 +10,13 @@ import fetch from "cross-fetch";
 
 export default function RuleGeneric({ ruleName }) {
   const stubData = {
-  "id": 100,
-  "constraint_name": "",
-  "constraint_parameter_integer": 0,
-  "constraint_parameter_boolean": false,
-  "user_input_integer": 0,
-  "user_input_boolean": false
+    id: 100,
+    constraint_name: "",
+    constraint_parameter_integer: 0,
+    constraint_parameter_boolean: false,
+    user_input_integer: 0,
+    user_input_boolean: false,
+    logic_group: "",
   };
 
   const getAPIData = async (ruleName) => {
@@ -25,7 +26,7 @@ export default function RuleGeneric({ ruleName }) {
   };
 
   const putAPIData = async (ruleName) => {
-    console.log("Put request content: ", rule)
+    console.log("Put request content: ", rule);
     for (let i = 0; i < rule.length; i++) {
       const response = await fetch(`http://localhost:8080/rules/${ruleName}`, {
         method: "PUT",
@@ -85,13 +86,39 @@ export default function RuleGeneric({ ruleName }) {
     //module should also reveal exception-based sections as appropriate
     //module should make provisions for resetting exceptions if they are not required for eval
     const isRuleClear = () => {
+      let truthArray = [];
+
+      for (let i = 0; i < rule.length; i++) {
+        if (rule[i].constraint_parameter_boolean !== null) {
+          truthArray[i] =
+            rule[i].user_input_boolean === rule[i].constraint_parameter_boolean;
+        } else {
+          if (
+            rule[i].constraint_name &&
+            rule[i].constraint_name.includes("distance")
+          ) {
+            truthArray[i] =
+              rule[i].user_input_integer > rule[i].constraint_parameter_integer;
+          } else if (
+            rule[i].constraint_name &&
+            rule[i].constraint_name.includes("time")
+          ) {
+            truthArray[i] =
+              (Date.now() - rule[1].user_input_integer) / (1000 * 60) >
+              rule[1].constraint_parameter_integer;
+          }
+        }
+      }
+
+      console.log("Test logic: ", truthArray);
+
       // showByClass("exception", false);
       let rule1 =
         rule[0].user_input_integer > rule[0].constraint_parameter_integer;
 
-        // console.log(rule[0].user_input_integer > rule[0].constraint_parameter_integer, rule[0].user_input_integer, rule[0].constraint_parameter_integer)
+      // console.log(rule[0].user_input_integer > rule[0].constraint_parameter_integer, rule[0].user_input_integer, rule[0].constraint_parameter_integer)
 
-      let rule2=false;
+      let rule2 = false;
 
       // let rule2 =
       //   (Date.now() - rule[1].user_input_integer) / (1000 * 60) >
@@ -125,13 +152,12 @@ export default function RuleGeneric({ ruleName }) {
       >
         <CardContent>
           <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
-            {/* get from table name */}
             {properCase(ruleName)} Rule
           </Typography>
           <Typography variant="h5" component="div">
             {clearToLaunch ? "Clear" : "Violation"}
           </Typography>
-          {/* drop all graphics into folder and name according to table... call by reference */}
+          {/* drop all graphics into folder and name according to table... call by reference.. Yurik is working on this */}
           <CardMedia
             component="img"
             height="194"
@@ -145,7 +171,7 @@ export default function RuleGeneric({ ruleName }) {
           ))} */}
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={()=>handleModal()}>
+          <Button size="small" onClick={() => handleModal()}>
             Change Rule Data
           </Button>
         </CardActions>

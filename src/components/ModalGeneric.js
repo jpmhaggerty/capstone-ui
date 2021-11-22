@@ -62,231 +62,206 @@ export default function ModalGeneric({
   handleProMode,
   handleDataSet,
 }) {
-
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
+
+  let ruleDialogPro = rule.map((element, index) => {
+    if (element.constraint_parameter_boolean !== null) {
+      return (
+        <div key={index}>
+          <Divider />
+          <Stack direction="row" spacing={1} alignItems="center">
+            <TextField
+              label="Constraint Rule"
+              multiline
+              fullWidth
+              defaultValue={element.constraint_name}
+              sx={{
+                color: "blue",
+                bgcolor: "orange",
+                padding: "10px",
+                margin: "10px",
+              }}
+              size="small"
+              name="constraint_name"
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+            <FormControlLabel
+              label=""
+              sx={{ color: "blue", bgcolor: "orange" }}
+              control={
+                <div>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                      No
+                    </Typography>
+                    <Switch
+                      checked={element.constraint_parameter_boolean}
+                      name="constraint_parameter_boolean"
+                      color="success"
+                      onChange={(event) =>
+                        handleDataSet(
+                          index,
+                          event.target.name,
+                          event.target.checked
+                        )
+                      }
+                    />
+                    <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                      Yes
+                    </Typography>
+                  </Stack>
+                </div>
+              }
+            />
+            <TextField
+              label="Logic Group"
+              multiline
+              width="auto"
+              defaultValue={element.logic_group}
+              sx={{ color: "blue", bgcolor: "orange" }}
+              size="small"
+              name="logic_group"
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+          </Stack>
+        </div>
+      );
+    } else {
+      return (
+        <div key={index}>
+          <Divider />
+          <Stack direction="row" spacing={1} alignItems="center">
+            <TextField
+              label="Constraint Rule"
+              multiline
+              fullWidth
+              defaultValue={element.constraint_name}
+              sx={{
+                color: "blue",
+                bgcolor: "orange",
+                padding: "10px",
+                margin: "10px",
+              }}
+              size="small"
+              name="constraint_name"
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+            <TextField
+              label="Constraint Value"
+              multiline
+              width="auto"
+              defaultValue={element.constraint_parameter_integer}
+              sx={{ color: "blue", bgcolor: "orange" }}
+              size="small"
+              name="constraint_parameter_integer"
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+            <TextField
+              label="Logic Group"
+              multiline
+              width="auto"
+              defaultValue={element.logic_group}
+              sx={{ color: "blue", bgcolor: "orange" }}
+              size="small"
+              name="logic_group"
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+          </Stack>
+        </div>
+      );
+    }
+  });
 
   let ruleDialog = rule.map((element, index) => {
     if (element.constraint_parameter_boolean !== null) {
       return (
         <div key={index}>
-          {openProMode ? (
-            <div>
-              <Divider />
-              <Stack direction="row" spacing={1} alignItems="center">
-                <FormControlLabel
-                  label=""
-                  sx={{ color: "blue", bgcolor: "orange" }}
-                  control={
-                    <div>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Typography sx={{ padding: "0px 0px 0px 20px" }}>
-                          No
-                        </Typography>
-                        <Switch
-                          checked={element.constraint_parameter_boolean}
-                          name="constraint_parameter_boolean"
-                          color="success"
-                          onChange={(event) =>
-                            handleDataSet(
-                              index,
-                              event.target.name,
-                              event.target.checked
-                            )
-                          }
-                        />
-                        <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                          Yes
-                        </Typography>
-                      </Stack>
-                    </div>
-                  }
-                />
-                <TextField
-                  label="Default Rule"
-                  multiline
-                  fullWidth
-                  defaultValue={element.constraint_name}
-                  sx={{ color: "blue", bgcolor: "orange" }}
-                  size="small"
-                  name="constraint_name"
-                  onChange={(event) =>
-                    handleDataSet(index, event.target.name, event.target.value)
-                  }
-                />
-              </Stack>
-            </div>
-          ) : (
-            <div>
-              <Divider />
-              <FormControlLabel
-                label={element.constraint_name}
-                control={
-                  <div>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography sx={{ padding: "0px 0px 0px 20px" }}>
-                        No
-                      </Typography>
-                      <Switch
-                        checked={element.user_input_boolean}
-                        name="user_input_boolean"
-                        color="success"
-                        onChange={(event) =>
-                          handleDataSet(
-                            index,
-                            event.target.name,
-                            event.target.checked
-                          )
-                        }
-                      />
-                      <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                        Yes
-                      </Typography>
-                    </Stack>
-                  </div>
-                }
-              />
-            </div>
-          )}
+          <Divider />
+          <FormControlLabel
+            label={element.constraint_name}
+            control={
+              <div>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                    No
+                  </Typography>
+                  <Switch
+                    checked={element.user_input_boolean}
+                    name="user_input_boolean"
+                    color="success"
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        event.target.name,
+                        event.target.checked
+                      )
+                    }
+                  />
+                  <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                    Yes
+                  </Typography>
+                </Stack>
+              </div>
+            }
+          />
         </div>
       );
-    } else {
-      if (
-        element.constraint_name &&
-        element.constraint_name.includes("distance")
-      ) {
-        return (
-          <div key={index}>
-            {openProMode ? (
-              <div>
-                <Divider />
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <TextField
-                    label="Default Rule"
-                    multiline
-                    fullWidth
-                    defaultValue={element.constraint_name}
-                    sx={{ color: "blue", bgcolor: "orange" }}
-                    size="small"
-                    name="constraint_name"
-                    onChange={(event) =>
-                      handleDataSet(
-                        index,
-                        event.target.name,
-                        event.target.value
-                      )
-                    }
-                  />
-                  <TextField
-                    label="Default Value"
-                    multiline
-                    fullWidth
-                    defaultValue={element.constraint_parameter_integer}
-                    sx={{ color: "blue", bgcolor: "orange" }}
-                    size="small"
-                    name="constraint_parameter_integer"
-                    onChange={(event) =>
-                      handleDataSet(
-                        index,
-                        event.target.name,
-                        event.target.value
-                      )
-                    }
-                  />
-                </Stack>
-              </div>
-            ) : (
-              <div>
-                <Divider />
-                <h3>{element.constraint_name}</h3>
-                <TextField
-                  label="Enter distance"
-                  defaultValue={element.user_input_integer}
-                  name="user_input_integer"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">nm</InputAdornment>
-                    ),
-                  }}
-                  onChange={(event) =>
-                    handleDataSet(index, event.target.name, event.target.value)
-                  }
-                />
-              </div>
-            )}
-          </div>
-        );
-      } else if (
-        element.constraint_name &&
-        element.constraint_name.includes("time")
-      ) {
-        return (
-          <div key={index}>
-            {openProMode ? (
-              <div>
-                <Divider />
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <TextField
-                    label="Default Rule"
-                    multiline
-                    fullWidth
-                    defaultValue={element.constraint_name}
-                    sx={{ color: "blue", bgcolor: "orange" }}
-                    size="small"
-                    name="constraint_name"
-                    onChange={(event) =>
-                      handleDataSet(
-                        index,
-                        event.target.name,
-                        event.target.value
-                      )
-                    }
-                  />
-                  <TextField
-                    label="Default Value"
-                    multiline
-                    fullWidth
-                    defaultValue={element.constraint_parameter_integer}
-                    sx={{ color: "blue", bgcolor: "orange" }}
-                    size="small"
-                    name="constraint_parameter_integer"
-                    onChange={(event) =>
-                      handleDataSet(
-                        index,
-                        event.target.name,
-                        event.target.value
-                      )
-                    }
-                  />
-                </Stack>
-              </div>
-            ) : (
-              <div>
-                <Divider />
-                <h3>{element.constraint_name}</h3>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <Stack spacing={3}>
-                    <DateTimePicker
-                      label="Date & Time"
-                      value={+element.user_input_integer}
-                      openTo="hours"
-                      renderInput={(params) => <TextField {...params} />}
-                      onChange={(event) =>
-                        handleDataSet(
-                          index,
-                          "user_input_integer",
-                          Date.parse(event)
-                        )
-                      }
-                    />
-                  </Stack>
-                </LocalizationProvider>
-              </div>
-            )}
-          </div>
-        );
-      }
+    } else if (
+      element.constraint_name &&
+      element.constraint_name.includes("distance")
+    ) {
+      return (
+        <div key={index}>
+          <Divider />
+          <h3>{element.constraint_name}</h3>
+          <TextField
+            label="Enter distance"
+            defaultValue={element.user_input_integer}
+            name="user_input_integer"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">nm</InputAdornment>,
+            }}
+            onChange={(event) =>
+              handleDataSet(index, event.target.name, event.target.value)
+            }
+          />
+        </div>
+      );
+    } else if (
+      element.constraint_name &&
+      element.constraint_name.includes("time")
+    ) {
+      return (
+        <div key={index}>
+          <Divider />
+          <h3>{element.constraint_name}</h3>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Stack spacing={3}>
+              <DateTimePicker
+                label="Date & Time"
+                value={+element.user_input_integer}
+                openTo="hours"
+                renderInput={(params) => <TextField {...params} />}
+                onChange={(event) =>
+                  handleDataSet(index, "user_input_integer", Date.parse(event))
+                }
+              />
+            </Stack>
+          </LocalizationProvider>
+        </div>
+      );
     }
   });
 
@@ -303,10 +278,10 @@ export default function ModalGeneric({
       >
         {properCase(ruleName)} Rule
       </BootstrapDialogTitle>
-      {ruleDialog}
+      {openProMode ? ruleDialogPro : ruleDialog}
       <br></br>
       <Button size="small" onClick={handleModal}>
-        Close
+        Submit
       </Button>
       <Typography align="right">
         <FormControlLabel
@@ -315,7 +290,9 @@ export default function ModalGeneric({
           control={
             <div>
               <Stack direction="row" spacing={1} alignItems="center">
-                <Typography sx={{ padding: "0px 0px 0px 20px" }}>Locked</Typography>
+                <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                  Locked
+                </Typography>
                 <Switch
                   name="pro_mode"
                   color="warning"
