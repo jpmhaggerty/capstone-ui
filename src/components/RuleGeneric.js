@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
 import CreateIcon from '@mui/icons-material/Create';
-import sefcon from "../images/sefcon.png";
+import SEF from "../images/SEF.png";
 
 export default function RuleGeneric({ ruleName }) {
   const stubData = {
@@ -236,7 +236,7 @@ export default function RuleGeneric({ ruleName }) {
       />
 
 
-<Card sx={{ maxWidth: 345 }} sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}>
+<Card sx={{ maxWidth: 100 }} sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}>
   <Box sx={{ display: 'flex', flexDirection: 'row'}}/>
 
       <CardHeader
@@ -279,7 +279,7 @@ export default function RuleGeneric({ ruleName }) {
         maxHeight: "200px"
                         }}
       component="img"
-      image={sefcon}
+      image={SEF}
       alt="alt legend pic"
       />
 
@@ -289,7 +289,7 @@ export default function RuleGeneric({ ruleName }) {
         maxHeight: "200px"
                         }}
       component="img"
-      image={sefcon}
+      image={SEF}
       alt="alt legend pic"
       />
 
@@ -299,7 +299,7 @@ export default function RuleGeneric({ ruleName }) {
         maxHeight: "200px"
                         }}
       component="img"
-      image={sefcon}
+      image={SEF}
       alt="alt legend pic"
       />
 

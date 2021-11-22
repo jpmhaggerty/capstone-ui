@@ -316,7 +316,7 @@ export default function ModalGeneric({
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={handleModal}
-        sx={{ minWidth: 800 }}
+        sx={{ minWidth: 1000 }}
       >
         {properCase(ruleName)} Rule
       </BootstrapDialogTitle>
