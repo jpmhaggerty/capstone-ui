@@ -2,11 +2,18 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
+import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import { grey } from "@mui/material/colors";
 import ModalGeneric from "./ModalGeneric.js";
+import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
+import CreateIcon from '@mui/icons-material/Create';
+import sefcon from "../images/sefcon.png";
 
 export default function RuleGeneric({ ruleName }) {
   const stubData = {
@@ -147,35 +154,77 @@ export default function RuleGeneric({ ruleName }) {
 
   return (
     <div>
-      <Card
+      {/* { <Card
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
-      >
-        <CardContent>
-          <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
-            {properCase(ruleName)} Rule
-          </Typography>
+      > */}
+
+
+          {/* CARD HEADER */}
+
+
+      {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignContent: 'center'}}>
+
+        <Box sx={{ display: 'flex'}}>
+          <Avatar
+            sx={{ bgcolor: "rgba(32,31,31,0.637)", color: grey[50],   }}
+            aria-label="name avater"
+          >
+            SEF
+          </Avatar>
+        </Box>
+
+            <Box>
+                <Typography sx={{ fontSize: 24 }} color="text.primary" gutterBottom>
+                  {properCase(ruleName)} Rule
+                </Typography>
+            </Box>
+
+      </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Typography variant="h5" component="div">
             {clearToLaunch ? "Clear" : "Violation"}
           </Typography>
+        </Box> */}
+
+
+
           {/* drop all graphics into folder and name according to table... call by reference.. Yurik is working on this */}
-          <CardMedia
+
+          {/* MAIN CARD IMAGE */}
+          {/* <CardMedia
             component="img"
             height="194"
             image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
             alt="image link"
           />
+
+        <CardContent> */}
           {/* {rule.map((element, index) => (
             <Typography sx={{ mb: 1.5 }} color="text.secondary" key={index}>
               {element.constraint_name}: {element.user_input_integer}
             </Typography>
           ))} */}
-        </CardContent>
-        <CardActions>
-          <Button size="small" onClick={() => handleModal()}>
-            Change Rule Data
-          </Button>
-        </CardActions>
-      </Card>
+        {/* </CardContent>
+
+        <CardActions disableSpacing> */}
+
+          {/* PENCIL */}
+
+          {/* <Box>
+            <Button size="small" onClick={() => handleModal()}>
+              <IconButton aria-label="fill">
+                <CreateIcon/>
+              </IconButton>
+            </Button>
+          </Box>
+
+        </CardActions> */}
+
+      {/* </Card>  */}
+
+
+
       <ModalGeneric
         openModal={openModal}
         openProMode={openProMode}
@@ -185,6 +234,94 @@ export default function RuleGeneric({ ruleName }) {
         handleProMode={handleProMode}
         handleDataSet={handleDataSet}
       />
+
+
+<Card sx={{ maxWidth: 345 }} sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}>
+  <Box sx={{ display: 'flex', flexDirection: 'row'}}/>
+
+      <CardHeader
+        avatar={
+
+          <Avatar
+            sx={{ bgcolor: "#123548", color: grey[50],   }}
+            aria-label="recipe"
+          >
+            SE
+          </Avatar>
+        }
+
+        title={properCase(ruleName)}
+
+        />
+
+
+
+          {/* LAUNCH RESULT */}
+      <Box sx={{ display: 'flex', justifyContent: 'center'  }}>
+        {clearToLaunch ? "Clear" : "Violation"}
+      </Box>
+
+      {/* BIG IMAGE */}
+      <CardMedia component="img" image= "https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg" alt="SEF IMAGE" />
+
+      {/* CONSIDERATIONS */}
+      <CardContent>
+
+    <Box  sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around'  }}>
+
+    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 'bold'}} >
+      Considerations
+    </Typography>
+
+      <CardMedia
+      style={{
+        width: "auto",
+        maxHeight: "200px"
+                        }}
+      component="img"
+      image={sefcon}
+      alt="alt legend pic"
+      />
+
+      <CardMedia
+      style={{
+        width: "auto",
+        maxHeight: "200px"
+                        }}
+      component="img"
+      image={sefcon}
+      alt="alt legend pic"
+      />
+
+      <CardMedia
+      style={{
+        width: "auto",
+        maxHeight: "200px"
+                        }}
+      component="img"
+      image={sefcon}
+      alt="alt legend pic"
+      />
+
+  </Box>
+
+      </CardContent>
+
+
+      <CardActions disableSpacing>
+      <Button size="small" onClick={() => handleModal()}>
+              <IconButton aria-label="fill">
+                <CreateIcon/>
+              </IconButton>
+            </Button>
+      </CardActions>
+
+    </Card>
+
     </div>
+
+
+
+
   );
 }

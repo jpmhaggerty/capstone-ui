@@ -25,15 +25,34 @@ function App() {
         <ButtonAppBar />
       </header>
       <div role="group">
-        <Box sx={{ flexGrow: 1 }}>
+
+        {/* <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             {ruleList.map((element, index) => (
               <Grid key={index} item xs={2}>
                 <RuleGeneric ruleName={element} />
               </Grid>
             ))}
-          </Grid>
+          </Grid> */}
+
+          <Box
+        sx={{
+          display: 'grid',
+          columnGap: 2,
+          rowGap: 2,
+          gridTemplateColumns: 'repeat(5, 1fr)',
+        }}
+      >
+
+
+      {ruleList.map((element, index) => (
+              <Grid key={index}>
+                <RuleGeneric ruleName={element} />
+              </Grid>
+            ))}
         </Box>
+
+
       </div>
     </React.Fragment>
   );

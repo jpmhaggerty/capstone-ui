@@ -7,11 +7,15 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import MenuItem from "@mui/material/MenuItem";
 import PropTypes from "prop-types";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
@@ -72,6 +76,18 @@ export default function ModalGeneric({
         <div key={index}>
           <Divider />
           <Stack direction="row" spacing={1} alignItems="center">
+            <TextField
+              label="ID"
+              defaultValue={element.id}
+              sx={{
+                color: "blue",
+                bgcolor: "#CCCCCC",
+                width: "100px",
+                padding: "5px",
+                margin: "5px",
+              }}
+              size="small"
+            />
             <TextField
               label="Constraint Rule"
               multiline
@@ -138,6 +154,18 @@ export default function ModalGeneric({
           <Divider />
           <Stack direction="row" spacing={1} alignItems="center">
             <TextField
+              label="ID"
+              defaultValue={element.id}
+              sx={{
+                color: "blue",
+                bgcolor: "#CCCCCC",
+                width: "100px",
+                padding: "5px",
+                margin: "5px",
+              }}
+              size="small"
+            />
+            <TextField
               label="Constraint Rule"
               multiline
               fullWidth
@@ -154,6 +182,20 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
+            <FormControl>
+              <InputLabel>Operator</InputLabel>
+              <Select label="Operator"
+                            sx={{
+                              color: "blue",
+                              bgcolor: "orange",
+                              padding: "5px",
+                              margin: "5px",
+                            }}>
+                <MenuItem value={10}>=</MenuItem>
+                <MenuItem value={20}>&gt;</MenuItem>
+                <MenuItem value={30}>&lt;</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               label="Constraint Value"
               multiline
