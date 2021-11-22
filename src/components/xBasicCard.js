@@ -18,7 +18,7 @@ const bull = (
 
 export default function BasicCard({ ruleCriteria, handleClickOpen }) {
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 400 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {ruleCriteria.name}

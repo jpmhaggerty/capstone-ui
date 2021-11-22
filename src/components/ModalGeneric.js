@@ -55,26 +55,23 @@ BootstrapDialogTitle.propTypes = {
 
 export default function ModalGeneric({
   openModal,
+  openProMode,
   ruleName,
   rule,
   handleModal,
+  handleProMode,
   handleDataSet,
 }) {
-  const [proMode, setProMode] = React.useState(false);
 
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
-  };
-
-  const handleProMode = () => {
-    setProMode(!proMode);
   };
 
   let ruleDialog = rule.map((element, index) => {
     if (element.constraint_parameter_boolean !== null) {
       return (
         <div key={index}>
-          {proMode ? (
+          {openProMode ? (
             <div>
               <Divider />
               <Stack direction="row" spacing={1} alignItems="center">
@@ -88,8 +85,8 @@ export default function ModalGeneric({
                           No
                         </Typography>
                         <Switch
-                          checked={element.constraint_input_boolean}
-                          name="constraint_input_boolean"
+                          checked={element.constraint_parameter_boolean}
+                          name="constraint_parameter_boolean"
                           color="success"
                           onChange={(event) =>
                             handleDataSet(
@@ -107,10 +104,12 @@ export default function ModalGeneric({
                   }
                 />
                 <TextField
-                  fullWidth
                   label="Default Rule"
+                  multiline
+                  fullWidth
                   defaultValue={element.constraint_name}
                   sx={{ color: "blue", bgcolor: "orange" }}
+                  size="small"
                   name="constraint_name"
                   onChange={(event) =>
                     handleDataSet(index, event.target.name, event.target.value)
@@ -159,15 +158,17 @@ export default function ModalGeneric({
       ) {
         return (
           <div key={index}>
-            {proMode ? (
+            {openProMode ? (
               <div>
                 <Divider />
                 <Stack direction="row" spacing={1} alignItems="center">
                   <TextField
-                    fullWidth
                     label="Default Rule"
+                    multiline
+                    fullWidth
                     defaultValue={element.constraint_name}
                     sx={{ color: "blue", bgcolor: "orange" }}
+                    size="small"
                     name="constraint_name"
                     onChange={(event) =>
                       handleDataSet(
@@ -178,11 +179,13 @@ export default function ModalGeneric({
                     }
                   />
                   <TextField
-                    fullWidth
                     label="Default Value"
+                    multiline
+                    fullWidth
                     defaultValue={element.constraint_parameter_integer}
                     sx={{ color: "blue", bgcolor: "orange" }}
-                    name="constraint_name"
+                    size="small"
+                    name="constraint_parameter_integer"
                     onChange={(event) =>
                       handleDataSet(
                         index,
@@ -220,15 +223,17 @@ export default function ModalGeneric({
       ) {
         return (
           <div key={index}>
-            {proMode ? (
+            {openProMode ? (
               <div>
                 <Divider />
                 <Stack direction="row" spacing={1} alignItems="center">
                   <TextField
-                    fullWidth
                     label="Default Rule"
+                    multiline
+                    fullWidth
                     defaultValue={element.constraint_name}
                     sx={{ color: "blue", bgcolor: "orange" }}
+                    size="small"
                     name="constraint_name"
                     onChange={(event) =>
                       handleDataSet(
@@ -239,11 +244,13 @@ export default function ModalGeneric({
                     }
                   />
                   <TextField
-                    fullWidth
                     label="Default Value"
+                    multiline
+                    fullWidth
                     defaultValue={element.constraint_parameter_integer}
                     sx={{ color: "blue", bgcolor: "orange" }}
-                    name="constraint_name"
+                    size="small"
+                    name="constraint_parameter_integer"
                     onChange={(event) =>
                       handleDataSet(
                         index,
@@ -259,7 +266,6 @@ export default function ModalGeneric({
                 <Divider />
                 <h3>{element.constraint_name}</h3>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  {console.log("Element: ", element.user_input_integer)}
                   <Stack spacing={3}>
                     <DateTimePicker
                       label="Date & Time"
@@ -293,7 +299,7 @@ export default function ModalGeneric({
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={handleModal}
-        sx={{ minWidth: 400 }}
+        sx={{ minWidth: 800 }}
       >
         {properCase(ruleName)} Rule
       </BootstrapDialogTitle>
@@ -309,7 +315,7 @@ export default function ModalGeneric({
           control={
             <div>
               <Stack direction="row" spacing={1} alignItems="center">
-                <Typography sx={{ padding: "0px 0px 0px 20px" }}>No</Typography>
+                <Typography sx={{ padding: "0px 0px 0px 20px" }}>Locked</Typography>
                 <Switch
                   name="pro_mode"
                   color="warning"
@@ -317,7 +323,7 @@ export default function ModalGeneric({
                   onClick={handleProMode}
                 />
                 <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                  Yes
+                  Edit
                 </Typography>
               </Stack>
             </div>

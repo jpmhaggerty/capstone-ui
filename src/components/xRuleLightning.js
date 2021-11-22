@@ -28,7 +28,6 @@ export default function RuleLightning() {
   };
 
   const putAPIData = async (ruleName) => {
-    console.log("Pre JSON", JSON.stringify(rule));
     for (let i = 0; i < rule.length; i++) {
       const response = await fetch(`http://localhost:8080/rules/${ruleName}`, {
         method: "PUT",
@@ -39,7 +38,6 @@ export default function RuleLightning() {
         body: JSON.stringify(rule[i]),
       });
       const result = await response.json();
-      console.log("Put request:", result);
     }
   };
 
@@ -101,7 +99,6 @@ export default function RuleLightning() {
   };
 
   const handleDataSet = (index, name, value) => {
-    console.log("Name and value", index, name, value);
     let expandedRule = [...rule];
     expandedRule[index][name] = value;
     setRule(expandedRule);
@@ -162,7 +159,6 @@ export default function RuleLightning() {
       <Card
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       >
-        {console.log("Rule: ", rule)}
         <CardContent>
           <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
             {/* get from table name */}

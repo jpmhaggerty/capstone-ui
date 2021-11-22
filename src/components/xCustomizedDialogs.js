@@ -73,7 +73,6 @@ export default function CustomizedDialogs({ ruleCriteria }) {
           setName(event.target.value);
         }}
       />
-        {console.log("Input dialogs: ", name)}
     </Typography>
 
     ))
@@ -106,7 +105,6 @@ export default function CustomizedDialogs({ ruleCriteria }) {
               }}
             />
           </Typography>
-          {console.log("Name: ", name)}
           <Typography gutterBottom>
             <TextField
               required

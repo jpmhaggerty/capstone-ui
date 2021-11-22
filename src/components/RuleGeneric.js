@@ -10,7 +10,7 @@ import fetch from "cross-fetch";
 
 export default function RuleGeneric({ ruleName }) {
   const stubData = {
-  "id": 10,
+  "id": 100,
   "constraint_name": "",
   "constraint_parameter_integer": 0,
   "constraint_parameter_boolean": false,
@@ -42,14 +42,21 @@ export default function RuleGeneric({ ruleName }) {
   };
 
   const [openModal, setOpenModal] = React.useState(false);
+  const [openProMode, setOpenProMode] = React.useState(false);
   const [rule, setRule] = React.useState([stubData]);
   const [clearToLaunch, setClearToLaunch] = React.useState(false);
 
   const handleModal = () => {
     setOpenModal(!openModal);
+    !openModal ? setOpenProMode(false) : console.log("Modal called");
+  };
+
+  const handleProMode = () => {
+    setOpenProMode(!openProMode);
   };
 
   const handleDataSet = (index, name, value) => {
+    console.log("Change data: ", index, name, value);
     let expandedRule = [...rule];
     expandedRule[index][name] = value;
     setRule(expandedRule);
@@ -82,28 +89,29 @@ export default function RuleGeneric({ ruleName }) {
       let rule1 =
         rule[0].user_input_integer > rule[0].constraint_parameter_integer;
 
-      let rule2 = false;
+        // console.log(rule[0].user_input_integer > rule[0].constraint_parameter_integer, rule[0].user_input_integer, rule[0].constraint_parameter_integer)
+
+      let rule2=false;
+
       // let rule2 =
       //   (Date.now() - rule[1].user_input_integer) / (1000 * 60) >
       //   rule[1].constraint_parameter_integer;
 
       let except1 = false;
+
       // let except1 =
       // rule[3].user_input_boolean &&
       // rule[4].user_input_boolean &&
       // rule[5].user_input_boolean;
 
       // showByClass("exception", !(rule1 || rule2));
+      // console.log("Truth table: ", rule1,  rule2 , except1)
       return rule1 || rule2 || except1;
     };
 
-    // putAPIData(ruleName);
+    putAPIData(ruleName);
 
     setClearToLaunch(isRuleClear());
-  }, [rule]);
-
-  React.useEffect(() => {
-    putAPIData(ruleName);
   }, [rule]);
 
   React.useEffect(() => {
@@ -137,16 +145,18 @@ export default function RuleGeneric({ ruleName }) {
           ))} */}
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={() => handleModal()}>
+          <Button size="small" onClick={()=>handleModal()}>
             Change Rule Data
           </Button>
         </CardActions>
       </Card>
       <ModalGeneric
         openModal={openModal}
+        openProMode={openProMode}
         ruleName={ruleName}
         rule={rule}
         handleModal={handleModal}
+        handleProMode={handleProMode}
         handleDataSet={handleDataSet}
       />
     </div>

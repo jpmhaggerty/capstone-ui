@@ -20,11 +20,11 @@ function App() {
   ];
 
   return (
-    <div>
+    <React.Fragment>
       <header>
         <ButtonAppBar />
       </header>
-      <body>
+      <div role="group">
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             {ruleList.map((element, index) => (
@@ -34,8 +34,8 @@ function App() {
             ))}
           </Grid>
         </Box>
-      </body>
-    </div>
+      </div>
+    </React.Fragment>
   );
 }
 
