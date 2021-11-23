@@ -14,10 +14,13 @@ import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
 import CreateIcon from "@mui/icons-material/Create";
 import SEF from "../images/SEF.png";
-import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import Skeleton from "@mui/material/Skeleton";
 
-export default function RuleGeneric({ ruleName }) {
+export default function RuleGeneric({ ruleName }, props) {
+  const { loading = false } = props;
+
   const stubData = {
     id: 100,
     constraint_name: "",
@@ -206,11 +209,10 @@ export default function RuleGeneric({ ruleName }) {
             : truthDepth;
       }
 
-      // console.log("TD", truthDepth);
-
       let truthGroups = [];
       let uniqueTruthGroups = [];
       let runningTruth = [];
+      let reducedTruthSummary = [];
 
       for (let k = truthDepth - 1; k >= 0; k--) {
         truthGroups = truthArray.map((element) => {
@@ -219,101 +221,72 @@ export default function RuleGeneric({ ruleName }) {
         uniqueTruthGroups = [
           ...new Set(truthGroups.filter((element) => element !== null)),
         ];
-        for (let l = 0; l < uniqueTruthGroups.length; l++) {
-          let reducedTruth = truthArray.filter(
-            (element) =>
-              element[1][k] === uniqueTruthGroups[l] &&
-              element[1].length <= k + 1
-          );
 
-          let reducedTruthSample = truthArray.map((element) => {
-            let position = element[1].indexOf(uniqueTruthGroups[l]);
-            console.log("Position: ", position);
-            //is the current uniqueTruthGroup in the logic_group?
-            element[1].includes(uniqueTruthGroups[l])
-              ? //does a parent exist- is the length of element[1] greater than 1?
-                element[1].length > 1
-                ? console.log(
-                    "find index of unique and back-up one element",
-                    element[1],
-                    uniqueTruthGroups[l],
-                    element[1].indexOf(uniqueTruthGroups[l])
-                  )
-                : console.log(
-                    "this is a root element",
-                    element[1],
-                    uniqueTruthGroups[l],
-                    element[1].indexOf(uniqueTruthGroups[l])
-                  )
-              :
-                console.log("Not found");
-            return;
+
+        for (let l = 0; l < uniqueTruthGroups.length; l++) {
+          let reducedTruth = truthArray.map((element) => {
+              let position = element[1].indexOf(uniqueTruthGroups[l]);
+              if (position > 0 && position === element[1].length - 1) {
+                return [
+                  element[0],
+                  element[1][position],
+                  element[1][position - 1],
+                ];
+              } else if (position === 0 && position === element[1].length - 1) {
+                return [element[0], element[1][position], null];
+              } else {
+                return [];
+              }
+            })
+            .filter((e) => e.length);
+
+          //children nodes will be combined under a new array which needs to be called within reducer
+          reducedTruthSummary = reducedTruth.reduce((prev, curr) => {
+            let existsInRT = runningTruth.filter((element) =>
+              element.indexOf(curr[1])
+            );
+            // console.log(
+            //   "Is there an existing record in runningTruth?",
+            //   existsInRT[0] ? existsInRT[0][0] : "No",
+            //   curr[1]
+            // );
+            return existsInRT[0]
+              ? [
+                  existsInRT[0][1].slice(-1) === "&"
+                    ? existsInRT[0][0] && curr[1].slice(-1) === "&"
+                      ? prev[0] && curr[0]
+                      : prev[0] || curr[0]
+                    : existsInRT[0][0] || curr[1].slice(-1) === "&"
+                    ? prev[0] && curr[0]
+                    : prev[0] || curr[0],
+                  curr[2],
+                  null,
+                ]
+              : [
+                  curr[1].slice(-1) === "&"
+                    ? prev[0] && curr[0]
+                    : prev[0] || curr[0],
+                  curr[2],
+                  null,
+                ];
           });
 
-          // .filter((element) =>
-          //     element[1][k] === uniqueTruthGroups[l] &&
-          //     element[1].length <= k + 1
-          //     );
-          //     runningTruth.push([false, uniqueTruthGroups[l], "parent"])
-
-          //runningTruth is an array which holds the collective truthiness of each grouping (i.e. A, B, C, etc.)
-          //runningTruth should be evaluated for peers and link to parent
-          //...might take the form [child group truth, child group id, parent group id]
-          //can I build this array from the uniqueTruthGroups array? yes!
+          runningTruth.push(reducedTruthSummary);
 
           console.log(
             "Reduced truth group array: ",
             reducedTruth,
-            uniqueTruthGroups,
-            runningTruth
+            reducedTruthSummary,
+            runningTruth,
           );
 
-          //still need to reduce each group to a single boolean and store value (tuple?)
-          //for inclusion at the parent level
-          //reduction process should look for the stored value array
-
-          //reducedTruth is an array which groups the t/f per peerage level
-
-          // for (let m = 0; m < reducedTruth.length; m++) {
-          //   for (let n = 0; n < runningTruth.length; n++) {
-          //     if (!runningTruth[n].includes(reducedTruth[m])) {
-          //       runningTruth.push([
-          //         reducedTruth[m][0],
-          //         reducedTruth[m][1].pop(),
-          //       ]);
-          //       // console.log("Branched to no runningTruth", runningTruth, [reducedTruth[m][0], reducedTruth[m][1].pop()])
-          //     } else {
-          //       //evaluate and update with existing element, then
-          //       runningTruth[n] = [
-          //         reducedTruth[m][0],
-          //         reducedTruth[m][1].pop(),
-          //       ];
-          //       // console.log("Branched to existing runningTruth", runningTruth, [
-          //       //   reducedTruth[m][0],
-          //       //   reducedTruth[m][1].pop(),
-          //       // ]);
-          //     }
-          //   }
-          // }
-
-          //code below is not yet complete
-          // for (let m = 0; m < reducedTruth.length; m++) {
-          //     if (runningTruth === null) {
-          //       runningTruth = reducedTruth[m];
-          //     } else if (uniqueTruthGroups[l].slice(1) === "|") {
-          //       runningTruth = reducedTruth[m] || runningTruth;
-          //     } else if (uniqueTruthGroups[l].slice(1) === "&") {
-          //       runningTruth = reducedTruth[m] && runningTruth;
-          //     }
-          //   }
+          console.log("Final truth: ", runningTruth.reduce((prev, curr) => prev[0] || curr[0])[0])
         }
       }
 
       // showByClass("exception", false);
       let rule1 =
         rule[0].user_input_integer > rule[0].constraint_parameter_integer;
-
-      // console.log(rule[0].user_input_integer > rule[0].constraint_parameter_integer, rule[0].user_input_integer, rule[0].constraint_parameter_integer)
 
       let rule2 = false;
 
@@ -322,11 +295,6 @@ export default function RuleGeneric({ ruleName }) {
       //   rule[1].constraint_parameter_integer;
 
       let except1 = false;
-
-      // let except1 =
-      // rule[3].user_input_boolean &&
-      // rule[4].user_input_boolean &&
-      // rule[5].user_input_boolean;
 
       // showByClass("exception", !(rule1 || rule2));
       // console.log("Truth table: ", rule1,  rule2 , except1)
@@ -346,8 +314,6 @@ export default function RuleGeneric({ ruleName }) {
   //   width: '100%',
   // });
 
-
-
   return (
     <div>
       <ModalGeneric
@@ -363,34 +329,60 @@ export default function RuleGeneric({ ruleName }) {
       <Card
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       >
-        <Box sx={{ display: "flex", flexDirection: "row" }} />
+        {/* Rule Avatar */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ margin: 1 }}>
+            {loading ? (
+              <Skeleton variant="circular">
+                <Avatar />
+              </Skeleton>
+            ) : (
+              <Avatar
+                sx={{ bgcolor: "#123548", color: grey[50] }}
+                aria-label="avatar"
+              >
+                {" "}
+                SE{" "}
+              </Avatar>
+            )}
+          </Box>
 
-        <CardHeader
-          avatar={
-
-            <Avatar
-              sx={{ bgcolor: "#123548", color: grey[50] }}
-              aria-label="recipe"
-            >
-              SE
-            </Avatar>
-          }
-
-
-          title={properCase(ruleName)}
-        />
+          {/* Rule Name */}
+          <Box sx={{ width: "100%" }}>
+            {loading ? (
+              <Skeleton width="100%">
+                <Typography>.</Typography>
+              </Skeleton>
+            ) : (
+              <Typography> {properCase(ruleName)} </Typography>
+            )}
+          </Box>
+        </Box>
 
         {/* LAUNCH RESULT */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {clearToLaunch ? "Clear" : "Violation"}
+          {loading ? (
+            <Skeleton width="100%">
+              <Typography>.</Typography>
+            </Skeleton>
+          ) : (
+            <Typography> {clearToLaunch ? "Clear" : "Violation"} </Typography>
+          )}
         </Box>
 
         {/* BIG IMAGE */}
-        <CardMedia
-          component="img"
-          image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
-          alt="SEF IMAGE"
-        />
+
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%">
+            <div style={{ paddingTop: "57%" }} />
+          </Skeleton>
+        ) : (
+          <CardMedia
+            component="img"
+            src="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
+            alt=""
+          />
+        )}
 
         {/* CONSIDERATIONS */}
         <CardContent>
