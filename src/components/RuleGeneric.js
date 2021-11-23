@@ -14,6 +14,8 @@ import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
 import CreateIcon from "@mui/icons-material/Create";
 import SEF from "../images/SEF.png";
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 
 export default function RuleGeneric({ ruleName }) {
   const stubData = {
@@ -208,7 +210,7 @@ export default function RuleGeneric({ ruleName }) {
 
       let truthGroups = [];
       let uniqueTruthGroups = [];
-      let runningTruth = null;
+      let runningTruth = [];
 
       for (let k = truthDepth - 1; k >= 0; k--) {
         truthGroups = truthArray.map((element) => {
@@ -224,27 +226,88 @@ export default function RuleGeneric({ ruleName }) {
               element[1].length <= k + 1
           );
 
-          console.log("Reduced truth group array: ", reducedTruth)
-          //code below is not yet complete
+          let reducedTruthSample = truthArray.map((element) => {
+            let position = element[1].indexOf(uniqueTruthGroups[l]);
+            console.log("Position: ", position);
+            //is the current uniqueTruthGroup in the logic_group?
+            element[1].includes(uniqueTruthGroups[l])
+              ? //does a parent exist- is the length of element[1] greater than 1?
+                element[1].length > 1
+                ? console.log(
+                    "find index of unique and back-up one element",
+                    element[1],
+                    uniqueTruthGroups[l],
+                    element[1].indexOf(uniqueTruthGroups[l])
+                  )
+                : console.log(
+                    "this is a root element",
+                    element[1],
+                    uniqueTruthGroups[l],
+                    element[1].indexOf(uniqueTruthGroups[l])
+                  )
+              :
+                console.log("Not found");
+            return;
+          });
+
+          // .filter((element) =>
+          //     element[1][k] === uniqueTruthGroups[l] &&
+          //     element[1].length <= k + 1
+          //     );
+          //     runningTruth.push([false, uniqueTruthGroups[l], "parent"])
+
+          //runningTruth is an array which holds the collective truthiness of each grouping (i.e. A, B, C, etc.)
+          //runningTruth should be evaluated for peers and link to parent
+          //...might take the form [child group truth, child group id, parent group id]
+          //can I build this array from the uniqueTruthGroups array? yes!
+
+          console.log(
+            "Reduced truth group array: ",
+            reducedTruth,
+            uniqueTruthGroups,
+            runningTruth
+          );
 
           //still need to reduce each group to a single boolean and store value (tuple?)
           //for inclusion at the parent level
           //reduction process should look for the stored value array
-          for (let m = 0; m < reducedTruth.length; m++) {
-              if (runningTruth === null) {
-                runningTruth = reducedTruth[m];
-              } else if (uniqueTruthGroups[l].slice(1) === "|") {
-                runningTruth = reducedTruth[m] || runningTruth;
-              } else if (uniqueTruthGroups[l].slice(1) === "&") {
-                runningTruth = reducedTruth[m] && runningTruth;
-              }
-            }
-          }
+
+          //reducedTruth is an array which groups the t/f per peerage level
+
+          // for (let m = 0; m < reducedTruth.length; m++) {
+          //   for (let n = 0; n < runningTruth.length; n++) {
+          //     if (!runningTruth[n].includes(reducedTruth[m])) {
+          //       runningTruth.push([
+          //         reducedTruth[m][0],
+          //         reducedTruth[m][1].pop(),
+          //       ]);
+          //       // console.log("Branched to no runningTruth", runningTruth, [reducedTruth[m][0], reducedTruth[m][1].pop()])
+          //     } else {
+          //       //evaluate and update with existing element, then
+          //       runningTruth[n] = [
+          //         reducedTruth[m][0],
+          //         reducedTruth[m][1].pop(),
+          //       ];
+          //       // console.log("Branched to existing runningTruth", runningTruth, [
+          //       //   reducedTruth[m][0],
+          //       //   reducedTruth[m][1].pop(),
+          //       // ]);
+          //     }
+          //   }
+          // }
+
+          //code below is not yet complete
+          // for (let m = 0; m < reducedTruth.length; m++) {
+          //     if (runningTruth === null) {
+          //       runningTruth = reducedTruth[m];
+          //     } else if (uniqueTruthGroups[l].slice(1) === "|") {
+          //       runningTruth = reducedTruth[m] || runningTruth;
+          //     } else if (uniqueTruthGroups[l].slice(1) === "&") {
+          //       runningTruth = reducedTruth[m] && runningTruth;
+          //     }
+          //   }
+        }
       }
-
-
-
-
 
       // showByClass("exception", false);
       let rule1 =
@@ -279,73 +342,14 @@ export default function RuleGeneric({ ruleName }) {
     getAPIData(ruleName);
   }, []);
 
+  // const Image = styled('img')({
+  //   width: '100%',
+  // });
+
+
+
   return (
     <div>
-      {/* { <Card
-        sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
-      > */}
-
-      {/* CARD HEADER */}
-
-      {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignContent: 'center'}}>
-
-        <Box sx={{ display: 'flex'}}>
-          <Avatar
-            sx={{ bgcolor: "rgba(32,31,31,0.637)", color: grey[50],   }}
-            aria-label="name avater"
-          >
-            SEF
-          </Avatar>
-        </Box>
-
-            <Box>
-                <Typography sx={{ fontSize: 24 }} color="text.primary" gutterBottom>
-                  {properCase(ruleName)} Rule
-                </Typography>
-            </Box>
-
-      </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Typography variant="h5" component="div">
-            {clearToLaunch ? "Clear" : "Violation"}
-          </Typography>
-        </Box> */}
-
-      {/* drop all graphics into folder and name according to table... call by reference.. Yurik is working on this */}
-
-      {/* MAIN CARD IMAGE */}
-      {/* <CardMedia
-            component="img"
-            height="194"
-            image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
-            alt="image link"
-          />
-
-        <CardContent> */}
-      {/* {rule.map((element, index) => (
-            <Typography sx={{ mb: 1.5 }} color="text.secondary" key={index}>
-              {element.constraint_name}: {element.user_input_integer}
-            </Typography>
-          ))} */}
-      {/* </CardContent>
-
-        <CardActions disableSpacing> */}
-
-      {/* PENCIL */}
-
-      {/* <Box>
-            <Button size="small" onClick={() => handleModal()}>
-              <IconButton aria-label="fill">
-                <CreateIcon/>
-              </IconButton>
-            </Button>
-          </Box>
-
-        </CardActions> */}
-
-      {/* </Card>  */}
-
       <ModalGeneric
         openModal={openModal}
         openProMode={openProMode}
@@ -357,13 +361,13 @@ export default function RuleGeneric({ ruleName }) {
       />
 
       <Card
-        sx={{ maxWidth: 100 }}
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       >
         <Box sx={{ display: "flex", flexDirection: "row" }} />
 
         <CardHeader
           avatar={
+
             <Avatar
               sx={{ bgcolor: "#123548", color: grey[50] }}
               aria-label="recipe"
@@ -371,6 +375,8 @@ export default function RuleGeneric({ ruleName }) {
               SE
             </Avatar>
           }
+
+
           title={properCase(ruleName)}
         />
 

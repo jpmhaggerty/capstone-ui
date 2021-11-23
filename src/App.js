@@ -1,59 +1,39 @@
 import * as React from "react";
-import "./App.css";
 import ButtonAppBar from "./components/ButtonAppBar.js";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import RuleGeneric from "./components/RuleGeneric.js";
+import CssBaseline from '@mui/material/CssBaseline';
+import Home from "./components/Home.js";
+import { ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import { useState} from 'react';
+import { Routes, Route} from "react-router-dom";
+
 
 function App() {
-  const ruleList = [
-    "lightning",
-    "sefm",
-    "cumulus",
-    "attached",
-    "detached",
-    "debris",
-    "disturbed",
-    "thick",
-    "smoke",
-    "tribo",
-  ];
+
+  const [darkMode, setDarkMode] = useState();
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? 'dark' : 'light',
+    }
+  })
 
   return (
     <React.Fragment>
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+
       <header>
-        <ButtonAppBar />
+        <ButtonAppBar darkMode={darkMode} setDarkMode={setDarkMode}/>
       </header>
-      <div role="group">
 
-        {/* <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            {ruleList.map((element, index) => (
-              <Grid key={index} item xs={2}>
-                <RuleGeneric ruleName={element} />
-              </Grid>
-            ))}
-          </Grid> */}
+      <Routes>
+        <Route path="/" element={<Home/>} darkMode={darkMode} setDarkMode={setDarkMode}/>
+      </Routes>
 
-          <Box
-        sx={{
-          display: 'grid',
-          columnGap: 2,
-          rowGap: 2,
-          gridTemplateColumns: 'repeat(5, 1fr)',
-        }}
-      >
+      </CssBaseline>
+    </ThemeProvider>
 
-
-      {ruleList.map((element, index) => (
-              <Grid key={index}>
-                <RuleGeneric ruleName={element} />
-              </Grid>
-            ))}
-        </Box>
-
-
-      </div>
     </React.Fragment>
   );
 }

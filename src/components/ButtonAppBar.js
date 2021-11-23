@@ -7,11 +7,21 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
+import TempDrawer from "../components/TempDrawer.js";
+import { useState, useContext } from 'react';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-export default function ButtonAppBar() {
+
+export default function ButtonAppBar({ darkMode, setDarkMode }) {
+
+  const handleDarkMode = () => {
+    setDarkMode(!darkMode);
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" position="static" sx={{ backgroundColor: '#123548'}} >
+      <AppBar position="static" sx={{ backgroundColor: '#123548', overflow: 'hidden' }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -20,7 +30,7 @@ export default function ButtonAppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <TempDrawer />
           </IconButton>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -31,6 +41,12 @@ export default function ButtonAppBar() {
 
           </Typography>
 
+          <IconButton sx={{ ml: 1 }}
+            onClick={handleDarkMode}
+            color="inherit"
+            >
+            {darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
+          </IconButton>
 
           <Link to="/" style={{ textDecoration: 'none', color: 'white'}}>
             <Button variant="contained" sx={{ backgroundColor: '#123540'}} > Home</Button>
