@@ -9,10 +9,10 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import { grey } from "@mui/material/colors";
 import ModalGeneric from "./ModalGeneric.js";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
-import CreateIcon from '@mui/icons-material/Create';
+import CreateIcon from "@mui/icons-material/Create";
 import SEF from "../images/SEF.png";
 
 export default function RuleGeneric({ ruleName }) {
@@ -20,6 +20,7 @@ export default function RuleGeneric({ ruleName }) {
     id: 100,
     constraint_name: "",
     constraint_parameter_integer: 0,
+    constraint_operator: "",
     constraint_parameter_boolean: false,
     user_input_integer: 0,
     user_input_boolean: false,
@@ -33,7 +34,7 @@ export default function RuleGeneric({ ruleName }) {
   };
 
   const putAPIData = async (ruleName) => {
-    console.log("Put request content: ", rule);
+    // console.log("Put request content: ", rule);
     for (let i = 0; i < rule.length; i++) {
       const response = await fetch(`http://localhost:8080/rules/${ruleName}`, {
         method: "PUT",
@@ -45,7 +46,7 @@ export default function RuleGeneric({ ruleName }) {
       });
       //we could use the result for error checking
       const result = await response.json();
-      console.log("Put request result:", result);
+      // console.log("Put request result:", result);
     }
   };
 
@@ -97,27 +98,153 @@ export default function RuleGeneric({ ruleName }) {
 
       for (let i = 0; i < rule.length; i++) {
         if (rule[i].constraint_parameter_boolean !== null) {
-          truthArray[i] =
-            rule[i].user_input_boolean === rule[i].constraint_parameter_boolean;
+          truthArray[i] = [
+            rule[i].user_input_boolean === rule[i].constraint_parameter_boolean,
+            rule[i].logic_group.split(","),
+          ];
         } else {
           if (
             rule[i].constraint_name &&
             rule[i].constraint_name.includes("distance")
           ) {
-            truthArray[i] =
-              rule[i].user_input_integer > rule[i].constraint_parameter_integer;
+            switch (rule[i].constraint_operator) {
+              case "eq":
+                truthArray[i] = [
+                  +rule[i].user_input_integer ===
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "gt":
+                truthArray[i] = [
+                  +rule[i].user_input_integer >
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "ge":
+                truthArray[i] = [
+                  +rule[i].user_input_integer >=
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "lt":
+                truthArray[i] = [
+                  +rule[i].user_input_integer <
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "le":
+                truthArray[i] = [
+                  +rule[i].user_input_integer <=
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              default:
+                console.log("Might have a problem with distnace operator");
+            }
           } else if (
             rule[i].constraint_name &&
             rule[i].constraint_name.includes("time")
           ) {
-            truthArray[i] =
-              (Date.now() - rule[1].user_input_integer) / (1000 * 60) >
-              rule[1].constraint_parameter_integer;
+            switch (rule[i].constraint_operator) {
+              case "eq":
+                truthArray[i] = [
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) ===
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "gt":
+                truthArray[i] = [
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) >
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "ge":
+                truthArray[i] = [
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) >=
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "lt":
+                truthArray[i] = [
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) <
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              case "le":
+                truthArray[i] = [
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) <=
+                    +rule[i].constraint_parameter_integer,
+                  rule[i].logic_group.split(","),
+                ];
+                break;
+              default:
+                console.log("Might have a problem with time operator");
+            }
           }
         }
       }
 
-      console.log("Test logic: ", truthArray);
+      // console.log("Test logic: ", truthArray);
+
+      let truthDepth = 0;
+
+      for (let j = 0; j < truthArray.length; j++) {
+        truthDepth =
+          truthArray[j] && truthArray[j][1].length > truthDepth
+            ? truthArray[j][1].length
+            : truthDepth;
+      }
+
+      // console.log("TD", truthDepth);
+
+      let truthGroups = [];
+      let uniqueTruthGroups = [];
+      let runningTruth = null;
+
+      for (let k = truthDepth - 1; k >= 0; k--) {
+        truthGroups = truthArray.map((element) => {
+          return element[1][k] ? element[1][k] : null;
+        });
+        uniqueTruthGroups = [
+          ...new Set(truthGroups.filter((element) => element !== null)),
+        ];
+        for (let l = 0; l < uniqueTruthGroups.length; l++) {
+          let reducedTruth = truthArray.filter(
+            (element) =>
+              element[1][k] === uniqueTruthGroups[l] &&
+              element[1].length <= k + 1
+          );
+
+          console.log("Reduced truth group array: ", reducedTruth)
+          //code below is not yet complete
+
+          //still need to reduce each group to a single boolean and store value (tuple?)
+          //for inclusion at the parent level
+          //reduction process should look for the stored value array
+          for (let m = 0; m < reducedTruth.length; m++) {
+              if (runningTruth === null) {
+                runningTruth = reducedTruth[m];
+              } else if (uniqueTruthGroups[l].slice(1) === "|") {
+                runningTruth = reducedTruth[m] || runningTruth;
+              } else if (uniqueTruthGroups[l].slice(1) === "&") {
+                runningTruth = reducedTruth[m] && runningTruth;
+              }
+            }
+          }
+      }
+
+
+
+
 
       // showByClass("exception", false);
       let rule1 =
@@ -158,9 +285,7 @@ export default function RuleGeneric({ ruleName }) {
         sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
       > */}
 
-
-          {/* CARD HEADER */}
-
+      {/* CARD HEADER */}
 
       {/* <Box sx={{ display: 'flex', flexDirection: 'row', alignContent: 'center'}}>
 
@@ -187,12 +312,10 @@ export default function RuleGeneric({ ruleName }) {
           </Typography>
         </Box> */}
 
+      {/* drop all graphics into folder and name according to table... call by reference.. Yurik is working on this */}
 
-
-          {/* drop all graphics into folder and name according to table... call by reference.. Yurik is working on this */}
-
-          {/* MAIN CARD IMAGE */}
-          {/* <CardMedia
+      {/* MAIN CARD IMAGE */}
+      {/* <CardMedia
             component="img"
             height="194"
             image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
@@ -200,18 +323,18 @@ export default function RuleGeneric({ ruleName }) {
           />
 
         <CardContent> */}
-          {/* {rule.map((element, index) => (
+      {/* {rule.map((element, index) => (
             <Typography sx={{ mb: 1.5 }} color="text.secondary" key={index}>
               {element.constraint_name}: {element.user_input_integer}
             </Typography>
           ))} */}
-        {/* </CardContent>
+      {/* </CardContent>
 
         <CardActions disableSpacing> */}
 
-          {/* PENCIL */}
+      {/* PENCIL */}
 
-          {/* <Box>
+      {/* <Box>
             <Button size="small" onClick={() => handleModal()}>
               <IconButton aria-label="fill">
                 <CreateIcon/>
@@ -223,8 +346,6 @@ export default function RuleGeneric({ ruleName }) {
 
       {/* </Card>  */}
 
-
-
       <ModalGeneric
         openModal={openModal}
         openProMode={openProMode}
@@ -235,93 +356,93 @@ export default function RuleGeneric({ ruleName }) {
         handleDataSet={handleDataSet}
       />
 
+      <Card
+        sx={{ maxWidth: 100 }}
+        sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}
+      >
+        <Box sx={{ display: "flex", flexDirection: "row" }} />
 
-<Card sx={{ maxWidth: 100 }} sx={{ minWidth: 100, bgcolor: clearToLaunch ? "#D7FFD7" : "#FFD7D7" }}>
-  <Box sx={{ display: 'flex', flexDirection: 'row'}}/>
-
-      <CardHeader
-        avatar={
-
-          <Avatar
-            sx={{ bgcolor: "#123548", color: grey[50],   }}
-            aria-label="recipe"
-          >
-            SE
-          </Avatar>
-        }
-
-        title={properCase(ruleName)}
-
+        <CardHeader
+          avatar={
+            <Avatar
+              sx={{ bgcolor: "#123548", color: grey[50] }}
+              aria-label="recipe"
+            >
+              SE
+            </Avatar>
+          }
+          title={properCase(ruleName)}
         />
 
+        {/* LAUNCH RESULT */}
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {clearToLaunch ? "Clear" : "Violation"}
+        </Box>
 
+        {/* BIG IMAGE */}
+        <CardMedia
+          component="img"
+          image="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
+          alt="SEF IMAGE"
+        />
 
-          {/* LAUNCH RESULT */}
-      <Box sx={{ display: 'flex', justifyContent: 'center'  }}>
-        {clearToLaunch ? "Clear" : "Violation"}
-      </Box>
+        {/* CONSIDERATIONS */}
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
+          >
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontWeight: "bold" }}
+            >
+              Considerations
+            </Typography>
 
-      {/* BIG IMAGE */}
-      <CardMedia component="img" image= "https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg" alt="SEF IMAGE" />
+            <CardMedia
+              style={{
+                width: "auto",
+                maxHeight: "200px",
+              }}
+              component="img"
+              image={SEF}
+              alt="alt legend pic"
+            />
 
-      {/* CONSIDERATIONS */}
-      <CardContent>
+            <CardMedia
+              style={{
+                width: "auto",
+                maxHeight: "200px",
+              }}
+              component="img"
+              image={SEF}
+              alt="alt legend pic"
+            />
 
-    <Box  sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around'  }}>
+            <CardMedia
+              style={{
+                width: "auto",
+                maxHeight: "200px",
+              }}
+              component="img"
+              image={SEF}
+              alt="alt legend pic"
+            />
+          </Box>
+        </CardContent>
 
-    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 'bold'}} >
-      Considerations
-    </Typography>
-
-      <CardMedia
-      style={{
-        width: "auto",
-        maxHeight: "200px"
-                        }}
-      component="img"
-      image={SEF}
-      alt="alt legend pic"
-      />
-
-      <CardMedia
-      style={{
-        width: "auto",
-        maxHeight: "200px"
-                        }}
-      component="img"
-      image={SEF}
-      alt="alt legend pic"
-      />
-
-      <CardMedia
-      style={{
-        width: "auto",
-        maxHeight: "200px"
-                        }}
-      component="img"
-      image={SEF}
-      alt="alt legend pic"
-      />
-
-  </Box>
-
-      </CardContent>
-
-
-      <CardActions disableSpacing>
-      <Button size="small" onClick={() => handleModal()}>
-              <IconButton aria-label="fill">
-                <CreateIcon/>
-              </IconButton>
-            </Button>
-      </CardActions>
-
-    </Card>
-
+        <CardActions disableSpacing>
+          <Button size="small" onClick={() => handleModal()}>
+            <IconButton aria-label="fill">
+              <CreateIcon />
+            </IconButton>
+          </Button>
+        </CardActions>
+      </Card>
     </div>
-
-
-
-
   );
 }

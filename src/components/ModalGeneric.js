@@ -7,15 +7,12 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
-import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import MenuItem from "@mui/material/MenuItem";
 import PropTypes from "prop-types";
-import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
@@ -66,6 +63,7 @@ export default function ModalGeneric({
   handleProMode,
   handleDataSet,
 }) {
+
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
@@ -107,6 +105,7 @@ export default function ModalGeneric({
             />
             <FormControlLabel
               label=""
+              labelPlacement="top"
               sx={{ color: "blue", bgcolor: "orange" }}
               control={
                 <div>
@@ -182,26 +181,29 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
-            <FormControl>
-              <InputLabel>Operator</InputLabel>
-              <Select label="Operator"
-                            sx={{
-                              color: "blue",
-                              bgcolor: "orange",
-                              padding: "5px",
-                              margin: "5px",
-                            }}>
-                <MenuItem value={10}>=</MenuItem>
-                <MenuItem value={20}>&gt;</MenuItem>
-                <MenuItem value={30}>&lt;</MenuItem>
-              </Select>
-            </FormControl>
+
             <TextField
-              label="Constraint Value"
+              label="Operator"
+              defaultValue={element.constraint_operator}
+              select
+              sx={{ color: "blue", bgcolor: "orange", width: "125px" }}
+              size="small"
+              name="constraint_operator"
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            >
+              <MenuItem value={"eq"}>=</MenuItem>
+              <MenuItem value={"gt"}>&gt;</MenuItem>
+              <MenuItem value={"ge"}>&gt;=</MenuItem>
+              <MenuItem value={"lt"}>&lt;</MenuItem>
+              <MenuItem value={"le"}>&lt;=</MenuItem>
+            </TextField>
+            <TextField
+              label="Value"
               multiline
-              width="auto"
               defaultValue={element.constraint_parameter_integer}
-              sx={{ color: "blue", bgcolor: "orange" }}
+              sx={{ color: "blue", bgcolor: "orange", width: "125px" }}
               size="small"
               name="constraint_parameter_integer"
               onChange={(event) =>
@@ -312,6 +314,8 @@ export default function ModalGeneric({
       onClose={handleModal}
       aria-labelledby="customized-dialog-title"
       open={openModal}
+      fullWidth="true"
+      maxWidth="xl"
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
