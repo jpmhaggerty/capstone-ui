@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 function Home() {
 
   //develop a function to determiner if the page is loading or not
-  let loading = true;
+  let loading = false;
 
 
   const ruleList = [
