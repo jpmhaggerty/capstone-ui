@@ -104,46 +104,47 @@ export default function RuleGeneric({ ruleName }, props) {
       let runningTruth = [];
 
       for (let i = 0; i < rule.length; i++) {
+        //collects up all the group listings in anticipation of creating a set later
         truthGroups.push(...rule[i].logic_group.split(","));
+
         if (rule[i].constraint_parameter_boolean !== null) {
           truthArray[i] = [
             rule[i].user_input_boolean === rule[i].constraint_parameter_boolean,
-            rule[i].logic_group.split(",").slice(-1)[0],
-            rule[i].logic_group.split(",").length > 1
-              ? rule[i].logic_group.split(",").slice(-2)[0]
+            [...rule][i].logic_group.split(",").slice(-1)[0],
+            [...rule][i].logic_group.split(",").length > 1
+              ? [...rule][i].logic_group.split(",").slice(-2)[0]
               : null,
           ];
+          console.log("Weirdness: ", truthArray[i], i, truthArray)
         } else {
           if (
-            // rule[i].constraint_name &&
-            rule[i].constraint_name?.includes("distance")
+            rule[i].constraint_name &&
+            rule[i].constraint_name.includes("distance")
           ) {
             truthArray[i] = [
               Function(
-                "return " +
-                  rule[i].user_input_integer +
-                  rule[i].constraint_operator +
-                  rule[i].constraint_parameter_integer
+                `return ${rule[i].user_input_integer} ${rule[i].constraint_operator} ${rule[i].constraint_parameter_integer}`
               )(),
-              rule[i].logic_group.split(",").slice(-1)[0],
-              rule[i].logic_group.split(",").length > 1
-                ? rule[i].logic_group.split(",").slice(-2)[0]
+              [...rule][i].logic_group.split(",").slice(-1)[0],
+              [...rule][i].logic_group.split(",").length > 1
+                ? [...rule][i].logic_group.split(",").slice(-2)[0]
                 : null,
             ];
           } else if (
-            // rule[i].constraint_name &&
-            rule[i].constraint_name?.includes("time")
+            rule[i].constraint_name &&
+            rule[i].constraint_name.includes("time")
           ) {
             truthArray[i] = [
               Function(
-                "return " +
-                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) +
-                  rule[i].constraint_operator +
+                `return ${
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60)
+                } ${rule[i].constraint_operator} ${
                   rule[i].constraint_parameter_integer
+                }`
               )(),
-              rule[i].logic_group.split(",").slice(-1)[0],
-              rule[i].logic_group.split(",").length > 1
-                ? rule[i].logic_group.split(",").slice(-2)[0]
+              [...rule][i].logic_group.split(",").slice(-1)[0],
+              [...rule][i].logic_group.split(",").length > 1
+                ? [...rule][i].logic_group.split(",").slice(-2)[0]
                 : null,
             ];
           }
@@ -154,177 +155,34 @@ export default function RuleGeneric({ ruleName }, props) {
         ...new Set(truthGroups.filter((element) => element !== null)),
       ];
 
+      console.log("Truth array before: ", truthArray)
+
       for (let j = 0; j < truthGroups.length; j++) {
-        runningTruth.push(truthArray
-          .filter((element) => element[1] === truthGroups[j])
-          .reduce((prev, curr) => {
-            if (truthGroups[j].slice(-1) === "&") {
+        let filteredTruth = truthArray.filter((element) => element[1] === truthGroups[j]);
+        let localTruth = filteredTruth.reduce((prev, curr) => {
+            if ([...truthGroups][j].slice(-1) === "&") {
               return [curr[0] && prev[0]].concat(...curr.splice(1));
             } else {
               return [curr[0] || prev[0]].concat(...curr.splice(1));
             }
-          }))
+          });
+
+          console.log("Local truth", localTruth);
+
+        // let localTruth = [true, 'A|', 'B&'];
+
+        localTruth[1] = localTruth[2];
+        localTruth[2] = null;
+        truthArray.push(localTruth);
+
       }
 
-      // for (let k = 0; k < truthGroups.length; k++) {
-      //   for (let m = 0; m < runningTruth.length; m++) {
-      //     if (runningTruth[k][1] === runningTruth[m][2]) {
+      console.log("Truth array after: ", truthArray)
 
 
-      //       if (truthGroups[j].slice(-1) === "&") {
-      //         return [curr[0] && prev[0]].concat(...curr.splice(1));
-      //       } else {
-      //         return [curr[0] || prev[0]].concat(...curr.splice(1));
-      //       }
-      //     }
-      //   }
-
-      // }
-
-      console.log(runningTruth)
-      //   let localTruthy;
-      //   truthArray.forEach((element) => {
-      //     if (element[1] === truthGroups[j]) {
-      //       if (truthGroups[j].slice(-1) === "&") {
-      //         if (localTruthy) {
-      //           localTruthy = localTruthy && element[0];
-      //         } else {
-      //           localTruthy = element[0];
-      //         }
-      //         // if (runningTruth[j] && runningTruth[j][1]) {
-      //         //   runningTruth[j][1] = runningTruth[j][1] && element[0];
-      //         // } else {
-      //         //   runningTruth.push(element[0]);
-      //         // }
-      //       } else if (truthGroups[j].slice(-1) === "|") {
-      //         if (localTruthy) {
-      //           localTruthy = localTruthy || element[0];
-      //         } else {
-      //           localTruthy = element[0];
-      //         }
-      //         // if (runningTruth[j] && runningTruth[j][1]) {
-      //         //   runningTruth[j][1] = runningTruth[j][1] || element[0];
-      //         // } else {
-      //         //   runningTruth.push(element[0]);
-      //         // }
-      //       }
-      //       console.log("Before child, running truth", localTruthy);
-      //     }
-      //   });
-      //   runningTruth.push([localTruthy, truthGroups[j]]);
-
-      //   //run through parent list to check for attachments
-      //   let childCrit = truthArray.reduce((prev, curr) => {
-      //     return truthGroups[j] === curr[2] ? curr[1] : prev;
-      //   }, null);
-      //   let childIndex = runningTruth.reduce((prev, curr, index) => {
-      //     if (curr && curr[0] === childCrit) {
-      //       return index;
-      //     } else {
-      //       return prev;
-      //     }
-      //   }, truthGroups.length - 1);
-      //   // console.log("Child", childIndex, childCrit);
-      //   if (childCrit?.slice(-1) === "&") {
-      //     if (runningTruth[childIndex] && runningTruth[childIndex][1]) {
-      //       runningTruth[childIndex][1] =
-      //         runningTruth[childIndex][1] && runningTruth[j][1];
-      //       // } else {
-      //       //   runningTruth.push(runningTruth[j][1]);
-      //     }
-      //   } else if (childCrit?.slice(-1) === "|") {
-      //     if (runningTruth[childIndex] && runningTruth[childIndex][1]) {
-      //       runningTruth[childIndex][1] =
-      //         runningTruth[childIndex][1] || runningTruth[j][1];
-      //       // } else {
-      //       //   runningTruth.push(runningTruth[j][1]);
-      //     }
-      //   }
-      // }
-
-      // console.log("Test logic: ", truthArray, truthGroups, runningTruth);
-
-      // let truthDepth = 0;
-
-      // for (let j = 0; j < truthArray.length; j++) {
-      //   truthDepth =
-      //     truthArray[j] && truthArray[j][1].length > truthDepth
-      //       ? truthArray[j][1].length
-      //       : truthDepth;
-      // }
-
-      let uniqueTruthGroups = [];
-
-      let reducedTruthSummary = [];
-
-      // for (let k = truthDepth - 1; k >= 0; k--) {
-      //   truthGroups = truthArray.map((element) => {
-      //     return element[1][k] ? element[1][k] : null;
-      //   });
-      //   uniqueTruthGroups = [
-      //     ...new Set(truthGroups.filter((element) => element !== null)),
-      //   ];
-
-      //   for (let l = 0; l < uniqueTruthGroups.length; l++) {
-      //     let reducedTruth = truthArray.map((element) => {
-      //         let position = element[1].indexOf(uniqueTruthGroups[l]);
-      //         if (position > 0 && position === element[1].length - 1) {
-      //           return [
-      //             element[0],
-      //             element[1][position],
-      //             element[1][position - 1],
-      //           ];
-      //         } else if (position === 0 && position === element[1].length - 1) {
-      //           return [element[0], element[1][position], null];
-      //         } else {
-      //           return [];
-      //         }
-      //       })
-      //       .filter((e) => e.length);
-
-      //     //children nodes will be combined under a new array which needs to be called within reducer
-      //     reducedTruthSummary = reducedTruth.reduce((prev, curr) => {
-      //       let existsInRT = runningTruth.filter((element) =>
-      //         element.indexOf(curr[1])
-      //       );
-      //       // console.log(
-      //       //   "Is there an existing record in runningTruth?",
-      //       //   existsInRT[0] ? existsInRT[0][0] : "No",
-      //       //   curr[1]
-      //       // );
-      //       return existsInRT[0]
-      //         ? [
-      //             existsInRT[0][1].slice(-1) === "&"
-      //               ? existsInRT[0][0] && curr[1].slice(-1) === "&"
-      //                 ? prev[0] && curr[0]
-      //                 : prev[0] || curr[0]
-      //               : existsInRT[0][0] || curr[1].slice(-1) === "&"
-      //               ? prev[0] && curr[0]
-      //               : prev[0] || curr[0],
-      //             curr[2],
-      //             null,
-      //           ]
-      //         : [
-      //             curr[1].slice(-1) === "&"
-      //               ? prev[0] && curr[0]
-      //               : prev[0] || curr[0],
-      //             curr[2],
-      //             null,
-      //           ];
-      //     });
-
-      //     runningTruth.push(reducedTruthSummary);
-
-      //     console.log(
-      //       "Reduced truth group array: ",
-      //       reducedTruth,
-      //       reducedTruthSummary,
-      //       runningTruth,
-      //     );
-
-      //     console.log("Final truth: ", runningTruth.reduce((prev, curr) => prev[0] || curr[0])[0])
-      //   }
-      // }
+      //
+      //old code to keep the page running
+      //
 
       // showByClass("exception", false);
       let rule1 =
