@@ -46,15 +46,17 @@ function Home(props) {
                     <RuleGeneric ruleName={element} loading />
                   </Grid>
                 ))}
-      {loading && ruleList.map(key => (
-        <Grid item key={index} xs={12} md={6} lg={2.4} >
 
-        <Grid width={200}>
 
-        </Grid>
+                        {loading && ruleList.map(key => (
+                          <Grid item key={index} xs={12} md={6} lg={2.4} >
 
-        </Grid>
-      ))}
+                          <Grid width={200}>
+
+                          </Grid>
+
+                          </Grid>
+                        ))}
         </Grid>
       </Box>
 
