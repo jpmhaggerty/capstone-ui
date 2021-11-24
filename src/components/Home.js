@@ -2,7 +2,10 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import RuleGeneric from "./RuleGeneric.js";
-import PropTypes from 'prop-types';
+import Skeleton from "@mui/material/Skeleton";
+
+
+
 
 
 function Home(props) {
@@ -26,9 +29,6 @@ function Home(props) {
 
 
 
-  RuleGeneric.propTypes = {
-    loading: PropTypes.bool,
-  };
 
   return (
 
@@ -41,22 +41,24 @@ function Home(props) {
         }}>
 
         <Grid container spacing={3}>
-          {ruleList.map((element, index) => (
+          {!loading && ruleList.map((element, index) => (
                   <Grid item key={index} xs={12} md={6} lg={2.4} >
                     <RuleGeneric ruleName={element} loading />
                   </Grid>
                 ))}
 
 
-                        {loading && ruleList.map(key => (
-                          <Grid item key={index} xs={12} md={6} lg={2.4} >
-
-                          <Grid width={200}>
-
-                          </Grid>
-
-                          </Grid>
-                        ))}
+                    {loading && ruleList.map(index => (
+                            <Grid item key={index} xs={12} md={6} lg={2.4} >
+                                <Grid width={200}>
+                                  <Skeleton variant="rect" width={210} height={210} />
+                                  <Box pt={0.5} height={52}>
+                                    <Skeleton />
+                                    <Skeleton width={60} />
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            ))}
         </Grid>
       </Box>
 

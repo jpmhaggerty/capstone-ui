@@ -101,12 +101,10 @@ export default function RuleGeneric({ ruleName }, props) {
     const isRuleClear = () => {
       let truthArray = [];
       let truthGroups = [];
-      let runningTruth = [];
 
       for (let i = 0; i < rule.length; i++) {
         //collects up all the group listings in anticipation of creating a set later
         truthGroups.push(...rule[i].logic_group.split(","));
-        // console.log("Truth groups", truthGroups);
 
         if (rule[i].constraint_parameter_boolean !== null) {
           truthArray[i] = [
@@ -116,7 +114,6 @@ export default function RuleGeneric({ ruleName }, props) {
               ? [...rule][i].logic_group.split(",").slice(-2)[0]
               : null,
           ];
-          // console.log("Weirdness (boolean): ", truthArray[i], i, truthArray)
         } else {
           if (
             rule[i].constraint_name &&
@@ -131,7 +128,6 @@ export default function RuleGeneric({ ruleName }, props) {
                 ? [...rule][i].logic_group.split(",").slice(-2)[0]
                 : null,
             ];
-            // console.log("Weirdness (distance): ", truthArray[i], i, truthArray)
           } else if (
             rule[i].constraint_name &&
             rule[i].constraint_name.includes("time")
@@ -149,20 +145,22 @@ export default function RuleGeneric({ ruleName }, props) {
                 ? [...rule][i].logic_group.split(",").slice(-2)[0]
                 : null,
             ];
-            // console.log("Weirdness (time): ", truthArray[i], i, truthArray)
           }
         }
       }
 
+      //make a set of unique group ids and sort in reverse order
       truthGroups = [
         ...new Set(truthGroups.filter((element) => element !== null)),
-      ];
+      ].sort().reverse();
 
-      truthGroups = truthGroups.sort().reverse();
 
-      // console.log("Truth array before: ", truthArray);
 
       for (let j = 0; j < truthGroups.length; j++) {
+        let restOfTruth = truthArray.filter(
+          (element) => element[1] !== truthGroups[j]
+        );
+
         let filteredTruth = truthArray.filter(
           (element) => element[1] === truthGroups[j]
         );
@@ -170,22 +168,26 @@ export default function RuleGeneric({ ruleName }, props) {
         let localTruth = filteredTruth.reduce(
           (prev, curr) => {
             if (truthGroups[j].slice(-1) === "&") {
-              return [curr[0] && prev[0]].concat([...curr].splice(1));
+              return [curr[0] && (typeof prev === "boolean" ? prev : prev[0])].concat([...curr].splice(1));
             } else {
-              return [curr[0] || prev[0]].concat([...curr].splice(1));
+              return [curr[0] || (typeof prev === "boolean" ? prev : prev[0])].concat([...curr].splice(1));
             }
           },
           truthGroups[j].slice(-1) === "&" ? true : false
         );
 
-        // console.log("Local truth", localTruth);
+        if (truthGroups[j].slice(0, 1) !== "A") {
+          localTruth[1] = localTruth[2];
+          localTruth[2] = null;
+        }
 
-        localTruth[1] = localTruth[2];
-        localTruth[2] = null;
-        truthArray.push(localTruth);
+        restOfTruth.push(localTruth);
+        truthArray = restOfTruth;
+
+        // console.log("New truth", j, truthGroups[j], truthArray);
       }
 
-      console.log("Truth array after: ", truthArray);
+      console.log("Truth array after: ", truthArray[0][0]);
 
       //
       //old code to keep the page running
@@ -255,7 +257,7 @@ export default function RuleGeneric({ ruleName }, props) {
           </Box>
 
           {/* Rule Name */}
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%", color: "#212121"}}>
             {loading ? (
               <Skeleton width="100%">
                 <Typography>.</Typography>
@@ -270,7 +272,7 @@ export default function RuleGeneric({ ruleName }, props) {
         </Box>
 
         {/* LAUNCH RESULT */}
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", color: "#212121" }}>
           {loading ? (
             <Skeleton width="100%">
               <Typography>.</Typography>
@@ -313,6 +315,7 @@ export default function RuleGeneric({ ruleName }, props) {
                 sx={{
                   fontWeight: "bold",
                   alignItems: "center",
+                  color: "#212121"
                 }}
               >
                 Considerations:

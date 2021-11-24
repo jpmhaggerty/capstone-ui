@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useState} from 'react';
 import { Routes, Route} from "react-router-dom";
+import { grey } from '@mui/material/colors';
 
 
 function App() {
@@ -15,8 +16,14 @@ function App() {
   const theme = createTheme({
     palette: {
       mode: darkMode ? 'dark' : 'light',
-    }
-  })
+      primary: {
+        main: "#123548",
+      },
+    },
+    typography: {
+      fontFamily: ["Open Sans"],
+    },
+})
 
   return (
     <React.Fragment>
