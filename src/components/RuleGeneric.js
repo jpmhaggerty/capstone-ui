@@ -100,193 +100,231 @@ export default function RuleGeneric({ ruleName }, props) {
     //module should make provisions for resetting exceptions if they are not required for eval
     const isRuleClear = () => {
       let truthArray = [];
-
-      // let eqStr = rule[i].user_input_boolean + rule[i].constraint_operator + rule[i].constraint_parameter_boolean;
-      // let eqStr = "2 + 2"
-      // console.log("Function test: ", Function("return 2 + 2")());
+      let truthGroups = [];
+      let runningTruth = [];
 
       for (let i = 0; i < rule.length; i++) {
+        truthGroups.push(...rule[i].logic_group.split(","));
         if (rule[i].constraint_parameter_boolean !== null) {
           truthArray[i] = [
             rule[i].user_input_boolean === rule[i].constraint_parameter_boolean,
-            rule[i].logic_group.split(","),
+            rule[i].logic_group.split(",").slice(-1)[0],
+            rule[i].logic_group.split(",").length > 1
+              ? rule[i].logic_group.split(",").slice(-2)[0]
+              : null,
           ];
         } else {
           if (
-            rule[i].constraint_name &&
-            rule[i].constraint_name.includes("distance")
+            // rule[i].constraint_name &&
+            rule[i].constraint_name?.includes("distance")
           ) {
-            switch (rule[i].constraint_operator) {
-              case "eq":
-                truthArray[i] = [
-                  +rule[i].user_input_integer ===
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "gt":
-                truthArray[i] = [
-                  +rule[i].user_input_integer >
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "ge":
-                truthArray[i] = [
-                  +rule[i].user_input_integer >=
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "lt":
-                truthArray[i] = [
-                  +rule[i].user_input_integer <
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "le":
-                truthArray[i] = [
-                  +rule[i].user_input_integer <=
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              default:
-                console.log("Might have a problem with distnace operator");
-            }
+            truthArray[i] = [
+              Function(
+                "return " +
+                  rule[i].user_input_integer +
+                  rule[i].constraint_operator +
+                  rule[i].constraint_parameter_integer
+              )(),
+              rule[i].logic_group.split(",").slice(-1)[0],
+              rule[i].logic_group.split(",").length > 1
+                ? rule[i].logic_group.split(",").slice(-2)[0]
+                : null,
+            ];
           } else if (
-            rule[i].constraint_name &&
-            rule[i].constraint_name.includes("time")
+            // rule[i].constraint_name &&
+            rule[i].constraint_name?.includes("time")
           ) {
-            switch (rule[i].constraint_operator) {
-              case "eq":
-                truthArray[i] = [
-                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) ===
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "gt":
-                truthArray[i] = [
-                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) >
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "ge":
-                truthArray[i] = [
-                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) >=
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "lt":
-                truthArray[i] = [
-                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) <
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              case "le":
-                truthArray[i] = [
-                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) <=
-                    +rule[i].constraint_parameter_integer,
-                  rule[i].logic_group.split(","),
-                ];
-                break;
-              default:
-                console.log("Might have a problem with time operator");
-            }
+            truthArray[i] = [
+              Function(
+                "return " +
+                  (Date.now() - rule[i].user_input_integer) / (1000 * 60) +
+                  rule[i].constraint_operator +
+                  rule[i].constraint_parameter_integer
+              )(),
+              rule[i].logic_group.split(",").slice(-1)[0],
+              rule[i].logic_group.split(",").length > 1
+                ? rule[i].logic_group.split(",").slice(-2)[0]
+                : null,
+            ];
           }
         }
       }
 
-      // console.log("Test logic: ", truthArray);
+      truthGroups = [
+        ...new Set(truthGroups.filter((element) => element !== null)),
+      ];
 
-      let truthDepth = 0;
-
-      for (let j = 0; j < truthArray.length; j++) {
-        truthDepth =
-          truthArray[j] && truthArray[j][1].length > truthDepth
-            ? truthArray[j][1].length
-            : truthDepth;
+      for (let j = 0; j < truthGroups.length; j++) {
+        runningTruth.push(truthArray
+          .filter((element) => element[1] === truthGroups[j])
+          .reduce((prev, curr) => {
+            if (truthGroups[j].slice(-1) === "&") {
+              return [curr[0] && prev[0]].concat(...curr.splice(1));
+            } else {
+              return [curr[0] || prev[0]].concat(...curr.splice(1));
+            }
+          }))
       }
 
-      let truthGroups = [];
+      // for (let k = 0; k < truthGroups.length; k++) {
+      //   for (let m = 0; m < runningTruth.length; m++) {
+      //     if (runningTruth[k][1] === runningTruth[m][2]) {
+
+
+      //       if (truthGroups[j].slice(-1) === "&") {
+      //         return [curr[0] && prev[0]].concat(...curr.splice(1));
+      //       } else {
+      //         return [curr[0] || prev[0]].concat(...curr.splice(1));
+      //       }
+      //     }
+      //   }
+
+      // }
+
+      console.log(runningTruth)
+      //   let localTruthy;
+      //   truthArray.forEach((element) => {
+      //     if (element[1] === truthGroups[j]) {
+      //       if (truthGroups[j].slice(-1) === "&") {
+      //         if (localTruthy) {
+      //           localTruthy = localTruthy && element[0];
+      //         } else {
+      //           localTruthy = element[0];
+      //         }
+      //         // if (runningTruth[j] && runningTruth[j][1]) {
+      //         //   runningTruth[j][1] = runningTruth[j][1] && element[0];
+      //         // } else {
+      //         //   runningTruth.push(element[0]);
+      //         // }
+      //       } else if (truthGroups[j].slice(-1) === "|") {
+      //         if (localTruthy) {
+      //           localTruthy = localTruthy || element[0];
+      //         } else {
+      //           localTruthy = element[0];
+      //         }
+      //         // if (runningTruth[j] && runningTruth[j][1]) {
+      //         //   runningTruth[j][1] = runningTruth[j][1] || element[0];
+      //         // } else {
+      //         //   runningTruth.push(element[0]);
+      //         // }
+      //       }
+      //       console.log("Before child, running truth", localTruthy);
+      //     }
+      //   });
+      //   runningTruth.push([localTruthy, truthGroups[j]]);
+
+      //   //run through parent list to check for attachments
+      //   let childCrit = truthArray.reduce((prev, curr) => {
+      //     return truthGroups[j] === curr[2] ? curr[1] : prev;
+      //   }, null);
+      //   let childIndex = runningTruth.reduce((prev, curr, index) => {
+      //     if (curr && curr[0] === childCrit) {
+      //       return index;
+      //     } else {
+      //       return prev;
+      //     }
+      //   }, truthGroups.length - 1);
+      //   // console.log("Child", childIndex, childCrit);
+      //   if (childCrit?.slice(-1) === "&") {
+      //     if (runningTruth[childIndex] && runningTruth[childIndex][1]) {
+      //       runningTruth[childIndex][1] =
+      //         runningTruth[childIndex][1] && runningTruth[j][1];
+      //       // } else {
+      //       //   runningTruth.push(runningTruth[j][1]);
+      //     }
+      //   } else if (childCrit?.slice(-1) === "|") {
+      //     if (runningTruth[childIndex] && runningTruth[childIndex][1]) {
+      //       runningTruth[childIndex][1] =
+      //         runningTruth[childIndex][1] || runningTruth[j][1];
+      //       // } else {
+      //       //   runningTruth.push(runningTruth[j][1]);
+      //     }
+      //   }
+      // }
+
+      // console.log("Test logic: ", truthArray, truthGroups, runningTruth);
+
+      // let truthDepth = 0;
+
+      // for (let j = 0; j < truthArray.length; j++) {
+      //   truthDepth =
+      //     truthArray[j] && truthArray[j][1].length > truthDepth
+      //       ? truthArray[j][1].length
+      //       : truthDepth;
+      // }
+
       let uniqueTruthGroups = [];
-      let runningTruth = [];
+
       let reducedTruthSummary = [];
 
-      for (let k = truthDepth - 1; k >= 0; k--) {
-        truthGroups = truthArray.map((element) => {
-          return element[1][k] ? element[1][k] : null;
-        });
-        uniqueTruthGroups = [
-          ...new Set(truthGroups.filter((element) => element !== null)),
-        ];
+      // for (let k = truthDepth - 1; k >= 0; k--) {
+      //   truthGroups = truthArray.map((element) => {
+      //     return element[1][k] ? element[1][k] : null;
+      //   });
+      //   uniqueTruthGroups = [
+      //     ...new Set(truthGroups.filter((element) => element !== null)),
+      //   ];
 
+      //   for (let l = 0; l < uniqueTruthGroups.length; l++) {
+      //     let reducedTruth = truthArray.map((element) => {
+      //         let position = element[1].indexOf(uniqueTruthGroups[l]);
+      //         if (position > 0 && position === element[1].length - 1) {
+      //           return [
+      //             element[0],
+      //             element[1][position],
+      //             element[1][position - 1],
+      //           ];
+      //         } else if (position === 0 && position === element[1].length - 1) {
+      //           return [element[0], element[1][position], null];
+      //         } else {
+      //           return [];
+      //         }
+      //       })
+      //       .filter((e) => e.length);
 
-        for (let l = 0; l < uniqueTruthGroups.length; l++) {
-          let reducedTruth = truthArray.map((element) => {
-              let position = element[1].indexOf(uniqueTruthGroups[l]);
-              if (position > 0 && position === element[1].length - 1) {
-                return [
-                  element[0],
-                  element[1][position],
-                  element[1][position - 1],
-                ];
-              } else if (position === 0 && position === element[1].length - 1) {
-                return [element[0], element[1][position], null];
-              } else {
-                return [];
-              }
-            })
-            .filter((e) => e.length);
+      //     //children nodes will be combined under a new array which needs to be called within reducer
+      //     reducedTruthSummary = reducedTruth.reduce((prev, curr) => {
+      //       let existsInRT = runningTruth.filter((element) =>
+      //         element.indexOf(curr[1])
+      //       );
+      //       // console.log(
+      //       //   "Is there an existing record in runningTruth?",
+      //       //   existsInRT[0] ? existsInRT[0][0] : "No",
+      //       //   curr[1]
+      //       // );
+      //       return existsInRT[0]
+      //         ? [
+      //             existsInRT[0][1].slice(-1) === "&"
+      //               ? existsInRT[0][0] && curr[1].slice(-1) === "&"
+      //                 ? prev[0] && curr[0]
+      //                 : prev[0] || curr[0]
+      //               : existsInRT[0][0] || curr[1].slice(-1) === "&"
+      //               ? prev[0] && curr[0]
+      //               : prev[0] || curr[0],
+      //             curr[2],
+      //             null,
+      //           ]
+      //         : [
+      //             curr[1].slice(-1) === "&"
+      //               ? prev[0] && curr[0]
+      //               : prev[0] || curr[0],
+      //             curr[2],
+      //             null,
+      //           ];
+      //     });
 
-          //children nodes will be combined under a new array which needs to be called within reducer
-          reducedTruthSummary = reducedTruth.reduce((prev, curr) => {
-            let existsInRT = runningTruth.filter((element) =>
-              element.indexOf(curr[1])
-            );
-            // console.log(
-            //   "Is there an existing record in runningTruth?",
-            //   existsInRT[0] ? existsInRT[0][0] : "No",
-            //   curr[1]
-            // );
-            return existsInRT[0]
-              ? [
-                  existsInRT[0][1].slice(-1) === "&"
-                    ? existsInRT[0][0] && curr[1].slice(-1) === "&"
-                      ? prev[0] && curr[0]
-                      : prev[0] || curr[0]
-                    : existsInRT[0][0] || curr[1].slice(-1) === "&"
-                    ? prev[0] && curr[0]
-                    : prev[0] || curr[0],
-                  curr[2],
-                  null,
-                ]
-              : [
-                  curr[1].slice(-1) === "&"
-                    ? prev[0] && curr[0]
-                    : prev[0] || curr[0],
-                  curr[2],
-                  null,
-                ];
-          });
+      //     runningTruth.push(reducedTruthSummary);
 
-          runningTruth.push(reducedTruthSummary);
+      //     console.log(
+      //       "Reduced truth group array: ",
+      //       reducedTruth,
+      //       reducedTruthSummary,
+      //       runningTruth,
+      //     );
 
-          console.log(
-            "Reduced truth group array: ",
-            reducedTruth,
-            reducedTruthSummary,
-            runningTruth,
-          );
-
-          console.log("Final truth: ", runningTruth.reduce((prev, curr) => prev[0] || curr[0])[0])
-        }
-      }
+      //     console.log("Final truth: ", runningTruth.reduce((prev, curr) => prev[0] || curr[0])[0])
+      //   }
+      // }
 
       // showByClass("exception", false);
       let rule1 =
@@ -352,13 +390,16 @@ export default function RuleGeneric({ ruleName }, props) {
           </Box>
 
           {/* Rule Name */}
-          <Box sx={{ width: "100%"}}>
+          <Box sx={{ width: "100%" }}>
             {loading ? (
               <Skeleton width="100%">
                 <Typography>.</Typography>
               </Skeleton>
             ) : (
-              <Typography sx={{ fontSize:25}}> {properCase(ruleName)} </Typography>
+              <Typography sx={{ fontSize: 25 }}>
+                {" "}
+                {properCase(ruleName)}{" "}
+              </Typography>
             )}
           </Box>
         </Box>
@@ -370,7 +411,10 @@ export default function RuleGeneric({ ruleName }, props) {
               <Typography>.</Typography>
             </Skeleton>
           ) : (
-            <Typography sx={{ fontSize:18}}> {clearToLaunch ? "Cleared" : "Violated"} </Typography>
+            <Typography sx={{ fontSize: 18 }}>
+              {" "}
+              {clearToLaunch ? "Cleared" : "Violated"}{" "}
+            </Typography>
           )}
         </Box>
 
@@ -397,17 +441,17 @@ export default function RuleGeneric({ ruleName }, props) {
               justifyContent: "space-around",
             }}
           >
-            <Box            >
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{
-                fontWeight: "bold",
-                alignItems: "center",
+            <Box>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontWeight: "bold",
+                  alignItems: "center",
                 }}
-            >
-              Considerations:
-            </Typography>
+              >
+                Considerations:
+              </Typography>
             </Box>
 
             <CardMedia
@@ -442,25 +486,22 @@ export default function RuleGeneric({ ruleName }, props) {
           </Box>
         </CardContent>
 
-        <CardActions disableSpacing
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}
+        <CardActions
+          disableSpacing
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
         >
-
-        {/* PENCIL */}
+          {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
             <IconButton aria-label="fill">
               <CreateIcon />
             </IconButton>
           </Button>
         </CardActions>
-
       </Card>
     </div>
-
-
   );
 }
 // RuleGeneric.propTypes = {

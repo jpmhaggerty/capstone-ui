@@ -193,11 +193,11 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             >
-              <MenuItem value={"eq"}>=</MenuItem>
-              <MenuItem value={"gt"}>&gt;</MenuItem>
-              <MenuItem value={"ge"}>&gt;=</MenuItem>
-              <MenuItem value={"lt"}>&lt;</MenuItem>
-              <MenuItem value={"le"}>&lt;=</MenuItem>
+              <MenuItem value={"==="}>=</MenuItem>
+              <MenuItem value={">"}>&gt;</MenuItem>
+              <MenuItem value={">="}>&gt;=</MenuItem>
+              <MenuItem value={"<"}>&lt;</MenuItem>
+              <MenuItem value={"<="}>&lt;=</MenuItem>
             </TextField>
             <TextField
               label="Value"
