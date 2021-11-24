@@ -41,19 +41,21 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
 
           </Typography>
 
-          <IconButton sx={{ ml: 1 }}
+          <IconButton
             onClick={handleDarkMode}
             color="inherit"
+
+
             >
-            {darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
+            {darkMode ? <Brightness4Icon sx={{ fontSize: 15  }} /> : <Brightness7Icon  sx={{ fontSize: 15 }}/>}
           </IconButton>
 
           <Link to="/" style={{ textDecoration: 'none', color: 'white'}}>
-            <Button variant="contained" sx={{ backgroundColor: '#123540'}} > Home</Button>
+            <Button variant="contained" sx={{ backgroundColor: '#123540', mr:1 }} > Home</Button>
           </Link>
 
           <Link to="/chart" style={{ textDecoration: 'none', color: 'white'}}>
-            <Button variant="contained" sx={{ backgroundColor: '#123540'}} > Chart</Button>
+            <Button variant="contained" sx={{ backgroundColor: '#123540', ml: 1}} > Charts</Button>
           </Link>
 
 

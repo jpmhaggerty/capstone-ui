@@ -25,7 +25,7 @@ function Home() {
         <Box sx={{
             display: "flex",
             justifyContent: "center",
-            mt: 4,
+            mt: 12,
             ml: 4,
             mr:4
         }}>

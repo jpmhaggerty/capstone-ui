@@ -8,7 +8,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
-import HouseboatOutlinedIcon from "@mui/icons-material/HouseboatOutlined";
+import HomeIcon from '@mui/icons-material/Home';
 import { Link } from "react-router-dom";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
@@ -52,7 +52,7 @@ export default function TempDrawer() {
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <HouseboatOutlinedIcon />
+                <HomeIcon  />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItemButton>

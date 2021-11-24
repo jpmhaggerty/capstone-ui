@@ -101,6 +101,10 @@ export default function RuleGeneric({ ruleName }, props) {
     const isRuleClear = () => {
       let truthArray = [];
 
+      // let eqStr = rule[i].user_input_boolean + rule[i].constraint_operator + rule[i].constraint_parameter_boolean;
+      // let eqStr = "2 + 2"
+      // console.log("Function test: ", Function("return 2 + 2")());
+
       for (let i = 0; i < rule.length; i++) {
         if (rule[i].constraint_parameter_boolean !== null) {
           truthArray[i] = [
@@ -348,13 +352,13 @@ export default function RuleGeneric({ ruleName }, props) {
           </Box>
 
           {/* Rule Name */}
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%"}}>
             {loading ? (
               <Skeleton width="100%">
                 <Typography>.</Typography>
               </Skeleton>
             ) : (
-              <Typography> {properCase(ruleName)} </Typography>
+              <Typography sx={{ fontSize:25}}> {properCase(ruleName)} </Typography>
             )}
           </Box>
         </Box>
@@ -366,7 +370,7 @@ export default function RuleGeneric({ ruleName }, props) {
               <Typography>.</Typography>
             </Skeleton>
           ) : (
-            <Typography> {clearToLaunch ? "Clear" : "Violation"} </Typography>
+            <Typography sx={{ fontSize:18}}> {clearToLaunch ? "Cleared" : "Violated"} </Typography>
           )}
         </Box>
 
@@ -393,13 +397,18 @@ export default function RuleGeneric({ ruleName }, props) {
               justifyContent: "space-around",
             }}
           >
+            <Box            >
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ fontWeight: "bold" }}
+              sx={{
+                fontWeight: "bold",
+                alignItems: "center",
+                }}
             >
-              Considerations
+              Considerations:
             </Typography>
+            </Box>
 
             <CardMedia
               style={{
@@ -433,14 +442,27 @@ export default function RuleGeneric({ ruleName }, props) {
           </Box>
         </CardContent>
 
-        <CardActions disableSpacing>
+        <CardActions disableSpacing
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+        >
+
+        {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
             <IconButton aria-label="fill">
               <CreateIcon />
             </IconButton>
           </Button>
         </CardActions>
+
       </Card>
     </div>
+
+
   );
 }
+// RuleGeneric.propTypes = {
+//   loading: PropTypes.bool,
+// };
