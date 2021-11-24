@@ -18,8 +18,9 @@ import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import Skeleton from "@mui/material/Skeleton";
 
-export default function RuleGeneric({ ruleName }, props) {
+export default function RuleGeneric(props) {
   const { loading = false } = props;
+  const { ruleName } = props;
 
   const stubData = {
     id: 100,
@@ -152,9 +153,9 @@ export default function RuleGeneric({ ruleName }, props) {
       //make a set of unique group ids and sort in reverse order
       truthGroups = [
         ...new Set(truthGroups.filter((element) => element !== null)),
-      ].sort().reverse();
-
-
+      ]
+        .sort()
+        .reverse();
 
       for (let j = 0; j < truthGroups.length; j++) {
         let restOfTruth = truthArray.filter(
@@ -168,9 +169,13 @@ export default function RuleGeneric({ ruleName }, props) {
         let localTruth = filteredTruth.reduce(
           (prev, curr) => {
             if (truthGroups[j].slice(-1) === "&") {
-              return [curr[0] && (typeof prev === "boolean" ? prev : prev[0])].concat([...curr].splice(1));
+              return [
+                curr[0] && (typeof prev === "boolean" ? prev : prev[0]),
+              ].concat([...curr].splice(1));
             } else {
-              return [curr[0] || (typeof prev === "boolean" ? prev : prev[0])].concat([...curr].splice(1));
+              return [
+                curr[0] || (typeof prev === "boolean" ? prev : prev[0]),
+              ].concat([...curr].splice(1));
             }
           },
           truthGroups[j].slice(-1) === "&" ? true : false
@@ -257,7 +262,7 @@ export default function RuleGeneric({ ruleName }, props) {
           </Box>
 
           {/* Rule Name */}
-          <Box sx={{ width: "100%", color: "#212121"}}>
+          <Box sx={{ width: "100%", color: "#212121" }}>
             {loading ? (
               <Skeleton width="100%">
                 <Typography>.</Typography>
@@ -272,7 +277,9 @@ export default function RuleGeneric({ ruleName }, props) {
         </Box>
 
         {/* LAUNCH RESULT */}
-        <Box sx={{ display: "flex", justifyContent: "center", color: "#212121" }}>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", color: "#212121" }}
+        >
           {loading ? (
             <Skeleton width="100%">
               <Typography>.</Typography>
@@ -315,7 +322,7 @@ export default function RuleGeneric({ ruleName }, props) {
                 sx={{
                   fontWeight: "bold",
                   alignItems: "center",
-                  color: "#212121"
+                  color: "#212121",
                 }}
               >
                 Considerations:
@@ -372,6 +379,7 @@ export default function RuleGeneric({ ruleName }, props) {
     </div>
   );
 }
+
 // RuleGeneric.propTypes = {
 //   loading: PropTypes.bool,
 // };

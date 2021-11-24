@@ -3,14 +3,16 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import RuleGeneric from "./RuleGeneric.js";
 import Skeleton from "@mui/material/Skeleton";
+import PropTypes from 'prop-types';
 
 
 
 
 
-function Home(props) {
+function Home() {
 
-  const { loading = false } = props;
+  //develop a function to determiner if the page is loading or not
+  let loading = true;
 
 
   const ruleList = [
@@ -27,7 +29,9 @@ function Home(props) {
   ];
 
 
-
+  // RuleGeneric.propTypes = {
+  //   loading: PropTypes.bool,
+  // };
 
 
   return (
@@ -40,26 +44,16 @@ function Home(props) {
             mr:4
         }}>
 
+        {/* CARDS */}
         <Grid container spacing={3}>
-          {!loading && ruleList.map((element, index) => (
+          {ruleList.map((element, index) => (
                   <Grid item key={index} xs={12} md={6} lg={2.4} >
-                    <RuleGeneric ruleName={element} loading />
+                    <RuleGeneric ruleName={element} loading={loading}/>
                   </Grid>
                 ))}
-
-
-                    {loading && ruleList.map(index => (
-                            <Grid item key={index} xs={12} md={6} lg={2.4} >
-                                <Grid width={200}>
-                                  <Skeleton variant="rect" width={210} height={210} />
-                                  <Box pt={0.5} height={52}>
-                                    <Skeleton />
-                                    <Skeleton width={60} />
-                                  </Box>
-                                </Grid>
-                              </Grid>
-                            ))}
         </Grid>
+
+
       </Box>
 
 
