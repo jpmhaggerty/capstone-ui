@@ -21,7 +21,7 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: '#123548', overflow: 'hidden' }}>
+      <AppBar position="static" sx={{ overflow: 'hidden' }}>
         <Toolbar>
           <IconButton
             size="large"

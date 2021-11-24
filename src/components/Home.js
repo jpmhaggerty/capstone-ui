@@ -2,9 +2,14 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import RuleGeneric from "./RuleGeneric.js";
+import PropTypes from 'prop-types';
 
 
-function Home() {
+function Home(props) {
+
+  const { loading = false } = props;
+
+
   const ruleList = [
     "lightning",
     "sefm",
@@ -19,8 +24,13 @@ function Home() {
   ];
 
 
-  return (
 
+
+  RuleGeneric.propTypes = {
+    loading: PropTypes.bool,
+  };
+
+  return (
 
         <Box sx={{
             display: "flex",
@@ -33,9 +43,18 @@ function Home() {
         <Grid container spacing={3}>
           {ruleList.map((element, index) => (
                   <Grid item key={index} xs={12} md={6} lg={2.4} >
-                    <RuleGeneric ruleName={element} />
+                    <RuleGeneric ruleName={element} loading />
                   </Grid>
                 ))}
+      {loading && ruleList.map(key => (
+        <Grid item key={index} xs={12} md={6} lg={2.4} >
+
+        <Grid width={200}>
+
+        </Grid>
+
+        </Grid>
+      ))}
         </Grid>
       </Box>
 
