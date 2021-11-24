@@ -34,8 +34,11 @@ export default function RuleGeneric(props) {
   };
 
   const getAPIData = async (ruleName) => {
+    //set loading = false
     const response = await fetch(`http://localhost:8080/rules/${ruleName}`);
+    //set loading = true... waiting on the resolution of the promise
     const result = await response.json();
+    //promise resolved? set loading = false
     setRule(result);
   };
 
@@ -315,6 +318,13 @@ export default function RuleGeneric(props) {
               justifyContent: "space-around",
             }}
           >
+
+          {loading ? (
+            <Skeleton width="40%">
+              <Typography>.</Typography>
+            </Skeleton>
+          ) : (
+
             <Box>
               <Typography
                 variant="body2"
@@ -328,7 +338,13 @@ export default function RuleGeneric(props) {
                 Considerations:
               </Typography>
             </Box>
+            )}
 
+        {loading ? (
+          <Skeleton variant="rectangular" width="19%">
+            <div style={{ paddingTop: "57%" }} />
+          </Skeleton>
+        ) : (
             <CardMedia
               style={{
                 width: "auto",
@@ -338,7 +354,13 @@ export default function RuleGeneric(props) {
               image={SEF}
               alt="alt legend pic"
             />
+        )}
 
+        {loading ? (
+          <Skeleton variant="rectangular" width="19%">
+            <div style={{ paddingTop: "57%" }} />
+          </Skeleton>
+        ) : (
             <CardMedia
               style={{
                 width: "auto",
@@ -348,7 +370,13 @@ export default function RuleGeneric(props) {
               image={SEF}
               alt="alt legend pic"
             />
+        )}
 
+          {loading ? (
+          <Skeleton variant="rectangular" width="19%">
+            <div style={{ paddingTop: "57%" }} />
+          </Skeleton>
+        ) : (
             <CardMedia
               style={{
                 width: "auto",
@@ -358,6 +386,8 @@ export default function RuleGeneric(props) {
               image={SEF}
               alt="alt legend pic"
             />
+        )}
+
           </Box>
         </CardContent>
 
