@@ -34,11 +34,8 @@ export default function RuleGeneric(props) {
   };
 
   const getAPIData = async (ruleName) => {
-    //set loading = false
     const response = await fetch(`http://localhost:8080/rules/${ruleName}`);
-    //set loading = true... waiting on the resolution of the promise
     const result = await response.json();
-    //promise resolved? set loading = false
     setRule(result);
   };
 
@@ -74,7 +71,6 @@ export default function RuleGeneric(props) {
   };
 
   const handleDataSet = (index, name, value) => {
-    console.log("Change data: ", index, name, value);
     let expandedRule = [...rule];
     expandedRule[index][name] = value;
     setRule(expandedRule);
@@ -99,38 +95,33 @@ export default function RuleGeneric(props) {
   };
 
   React.useEffect(() => {
-    //place card logic here.. module should return pass/ fail (i.e. true/ false) boolean
-    //module should also reveal exception-based sections as appropriate
-    //module should make provisions for resetting exceptions if they are not required for eval
     const isRuleClear = () => {
       let truthArray = [];
       let truthGroups = [];
+      let showChildren = [];
 
       for (let i = 0; i < rule.length; i++) {
-        //collects up all the group listings in anticipation of creating a set later
         truthGroups.push(...rule[i].logic_group.split(","));
+        let logicSplit = [...rule][i].logic_group.split(",");
 
         if (rule[i].constraint_parameter_boolean !== null) {
           truthArray[i] = [
             rule[i].user_input_boolean === rule[i].constraint_parameter_boolean,
-            [...rule][i].logic_group.split(",").slice(-1)[0],
-            [...rule][i].logic_group.split(",").length > 1
-              ? [...rule][i].logic_group.split(",").slice(-2)[0]
-              : null,
+            logicSplit,
           ];
         } else {
           if (
             rule[i].constraint_name &&
             rule[i].constraint_name.includes("distance")
           ) {
+            rule[i].user_input_integer = rule[i].user_input_integer
+              ? rule[i].user_input_integer
+              : 0;
             truthArray[i] = [
               Function(
                 `return ${rule[i].user_input_integer} ${rule[i].constraint_operator} ${rule[i].constraint_parameter_integer}`
               )(),
-              [...rule][i].logic_group.split(",").slice(-1)[0],
-              [...rule][i].logic_group.split(",").length > 1
-                ? [...rule][i].logic_group.split(",").slice(-2)[0]
-                : null,
+              logicSplit,
             ];
           } else if (
             rule[i].constraint_name &&
@@ -144,16 +135,12 @@ export default function RuleGeneric(props) {
                   rule[i].constraint_parameter_integer
                 }`
               )(),
-              [...rule][i].logic_group.split(",").slice(-1)[0],
-              [...rule][i].logic_group.split(",").length > 1
-                ? [...rule][i].logic_group.split(",").slice(-2)[0]
-                : null,
+              logicSplit,
             ];
           }
         }
       }
 
-      //make a set of unique group ids and sort in reverse order
       truthGroups = [
         ...new Set(truthGroups.filter((element) => element !== null)),
       ]
@@ -161,17 +148,36 @@ export default function RuleGeneric(props) {
         .reverse();
 
       for (let j = 0; j < truthGroups.length; j++) {
+        if (!truthArray.length) {
+          break;
+        }
         let restOfTruth = truthArray.filter(
-          (element) => element[1] !== truthGroups[j]
+          (element) => !element[1].includes(truthGroups[j])
         );
 
-        let filteredTruth = truthArray.filter(
-          (element) => element[1] === truthGroups[j]
+        let filteredTruth = truthArray.filter((element) =>
+          element[1].includes(truthGroups[j])
         );
+
+        console.log("Truth array", truthArray);
+        console.log("Rest of truth", restOfTruth);
+        console.log("Filtered truth", filteredTruth);
+        console.log(
+          "Filtered truth- closer",
+          filteredTruth[0][1][filteredTruth[0][1].length - 2]
+        );
+
+        let parentGroup = filteredTruth[0][1][filteredTruth[0][1].length - 2];
+        let parentFilter = restOfTruth.filter(
+          (element) => element[1].slice(-1)[0] === parentGroup
+        );
+
+        console.log("Parent group", parentGroup);
+        console.log("Parent filter", parentFilter);
 
         let localTruth = filteredTruth.reduce(
           (prev, curr) => {
-            if (truthGroups[j].slice(-1) === "&") {
+            if (truthGroups[j].endsWith("&")) {
               return [
                 curr[0] && (typeof prev === "boolean" ? prev : prev[0]),
               ].concat([...curr].splice(1));
@@ -181,41 +187,46 @@ export default function RuleGeneric(props) {
               ].concat([...curr].splice(1));
             }
           },
-          truthGroups[j].slice(-1) === "&" ? true : false
+          truthGroups[j].endsWith("&") ? true : false
         );
 
-        if (truthGroups[j].slice(0, 1) !== "A") {
-          localTruth[1] = localTruth[2];
-          localTruth[2] = null;
+        let parentTruth = parentFilter.reduce(
+          (prev, curr) => {
+            if (parentGroup.includes("&")) {
+              return [
+                curr[0] && (typeof prev === "boolean" ? prev : prev[0]),
+              ].concat([...curr].splice(1));
+            } else {
+              return [
+                curr[0] || (typeof prev === "boolean" ? prev : prev[0]),
+              ].concat([...curr].splice(1));
+            }
+          },
+          parentGroup && parentGroup.includes("&") ? true : false
+        );
+
+        if (!parentTruth[0]) {
+          showChildren.push(truthGroups[j]);
+        }
+
+        if (localTruth.length) {
+          localTruth[1].pop();
         }
 
         restOfTruth.push(localTruth);
         truthArray = restOfTruth;
-
-        // console.log("New truth", j, truthGroups[j], truthArray);
       }
 
-      console.log("Truth array after: ", truthArray[0][0]);
+      // console.log("Groups to show: ", showChildren, truthGroups);
+      // for (let l = 0; l < truthGroups.length; l++) {
+      //   if (showChildren.includes(truthGroups[l])) {
+      //     showByClass(truthGroups[l], true);
+      //   } else {
+      //     showByClass(truthGroups[l], false);
+      //   }
+      // }
 
-      //
-      //old code to keep the page running
-      //
-
-      // showByClass("exception", false);
-      let rule1 =
-        rule[0].user_input_integer > rule[0].constraint_parameter_integer;
-
-      let rule2 = false;
-
-      // let rule2 =
-      //   (Date.now() - rule[1].user_input_integer) / (1000 * 60) >
-      //   rule[1].constraint_parameter_integer;
-
-      let except1 = false;
-
-      // showByClass("exception", !(rule1 || rule2));
-      // console.log("Truth table: ", rule1,  rule2 , except1)
-      return rule1 || rule2 || except1;
+      return truthArray.length ? truthArray[0][0] : false;
     };
 
     putAPIData(ruleName);
@@ -318,76 +329,73 @@ export default function RuleGeneric(props) {
               justifyContent: "space-around",
             }}
           >
-
-          {loading ? (
-            <Skeleton width="40%">
-              <Typography>.</Typography>
-            </Skeleton>
-          ) : (
-
-            <Box>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  fontWeight: "bold",
-                  alignItems: "center",
-                  color: "#212121",
-                }}
-              >
-                Considerations:
-              </Typography>
-            </Box>
+            {loading ? (
+              <Skeleton width="40%">
+                <Typography>.</Typography>
+              </Skeleton>
+            ) : (
+              <Box>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontWeight: "bold",
+                    alignItems: "center",
+                    color: "#212121",
+                  }}
+                >
+                  Considerations:
+                </Typography>
+              </Box>
             )}
 
-        {loading ? (
-          <Skeleton variant="rectangular" width="19%">
-            <div style={{ paddingTop: "57%" }} />
-          </Skeleton>
-        ) : (
-            <CardMedia
-              style={{
-                width: "auto",
-                maxHeight: "200px",
-              }}
-              component="img"
-              image={SEF}
-              alt="alt legend pic"
-            />
-        )}
+            {loading ? (
+              <Skeleton variant="rectangular" width="19%">
+                <div style={{ paddingTop: "57%" }} />
+              </Skeleton>
+            ) : (
+              <CardMedia
+                style={{
+                  width: "auto",
+                  maxHeight: "200px",
+                }}
+                component="img"
+                image={SEF}
+                alt="alt legend pic"
+              />
+            )}
 
-        {loading ? (
-          <Skeleton variant="rectangular" width="19%">
-            <div style={{ paddingTop: "57%" }} />
-          </Skeleton>
-        ) : (
-            <CardMedia
-              style={{
-                width: "auto",
-                maxHeight: "200px",
-              }}
-              component="img"
-              image={SEF}
-              alt="alt legend pic"
-            />
-        )}
+            {loading ? (
+              <Skeleton variant="rectangular" width="19%">
+                <div style={{ paddingTop: "57%" }} />
+              </Skeleton>
+            ) : (
+              <CardMedia
+                style={{
+                  width: "auto",
+                  maxHeight: "200px",
+                }}
+                component="img"
+                image={SEF}
+                alt="alt legend pic"
+              />
+            )}
 
-          {loading ? (
-          <Skeleton variant="rectangular" width="19%">
-            <div style={{ paddingTop: "57%" }} />
-          </Skeleton>
-        ) : (
-            <CardMedia
-              style={{
-                width: "auto",
-                maxHeight: "200px",
-              }}
-              component="img"
-              image={SEF}
-              alt="alt legend pic"
-            />
-        )}
-
+            {loading ? (
+              <Skeleton variant="rectangular" width="19%">
+                <div style={{ paddingTop: "57%" }} />
+              </Skeleton>
+            ) : (
+              <CardMedia
+                style={{
+                  width: "auto",
+                  maxHeight: "200px",
+                }}
+                component="img"
+                image={SEF}
+                alt="alt legend pic"
+              />
+            )}
           </Box>
         </CardContent>
 

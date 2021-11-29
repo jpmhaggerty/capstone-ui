@@ -231,7 +231,7 @@ export default function ModalGeneric({
   let ruleDialog = rule.map((element, index) => {
     if (element.constraint_parameter_boolean !== null) {
       return (
-        <div key={index}>
+        <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
           <FormControlLabel
             label={element.constraint_name}
@@ -267,7 +267,7 @@ export default function ModalGeneric({
       element.constraint_name.includes("distance")
     ) {
       return (
-        <div key={index}>
+        <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
           <h3>{element.constraint_name}</h3>
           <TextField
@@ -288,7 +288,7 @@ export default function ModalGeneric({
       element.constraint_name.includes("time")
     ) {
       return (
-        <div key={index}>
+        <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
           <h3>{element.constraint_name}</h3>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
