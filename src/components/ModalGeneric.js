@@ -1,6 +1,7 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import DateTimePicker from "@mui/lab/DateTimePicker";
@@ -73,6 +74,7 @@ export default function ModalGeneric({
       return (
         <div key={index}>
           <Divider />
+
           <Stack direction="row" spacing={1} alignItems="center">
             <TextField
               label="ID"
@@ -103,6 +105,8 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
+
+
             <FormControlLabel
               label=""
               labelPlacement="top"
@@ -145,6 +149,7 @@ export default function ModalGeneric({
               }
             />
           </Stack>
+
         </div>
       );
     } else {

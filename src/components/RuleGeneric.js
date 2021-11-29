@@ -2,7 +2,6 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
-import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Avatar from "@mui/material/Avatar";
@@ -13,10 +12,30 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import fetch from "cross-fetch";
 import CreateIcon from "@mui/icons-material/Create";
-import SEF from "../images/SEF.png";
-import PropTypes from "prop-types";
-import { styled } from "@mui/material/styles";
+import lightningPic from "../images/lightning.png";
+import sefmPic from "../images/sefm.png";
+import attachedPic from "../images/attached.png";
+import cumulusPic from "../images/cumulus.png";
+import detachedPic from "../images/detached.png";
+import debrisPic from "../images/debris.png";
+import disturbedPic from "../images/disturbed.png";
+import smokePic from "../images/smoke.png";
+import thickPic from "../images/thick.png";
+import triboPic from "../images/tribo.png";
 import Skeleton from "@mui/material/Skeleton";
+
+var imageObject = {
+  lightning: lightningPic,
+  attached: attachedPic,
+  detached: detachedPic,
+  disturbed: disturbedPic,
+  debris: debrisPic,
+  smoke: smokePic,
+  thick: thickPic,
+  tribo: triboPic,
+  cumulus: cumulusPic,
+  sefm: sefmPic,
+}
 
 export default function RuleGeneric(props) {
   const { loading = false } = props;
@@ -242,6 +261,11 @@ export default function RuleGeneric(props) {
   //   width: '100%',
   // });
 
+  // let lightning = {lightning}
+
+  // console.log("Lightning: ", lightning)
+  // console.log("SEFM: ", sefm)
+
   return (
     <div>
       <ModalGeneric
@@ -269,8 +293,7 @@ export default function RuleGeneric(props) {
                 sx={{ bgcolor: "#123548", color: grey[50] }}
                 aria-label="avatar"
               >
-                {" "}
-                SE{" "}
+                {ruleName.slice(0,2).toUpperCase()}
               </Avatar>
             )}
           </Box>
@@ -299,7 +322,7 @@ export default function RuleGeneric(props) {
               <Typography>.</Typography>
             </Skeleton>
           ) : (
-            <Typography sx={{ fontSize: 18 }}>
+            <Typography sx={{ fontSize: 20 }}>
               {" "}
               {clearToLaunch ? "Cleared" : "Violated"}{" "}
             </Typography>
@@ -315,9 +338,14 @@ export default function RuleGeneric(props) {
         ) : (
           <CardMedia
             component="img"
-            src="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
+            // src="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
+            // image= {Function("`${ruleName}`")()}
+            image= {imageObject[ruleName]}
+
+            // src={"../images/" + ruleName + ".png"}
             alt=""
           />
+
         )}
 
         {/* CONSIDERATIONS */}
@@ -360,7 +388,7 @@ export default function RuleGeneric(props) {
                   maxHeight: "200px",
                 }}
                 component="img"
-                image={SEF}
+                // image={sefm}
                 alt="alt legend pic"
               />
             )}
@@ -376,7 +404,7 @@ export default function RuleGeneric(props) {
                   maxHeight: "200px",
                 }}
                 component="img"
-                image={SEF}
+                // image={sefm}
                 alt="alt legend pic"
               />
             )}
@@ -392,7 +420,7 @@ export default function RuleGeneric(props) {
                   maxHeight: "200px",
                 }}
                 component="img"
-                image={SEF}
+                // image={sefm}
                 alt="alt legend pic"
               />
             )}
@@ -408,7 +436,7 @@ export default function RuleGeneric(props) {
         >
           {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
-            <IconButton aria-label="fill">
+            <IconButton aria-label="fill"  sx={{ color: "#9e9e9e" }}>
               <CreateIcon />
             </IconButton>
           </Button>
