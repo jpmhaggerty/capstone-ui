@@ -46,9 +46,8 @@ const APICallData = [
         global.fetch = mockGet(`http://localhost:8080/rules/${rule}`)
       });
 
-      const name = screen.getByClassName('MuiBox-root css-1mpmo0q')
+      const name = screen.getByText('Smoke')
       expect(name).toBeInTheDocument();
-      expect(name).toContain('Smoke');
     })
   });
 
