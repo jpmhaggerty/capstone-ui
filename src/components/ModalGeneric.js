@@ -89,6 +89,7 @@ export default function ModalGeneric({
               size="small"
             />
             <TextField
+              data-testid={`constraint_rule${index}`}
               label="Constraint Rule"
               multiline
               fullWidth
@@ -137,6 +138,7 @@ export default function ModalGeneric({
               }
             />
             <TextField
+              data-testid='logicGroup'
               label="Logic Group"
               multiline
               width="auto"
@@ -239,6 +241,7 @@ export default function ModalGeneric({
         <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
           <FormControlLabel
+            data-testid={`constraint_name${index}`}
             label={element.constraint_name}
             control={
               <div>
@@ -345,6 +348,7 @@ export default function ModalGeneric({
                   Locked
                 </Typography>
                 <Switch
+                  data-testid="proModeSwitch"
                   name="pro_mode"
                   color="warning"
                   size="small"

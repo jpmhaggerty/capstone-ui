@@ -2,6 +2,7 @@ import * as React from "react";
 import ButtonAppBar from "./components/ButtonAppBar.js";
 import CssBaseline from '@mui/material/CssBaseline';
 import Home from "./components/Home.js";
+import Charts from "./components/Charts.js";
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useState} from 'react';
@@ -36,6 +37,10 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home/>} darkMode={darkMode} setDarkMode={setDarkMode}/>
+      </Routes>
+
+      <Routes>
+        <Route path="/charts" element={<Charts/>} darkMode={darkMode} setDarkMode={setDarkMode}/>
       </Routes>
 
       </CssBaseline>

@@ -22,19 +22,26 @@ import disturbedPic from "../images/disturbed.png";
 import smokePic from "../images/smoke.png";
 import thickPic from "../images/thick.png";
 import triboPic from "../images/tribo.png";
+import cloudTempCon from "../images/cloudTempCon.png";
+import distanceCon from "../images/distanceCon.png";
+import prepCon from "../images/prepCon.png";
+import revCon from "../images/revCon.png";
+import sefmCon from "../images/sefmCon.png";
+import timeCon from "../images/timeCon.png";
 import Skeleton from "@mui/material/Skeleton";
+import { useState, useEffect } from "react";
 
 var imageObject = {
-  lightning: lightningPic,
-  attached: attachedPic,
-  detached: detachedPic,
-  disturbed: disturbedPic,
-  debris: debrisPic,
-  smoke: smokePic,
-  thick: thickPic,
-  tribo: triboPic,
-  cumulus: cumulusPic,
-  sefm: sefmPic,
+  lightning: [lightningPic, distanceCon, timeCon, sefmCon],
+  attached: [attachedPic,cloudTempCon, distanceCon, timeCon],
+  detached: [detachedPic, cloudTempCon, distanceCon, timeCon,sefmCon],
+  disturbed: [disturbedPic, cloudTempCon, prepCon, distanceCon ],
+  debris: [debrisPic, cloudTempCon, distanceCon, timeCon, sefmCon ],
+  smoke: [smokePic, cloudTempCon, distanceCon, timeCon  ],
+  thick: [thickPic, cloudTempCon, distanceCon],
+  tribo: [triboPic, revCon, cloudTempCon, distanceCon],
+  cumulus: [cumulusPic, cloudTempCon, distanceCon, sefmCon ],
+  sefm: [sefmPic, sefmCon, timeCon, distanceCon],
 }
 
 export default function RuleGeneric(props) {
@@ -257,14 +264,7 @@ export default function RuleGeneric(props) {
     getAPIData(ruleName);
   }, []);
 
-  // const Image = styled('img')({
-  //   width: '100%',
-  // });
-
-  // let lightning = {lightning}
-
-  // console.log("Lightning: ", lightning)
-  // console.log("SEFM: ", sefm)
+ const [altimage, setAltimage] = useState ([]);
 
   return (
     <div>
@@ -338,12 +338,8 @@ export default function RuleGeneric(props) {
         ) : (
           <CardMedia
             component="img"
-            // src="https://cdn.mos.cms.futurecdn.net/3nBMpxAkg5sAuHY8uaHy3B-1024-80.jpg"
-            // image= {Function("`${ruleName}`")()}
-            image= {imageObject[ruleName]}
-
-            // src={"../images/" + ruleName + ".png"}
-            alt=""
+            image= {imageObject[ruleName][0]}
+            alt= {setAltimage}
           />
 
         )}
@@ -388,8 +384,8 @@ export default function RuleGeneric(props) {
                   maxHeight: "200px",
                 }}
                 component="img"
-                // image={sefm}
-                alt="alt legend pic"
+                image={imageObject[ruleName][1]}
+                alt= {setAltimage}
               />
             )}
 
@@ -404,8 +400,9 @@ export default function RuleGeneric(props) {
                   maxHeight: "200px",
                 }}
                 component="img"
-                // image={sefm}
-                alt="alt legend pic"
+                image={imageObject[ruleName][2]}
+                alt= {setAltimage}
+
               />
             )}
 
@@ -420,10 +417,28 @@ export default function RuleGeneric(props) {
                   maxHeight: "200px",
                 }}
                 component="img"
-                // image={sefm}
-                alt="alt legend pic"
+                image={imageObject[ruleName][3]}
+                alt= {setAltimage}
+
               />
             )}
+
+{loading ? (
+              <Skeleton variant="rectangular" width="19%">
+                <div style={{ paddingTop: "57%" }} />
+              </Skeleton>
+            ) : (
+              <CardMedia
+                style={{
+                  width: "auto",
+                  maxHeight: "200px",
+                }}
+                component="img"
+                image={imageObject[ruleName][4]}
+                alt= {setAltimage}
+              />
+            )}
+
           </Box>
         </CardContent>
 
