@@ -5,6 +5,9 @@ import RuleGeneric from "./RuleGeneric.js";
 import Skeleton from "@mui/material/Skeleton";
 import PropTypes from 'prop-types';
 import Legend from "../components/Legend.js";
+import Button from "@mui/material/Button";
+import CreateIcon from "@mui/icons-material/Create";
+import IconButton from "@mui/material/IconButton";
 
 
 
@@ -37,6 +40,7 @@ function Home() {
 
   return (
 
+
         <Box
           data-testid='card-container'
           sx={{
@@ -46,6 +50,13 @@ function Home() {
             ml: 4,
             mr:4
         }}>
+{/*
+          <Button size="small" onClick={() => handleModal()}> */}
+          <Button>
+            <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
+              <CreateIcon />
+            </IconButton>
+          </Button>
 
         {/* CARDS */}
         <Grid container spacing={3}>
@@ -55,14 +66,8 @@ function Home() {
                   </Grid>
                 ))}
         </Grid>
+
       </Box>
-
-
-    // <div>
-
-    //   <Legend/>
-
-    // </div>
 
 
 
