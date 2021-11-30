@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import RuleGeneric from "./RuleGeneric.js";
 import Skeleton from "@mui/material/Skeleton";
 import PropTypes from 'prop-types';
+import Legend from "../components/Legend.js";
 
 
 
@@ -36,7 +37,9 @@ function Home() {
 
   return (
 
-        <Box sx={{
+        <Box
+          data-testid='card-container'
+          sx={{
             display: "flex",
             justifyContent: "center",
             mt: 12,
@@ -52,9 +55,14 @@ function Home() {
                   </Grid>
                 ))}
         </Grid>
-
-
       </Box>
+
+
+    <div>
+
+      <Legend/>
+
+    <div>
 
 
 

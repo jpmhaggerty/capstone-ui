@@ -1,7 +1,7 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import DateTimePicker from "@mui/lab/DateTimePicker";
@@ -64,7 +64,6 @@ export default function ModalGeneric({
   handleProMode,
   handleDataSet,
 }) {
-
   const properCase = (stringVal) => {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
@@ -74,7 +73,6 @@ export default function ModalGeneric({
       return (
         <div key={index}>
           <Divider />
-
           <Stack direction="row" spacing={1} alignItems="center">
             <TextField
               label="ID"
@@ -101,12 +99,11 @@ export default function ModalGeneric({
                 margin: "10px",
               }}
               size="small"
-              name="constraint_name"
+              name={`constraint_name${index}`}
               onChange={(event) =>
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
-
 
             <FormControlLabel
               label=""
@@ -137,7 +134,7 @@ export default function ModalGeneric({
                 </div>
               }
             />
-            <TextField
+            {/* <TextField
               data-testid='logicGroup'
               label="Logic Group"
               multiline
@@ -149,9 +146,8 @@ export default function ModalGeneric({
               onChange={(event) =>
                 handleDataSet(index, event.target.name, event.target.value)
               }
-            />
+            /> */}
           </Stack>
-
         </div>
       );
     } else {
@@ -217,7 +213,7 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
-            <TextField
+            {/* <TextField
               label="Logic Group"
               multiline
               width="auto"
@@ -228,7 +224,7 @@ export default function ModalGeneric({
               onChange={(event) =>
                 handleDataSet(index, event.target.name, event.target.value)
               }
-            />
+            /> */}
           </Stack>
         </div>
       );
@@ -240,34 +236,49 @@ export default function ModalGeneric({
       return (
         <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
-          <FormControlLabel
-            data-testid={`constraint_name${index}`}
-            label={element.constraint_name}
-            control={
-              <div>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography sx={{ padding: "0px 0px 0px 20px" }}>
-                    No
-                  </Typography>
-                  <Switch
-                    checked={element.user_input_boolean}
-                    name="user_input_boolean"
-                    color="success"
-                    onChange={(event) =>
-                      handleDataSet(
-                        index,
-                        event.target.name,
-                        event.target.checked
-                      )
-                    }
-                  />
-                  <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                    Yes
-                  </Typography>
-                </Stack>
-              </div>
-            }
-          />
+          <Stack direction="row" spacing={1} alignItems="left" divider={<Divider orientation="vertical" flexItem />}>
+            <TextField
+              label="ID"
+              defaultValue={element.id}
+              fullWidth
+              sx={{
+                color: "blue",
+                bgcolor: "#CCCCCC",
+                width: "50px",
+                padding: "5px",
+                margin: "5px",
+              }}
+              size="small"
+            />
+            <FormControlLabel
+              data-testid={`constraint_name${index}`}
+              label={element.constraint_name}
+              control={
+                <div>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                      No
+                    </Typography>
+                    <Switch
+                      checked={element.user_input_boolean}
+                      name="user_input_boolean"
+                      color="success"
+                      onChange={(event) =>
+                        handleDataSet(
+                          index,
+                          event.target.name,
+                          event.target.checked
+                        )
+                      }
+                    />
+                    <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                      Yes
+                    </Typography>
+                  </Stack>
+                </div>
+              }
+            />
+          </Stack>
         </div>
       );
     } else if (
@@ -277,6 +288,18 @@ export default function ModalGeneric({
       return (
         <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
+          <TextField
+            label="ID"
+            defaultValue={element.id}
+            sx={{
+              color: "blue",
+              bgcolor: "#CCCCCC",
+              width: "100px",
+              padding: "5px",
+              margin: "5px",
+            }}
+            size="small"
+          />
           <h3>{element.constraint_name}</h3>
           <TextField
             label="Enter distance"
@@ -301,6 +324,18 @@ export default function ModalGeneric({
           <h3>{element.constraint_name}</h3>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
+              <TextField
+                label="ID"
+                defaultValue={element.id}
+                sx={{
+                  color: "blue",
+                  bgcolor: "#CCCCCC",
+                  width: "100px",
+                  padding: "5px",
+                  margin: "5px",
+                }}
+                size="small"
+              />
               <DateTimePicker
                 label="Date & Time"
                 value={+element.user_input_integer}

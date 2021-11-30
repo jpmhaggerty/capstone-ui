@@ -33,16 +33,16 @@ import { useState, useEffect } from "react";
 
 var imageObject = {
   lightning: [lightningPic, distanceCon, timeCon, sefmCon],
-  attached: [attachedPic,cloudTempCon, distanceCon, timeCon],
-  detached: [detachedPic, cloudTempCon, distanceCon, timeCon,sefmCon],
-  disturbed: [disturbedPic, cloudTempCon, prepCon, distanceCon ],
-  debris: [debrisPic, cloudTempCon, distanceCon, timeCon, sefmCon ],
-  smoke: [smokePic, cloudTempCon, distanceCon, timeCon  ],
+  attached: [attachedPic, cloudTempCon, distanceCon, timeCon],
+  detached: [detachedPic, cloudTempCon, distanceCon, timeCon, sefmCon],
+  disturbed: [disturbedPic, cloudTempCon, prepCon, distanceCon],
+  debris: [debrisPic, cloudTempCon, distanceCon, timeCon, sefmCon],
+  smoke: [smokePic, cloudTempCon, distanceCon, timeCon],
   thick: [thickPic, cloudTempCon, distanceCon],
   tribo: [triboPic, revCon, cloudTempCon, distanceCon],
-  cumulus: [cumulusPic, cloudTempCon, distanceCon, sefmCon ],
+  cumulus: [cumulusPic, cloudTempCon, distanceCon, sefmCon],
   sefm: [sefmPic, sefmCon, timeCon, distanceCon],
-}
+};
 
 export default function RuleGeneric(props) {
   const { loading = false } = props;
@@ -66,7 +66,6 @@ export default function RuleGeneric(props) {
   };
 
   const putAPIData = async (ruleName) => {
-    // console.log("Put request content: ", rule);
     for (let i = 0; i < rule.length; i++) {
       const response = await fetch(`http://localhost:8080/rules/${ruleName}`, {
         method: "PUT",
@@ -76,9 +75,7 @@ export default function RuleGeneric(props) {
         },
         body: JSON.stringify(rule[i]),
       });
-      //we could use the result for error checking
       const result = await response.json();
-      // console.log("Put request result:", result);
     }
   };
 
@@ -106,19 +103,20 @@ export default function RuleGeneric(props) {
     return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
 
-  const showByClass = (name, show) => {
-    let classArray = document.getElementsByClassName(name);
-    if (classArray) {
-      for (let i = 0; i < classArray.length; i++) {
-        classArray[i].removeAttribute("hidden");
-      }
-    }
-    if (classArray && !show) {
-      for (let i = 0; i < classArray.length; i++) {
-        classArray[i].setAttribute("hidden", "true");
-      }
-    }
-  };
+  // Test code for hiding children groups
+  // const showByClass = (name, show) => {
+  //   let classArray = document.getElementsByClassName(name);
+  //   if (classArray) {
+  //     for (let i = 0; i < classArray.length; i++) {
+  //       classArray[i].removeAttribute("hidden");
+  //     }
+  //   }
+  //   if (classArray && !show) {
+  //     for (let i = 0; i < classArray.length; i++) {
+  //       classArray[i].setAttribute("hidden", "true");
+  //     }
+  //   }
+  // };
 
   React.useEffect(() => {
     const isRuleClear = () => {
@@ -143,12 +141,54 @@ export default function RuleGeneric(props) {
             rule[i].user_input_integer = rule[i].user_input_integer
               ? rule[i].user_input_integer
               : 0;
+
             truthArray[i] = [
               Function(
                 `return ${rule[i].user_input_integer} ${rule[i].constraint_operator} ${rule[i].constraint_parameter_integer}`
               )(),
               logicSplit,
             ];
+            //*** If Function is rejected, use this instead
+            //
+            // switch (rule[i].constraint_operator) {
+            //   case "=":
+            //     truthArray[i] = [
+            //       rule[i].user_input_integer ===
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case ">":
+            //     truthArray[i] = [
+            //       rule[i].user_input_integer >
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case "<":
+            //     truthArray[i] = [
+            //       rule[i].user_input_integer <
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case ">=":
+            //     truthArray[i] = [
+            //       rule[i].user_input_integer >=
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case ">=":
+            //     truthArray[i] = [
+            //       rule[i].user_input_integer <=
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   default:
+            //     false;
+            // }
           } else if (
             rule[i].constraint_name &&
             rule[i].constraint_name.includes("time")
@@ -163,6 +203,52 @@ export default function RuleGeneric(props) {
               )(),
               logicSplit,
             ];
+            //*** If Function is rejected, use this instead
+            //
+            // switch (rule[i].constraint_operator) {
+            //   case "=":
+            //     truthArray[i] = [
+            //       ((Date.now() - rule[i].user_input_integer) / (1000 * 60) >
+            //         rule[i].constraint_parameter_integer) ===
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case ">":
+            //     truthArray[i] = [
+            //       ((Date.now() - rule[i].user_input_integer) / (1000 * 60) >
+            //         rule[i].constraint_parameter_integer) >
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case "<":
+            //     truthArray[i] = [
+            //       ((Date.now() - rule[i].user_input_integer) / (1000 * 60) >
+            //         rule[i].constraint_parameter_integer) <
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case ">=":
+            //     truthArray[i] = [
+            //       ((Date.now() - rule[i].user_input_integer) / (1000 * 60) >
+            //         rule[i].constraint_parameter_integer) >=
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   case ">=":
+            //     truthArray[i] = [
+            //       ((Date.now() - rule[i].user_input_integer) / (1000 * 60) >
+            //         rule[i].constraint_parameter_integer) <=
+            //         rule[i].constraint_parameter_integer,
+            //       logicSplit,
+            //     ];
+            //     break;
+            //   default:
+            //     false;
+            // }
           }
         }
       }
@@ -185,21 +271,10 @@ export default function RuleGeneric(props) {
           element[1].includes(truthGroups[j])
         );
 
-        console.log("Truth array", truthArray);
-        console.log("Rest of truth", restOfTruth);
-        console.log("Filtered truth", filteredTruth);
-        console.log(
-          "Filtered truth- closer",
-          filteredTruth[0][1][filteredTruth[0][1].length - 2]
-        );
-
         let parentGroup = filteredTruth[0][1][filteredTruth[0][1].length - 2];
         let parentFilter = restOfTruth.filter(
           (element) => element[1].slice(-1)[0] === parentGroup
         );
-
-        console.log("Parent group", parentGroup);
-        console.log("Parent filter", parentFilter);
 
         let localTruth = filteredTruth.reduce(
           (prev, curr) => {
@@ -243,7 +318,7 @@ export default function RuleGeneric(props) {
         truthArray = restOfTruth;
       }
 
-      // console.log("Groups to show: ", showChildren, truthGroups);
+      // Test code for hiding children groups
       // for (let l = 0; l < truthGroups.length; l++) {
       //   if (showChildren.includes(truthGroups[l])) {
       //     showByClass(truthGroups[l], true);
@@ -264,7 +339,7 @@ export default function RuleGeneric(props) {
     getAPIData(ruleName);
   }, []);
 
- const [altimage, setAltimage] = useState ([]);
+  const [altimage, setAltimage] = useState([]);
 
   return (
     <div>
@@ -293,7 +368,7 @@ export default function RuleGeneric(props) {
                 sx={{ bgcolor: "#123548", color: grey[50] }}
                 aria-label="avatar"
               >
-                {ruleName.slice(0,2).toUpperCase()}
+                {ruleName.slice(0, 2).toUpperCase()}
               </Avatar>
             )}
           </Box>
@@ -338,10 +413,9 @@ export default function RuleGeneric(props) {
         ) : (
           <CardMedia
             component="img"
-            image= {imageObject[ruleName][0]}
-            alt= {setAltimage}
+            image={imageObject[ruleName][0]}
+            alt="LCCImg"
           />
-
         )}
 
         {/* CONSIDERATIONS */}
@@ -385,7 +459,7 @@ export default function RuleGeneric(props) {
                 }}
                 component="img"
                 image={imageObject[ruleName][1]}
-                alt= {setAltimage}
+                alt={setAltimage}
               />
             )}
 
@@ -401,8 +475,7 @@ export default function RuleGeneric(props) {
                 }}
                 component="img"
                 image={imageObject[ruleName][2]}
-                alt= {setAltimage}
-
+                alt={setAltimage}
               />
             )}
 
@@ -418,12 +491,11 @@ export default function RuleGeneric(props) {
                 }}
                 component="img"
                 image={imageObject[ruleName][3]}
-                alt= {setAltimage}
-
+                alt={setAltimage}
               />
             )}
 
-{loading ? (
+            {loading ? (
               <Skeleton variant="rectangular" width="19%">
                 <div style={{ paddingTop: "57%" }} />
               </Skeleton>
@@ -435,10 +507,9 @@ export default function RuleGeneric(props) {
                 }}
                 component="img"
                 image={imageObject[ruleName][4]}
-                alt= {setAltimage}
+                alt={setAltimage}
               />
             )}
-
           </Box>
         </CardContent>
 
@@ -451,7 +522,7 @@ export default function RuleGeneric(props) {
         >
           {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
-            <IconButton aria-label="fill"  sx={{ color: "#9e9e9e" }}>
+            <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
               <CreateIcon />
             </IconButton>
           </Button>
