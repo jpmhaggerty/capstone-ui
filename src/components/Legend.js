@@ -38,7 +38,7 @@ export default function Legend() {
        sx={{
             display: "flex",
             flexDirection: "row",
-            margin: 2,
+            margin: 10,
             bgcolor : "#f50057",
            }}
            display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}
