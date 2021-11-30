@@ -58,11 +58,11 @@ function Home() {
       </Box>
 
 
-    <div>
+    // <div>
 
-      <Legend/>
+    //   <Legend/>
 
-    <div>
+    // </div>
 
 
 
