@@ -38,7 +38,7 @@ export default function Legend() {
        sx={{
             display: "flex",
             flexDirection: "row",
-            margin: 10,
+            margin: 2,
             bgcolor : "#f50057",
            }}
            display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}
@@ -77,7 +77,7 @@ export default function Legend() {
 
                 {/* <Typography> Distance </Typography> */}
 
-                  <Box>
+            <Box>
                       <CardMedia
                   component="img"
                   sx={{ width: 75, height:75, }}
@@ -107,9 +107,10 @@ export default function Legend() {
                   image={revCon}
                   alt="rev"
                 />
-                </Box>
 
                 {/* <Typography> Rocket Velocity </Typography> */}
+
+
 
       </Box>
 </Grid>
