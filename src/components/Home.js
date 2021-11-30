@@ -6,9 +6,8 @@ import Skeleton from "@mui/material/Skeleton";
 import PropTypes from 'prop-types';
 import Legend from "../components/Legend.js";
 import Button from "@mui/material/Button";
-import CreateIcon from "@mui/icons-material/Create";
+import ReportIcon from '@mui/icons-material/Report';
 import IconButton from "@mui/material/IconButton";
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
 
@@ -17,9 +16,10 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 450,
+  height: 450,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '2px solid  #123540',
   boxShadow: 24,
   p: 4,
 };
@@ -58,11 +58,6 @@ function Home() {
   // };
 
 
-  <Modal
-  open={open}
-  onClose={handleClose}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description">
 
 
   return (
@@ -74,9 +69,22 @@ function Home() {
 
           <Button onClick={handleOpen}>
             <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
-              <CreateIcon />
+              <ReportIcon  />
             </IconButton>
           </Button>
+
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description">
+
+        <Box sx={style}>
+
+
+            <Legend/>
+        </Box>
+      </Modal>
 
 
 
@@ -85,7 +93,7 @@ function Home() {
           sx={{
             display: "flex",
             justifyContent: "center",
-            mt: 12,
+            mt: 4,
             ml: 4,
             mr:4
         }}>

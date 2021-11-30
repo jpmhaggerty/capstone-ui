@@ -1,12 +1,13 @@
+import PdfViewer from "../components/PdfViewer.js";
 
-import Legend from "../components/Legend.js";
 
 
 function Charts() {
   return (
     <div>
-                <Legend/>
+                <PdfViewer/>
     </div>
+
   );
 }
 
