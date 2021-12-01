@@ -258,7 +258,7 @@ export default function ModalGeneric({
                 margin: "5px",
 
               }}
-              size="small"
+              size="extra-small"
             />
             <FormControlLabel
               data-testid={`constraint_name${index}`}
@@ -345,6 +345,7 @@ export default function ModalGeneric({
               onChange={(event) =>
                 handleDataSet(index, event.target.name, event.target.value)
               }
+              size="small"
             />
           </Box>
         </Box>
