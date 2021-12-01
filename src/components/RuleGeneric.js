@@ -383,7 +383,7 @@ export default function RuleGeneric(props) {
             ) : (
               <Typography sx={{ fontSize: 25 }}>
                 {" "}
-                {properCase(ruleName)}{" "}
+                {properCase(ruleName)}{" "} Rule
               </Typography>
             )}
           </Box>

@@ -29,11 +29,12 @@ function App() {
   return (
     <React.Fragment>
     <ThemeProvider theme={theme}>
-      <CssBaseline>
+      <CssBaseline enableColorScheme>
 
       <header>
         <ButtonAppBar darkMode={darkMode} setDarkMode={setDarkMode}/>
       </header>
+
 
       <Routes>
         <Route path="/" element={<Home/>} darkMode={darkMode} setDarkMode={setDarkMode}/>

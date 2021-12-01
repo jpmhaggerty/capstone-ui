@@ -80,7 +80,7 @@ export default function ModalGeneric({
               sx={{
                 color: "blue",
 
-                width: "150px",
+                width: "158px",
                 padding: "10px",
                 margin: "5px",
               }}
@@ -164,7 +164,6 @@ export default function ModalGeneric({
               defaultValue={element.id}
               sx={{
                 color: "blue",
-
                 width: "150px",
                 padding: "10px",
                 margin: "5px",
@@ -247,6 +246,7 @@ export default function ModalGeneric({
           <Stack direction="row" spacing={1} alignItems="left" divider={<Divider orientation="vertical" flexItem />}>
 
           {/* TWO */}
+          <Box>
             <TextField
               label="ID"
               defaultValue={element.id}
@@ -256,10 +256,10 @@ export default function ModalGeneric({
                 width: "58px",
                 padding: "5px",
                 margin: "5px",
-
               }}
               size="extra-small"
             />
+          </Box>
             <FormControlLabel
               data-testid={`constraint_name${index}`}
               label={element.constraint_name}
@@ -316,14 +316,15 @@ export default function ModalGeneric({
             defaultValue={element.id}
             sx={{
               color: "blue",
-
-              width: "50px",
+              width: "58px",
               padding: "5px",
               margin: "5px",
             }}
             size="small"
           />
         </Box>
+
+        {/* <Divider orientation="vertical" /> */}
 
           <Box sx={{ml:4}}>
             <h3>{element.constraint_name}</h3>
@@ -371,18 +372,22 @@ export default function ModalGeneric({
                   mt: 2
                 }}
                 >
+
+          <Box>
               <TextField
                 label="ID"
                 defaultValue={element.id}
                 sx={{
                   color: "blue",
-
-                  width: "50px",
+                  width: "58px",
                   padding: "5px",
                   margin: "5px",
                 }}
                 size="small"
               />
+
+
+          </Box>
 
         <Box sx={{ml:5}}>
           <h3>{element.constraint_name}</h3>
@@ -420,9 +425,14 @@ export default function ModalGeneric({
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={handleModal}
-        sx={{ minWidth: 1000 }}
+        sx={{ minWidth: 1000, bgcolor:"#3e5f6b", color:"white"}}
       >
+
+
+
         {properCase(ruleName)} Rule
+
+
       </BootstrapDialogTitle>
       {openProMode ? ruleDialogPro : ruleDialog}
       <br></br>

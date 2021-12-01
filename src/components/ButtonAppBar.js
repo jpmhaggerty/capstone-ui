@@ -55,8 +55,8 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
             <Button variant="contained" sx={{ backgroundColor: '#123540', ml:1, mr:1 }} > Home</Button>
           </Link>
 
-          <Link to="/charts" style={{ textDecoration: 'none', color: 'white'}}>
-            <Button variant="contained" sx={{ backgroundColor: '#123540', ml: 1}} > Documents</Button>
+          <Link to="/documents" style={{ textDecoration: 'none', color: 'white'}}>
+            <Button variant="contained" sx={{ backgroundColor: '#123540', ml: 1}} > NASA Technical Standard 4010</Button>
           </Link>
 
 

@@ -1,10 +1,13 @@
 import PdfViewer from "../components/PdfViewer.js";
+import Grid from '@mui/material/Grid'
 
 function Documents() {
   return (
-    <div>
+    <Grid
+    container
+    justifyContent='center'>
       <PdfViewer />
-    </div>
+    </Grid>
   );
 }
 
