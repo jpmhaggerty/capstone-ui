@@ -10,6 +10,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import IconButton from "@mui/material/IconButton";
 import Modal from '@mui/material/Modal';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from "@mui/material/Typography";
 
 
 const style = {
@@ -70,8 +71,8 @@ function Home() {
 
           <Button onClick={handleOpen}>
             <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
-              <Tooltip title="Legend">
-                <ReportIcon  />
+              <Tooltip title={<Typography fontSize={18}>Legend</Typography>}>
+                  <ReportIcon/>
               </Tooltip>
             </IconButton>
           </Button>

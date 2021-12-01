@@ -524,7 +524,7 @@ export default function RuleGeneric(props) {
           {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
             <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
-              <Tooltip title="Complete Rule Form" placement="left">
+              <Tooltip title={<Typography fontSize={18}>Complete Rule Form</Typography>} placement="left">
                 <CreateIcon />
               </Tooltip>
             </IconButton>
