@@ -42,7 +42,7 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
 
           </Typography>
 
-        <Tooltip title="Light/Dark Mode" placement="left">
+        <Tooltip title={<Typography fontSize={15}>Light/Dark Mode</Typography>} placement="left">
           <IconButton
             onClick={handleDarkMode}
             color="inherit"
