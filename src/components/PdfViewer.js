@@ -26,13 +26,19 @@ export default function PdfViewer() {
   }
 
   return (
+
     <>
+    <Box>
+
       <Document
         file={pdf}
         onLoadSuccess={onDocumentLoadSuccess}
       >
         <Page pageNumber={pageNumber} />
       </Document>
+    </Box>
+
+
       <div>
         <p>
           Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
@@ -52,6 +58,8 @@ export default function PdfViewer() {
           Next
         </button>
       </div>
+
+    </Box>
     </>
   );
 }
