@@ -1,3 +1,17 @@
+This project was created from the create-react-app project which is a ready-made React application starter.
+
+## Get Started
+Install your node modules
+
+`npm i`
+
+Run the app
+
+`npm start`
+
+## run cypress tests locally in container
+
+`docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.4.0 --env configFile=pipeline`
 # 45 SLD Weather App
 
 The purpose of this app is to provide an interactive tool for the weather squadron to utilize as a way to determine whether a weather violation is occuring. There are ten launch commit criteria that must be go for launch prior to T-0. This tool takes in criteria from the NASA 4010 documentation pinpointing the different commit criteria for launch ([NASA 4010](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwilnNOa5qT0AhU1RDABHaWSALcQFnoECAgQAQ&url=https%3A%2F%2Fstandards.nasa.gov%2Fstandard%2Fnasa%2Fnasa-std-4010&usg=AOvVaw0Ha7XD4eqGmsQ5aAiJ-TH0)).
