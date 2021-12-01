@@ -88,6 +88,7 @@ export default function ModalGeneric({
             />
 
             {/* NO */}
+
             <TextField
               data-testid={`constraint_rule${index}`}
               label="Constraint Rule"
@@ -106,6 +107,7 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
+
 
             <FormControlLabel
               label=""
@@ -171,6 +173,7 @@ export default function ModalGeneric({
             />
 
             {/* NO */}
+
             <TextField
               label="Constraint Rule"
               multiline
@@ -188,6 +191,7 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
+
 
             <TextField
               label="Operator"
@@ -277,6 +281,7 @@ export default function ModalGeneric({
                         )
                       }
                     />
+
                     <Typography sx={{ padding: "0px 20px 0px 0px" }}>
                       Yes
                     </Typography>
@@ -451,3 +456,6 @@ export default function ModalGeneric({
     </BootstrapDialog>
   );
 }
+
+
+
