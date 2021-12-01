@@ -28,7 +28,7 @@ export default function PdfViewer() {
   return (
 
     <>
-    <Box>
+
 
       <Document
         file={pdf}
@@ -36,7 +36,7 @@ export default function PdfViewer() {
       >
         <Page pageNumber={pageNumber} />
       </Document>
-    </Box>
+
 
 
       <div>
@@ -59,7 +59,7 @@ export default function PdfViewer() {
         </button>
       </div>
 
-    </Box>
+
     </>
   );
 }
