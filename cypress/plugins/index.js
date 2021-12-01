@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+/// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -25,3 +26,11 @@ module.exports = (on, config) => {
   const file = config.env.configFile || 'development';
   return getConfigurationByFile(file);
 };
+/**
+ * @type {Cypress.PluginConfig}
+ */
+// eslint-disable-next-line no-unused-vars
+module.exports = (on, config) => {
+  // `on` is used to hook into various events Cypress emits
+  // `config` is the resolved Cypress config
+}
