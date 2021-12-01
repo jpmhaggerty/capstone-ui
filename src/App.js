@@ -2,7 +2,7 @@ import * as React from "react";
 import ButtonAppBar from "./components/ButtonAppBar.js";
 import CssBaseline from '@mui/material/CssBaseline';
 import Home from "./components/Home.js";
-import Charts from "./components/Charts.js";
+import Documents from "./components/Documents.js";
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useState} from 'react';
@@ -40,7 +40,7 @@ function App() {
       </Routes>
 
       <Routes>
-        <Route path="/charts" element={<Charts/>} darkMode={darkMode} setDarkMode={setDarkMode}/>
+        <Route path="/documents" element={<Documents/>} darkMode={darkMode} setDarkMode={setDarkMode}/>
       </Routes>
 
       </CssBaseline>

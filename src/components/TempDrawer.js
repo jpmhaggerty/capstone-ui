@@ -10,7 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from '@mui/icons-material/Home';
 import { Link } from "react-router-dom";
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 
 
@@ -64,9 +64,9 @@ export default function TempDrawer() {
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <AccountTreeIcon />
+                <DocumentScannerIcon/>
               </ListItemIcon>
-              <ListItemText primary="Charts" />
+              <ListItemText primary="Documents" />
             </ListItemButton>
           </ListItem>
         </Link>

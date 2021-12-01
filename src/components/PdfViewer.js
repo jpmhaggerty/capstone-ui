@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
-import file from '../public/nasa-std-4010.pdf'
+import { Document, Page } from "react-pdf";
+import file from "../pdfs/sample.pdf";
+// import workerFilePath from 'pdfjs-dist/build/pdf.worker.min.js';
+// import pdfjs from 'pdfjs-dist';
 
-export default function PdfViewer() {
+export default async function PdfViewer() {
+  // const [numPages, setNumPages] = useState(null);
+  // const [pageNumber, setPageNumber] = useState(1);
 
-      const [numPages, setNumPages] = useState(null);
-      const [pageNumber, setPageNumber] = useState(1);
+  // pdfjs.GlobalWorkerOptions.workerSrc = workerFilePath;
 
-      function onDocumentLoadSuccess({ numPages }) {
-        setNumPages(numPages);
-      }
-    return (
-            <div>
-              <Document
-                file= {file}
-                onLoadSuccess={onDocumentLoadSuccess}
-              >
-                <Page pageNumber={pageNumber} />
-              </Document>
-              <p>Page {pageNumber} of {numPages}</p>
-            </div>
-    );
-    }
+  // function onDocumentLoadSuccess({ numPages }) {
+  //   setNumPages(numPages);
+  // }
+
+  return (
+    <div style={{ width: 600 }}>
+      <Document
+        file={file}
+        // onLoadSuccess={onDocumentLoadSuccess}
+      >
+        {/* <Page pageNumber={pageNumber} width={600} /> */}
+      </Document>
+    </div>
+  );
+}

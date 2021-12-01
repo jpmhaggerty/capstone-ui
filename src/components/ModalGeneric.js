@@ -79,13 +79,15 @@ export default function ModalGeneric({
               defaultValue={element.id}
               sx={{
                 color: "blue",
-                bgcolor: "#CCCCCC",
-                width: "100px",
-                padding: "5px",
+
+                width: "150px",
+                padding: "10px",
                 margin: "5px",
               }}
               size="small"
             />
+
+            {/* NO */}
             <TextField
               data-testid={`constraint_rule${index}`}
               label="Constraint Rule"
@@ -99,7 +101,7 @@ export default function ModalGeneric({
                 margin: "10px",
               }}
               size="small"
-              name={`constraint_name${index}`}
+              name={`constraint_name`}
               onChange={(event) =>
                 handleDataSet(index, event.target.name, event.target.value)
               }
@@ -160,13 +162,15 @@ export default function ModalGeneric({
               defaultValue={element.id}
               sx={{
                 color: "blue",
-                bgcolor: "#CCCCCC",
-                width: "100px",
-                padding: "5px",
+
+                width: "150px",
+                padding: "10px",
                 margin: "5px",
               }}
               size="small"
             />
+
+            {/* NO */}
             <TextField
               label="Constraint Rule"
               multiline
@@ -237,16 +241,18 @@ export default function ModalGeneric({
         <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
           <Stack direction="row" spacing={1} alignItems="left" divider={<Divider orientation="vertical" flexItem />}>
+
+          {/* TWO */}
             <TextField
               label="ID"
               defaultValue={element.id}
               fullWidth
               sx={{
                 color: "blue",
-                bgcolor: "#CCCCCC",
-                width: "50px",
+                width: "58px",
                 padding: "5px",
                 margin: "5px",
+
               }}
               size="small"
             />
@@ -286,32 +292,59 @@ export default function ModalGeneric({
       element.constraint_name.includes("distance")
     ) {
       return (
+
+        // THREE
         <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
+
+          <Box
+            sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mt: 2
+                }}
+          >
+
+        <Box>
           <TextField
             label="ID"
             defaultValue={element.id}
             sx={{
               color: "blue",
-              bgcolor: "#CCCCCC",
-              width: "100px",
+
+              width: "50px",
               padding: "5px",
               margin: "5px",
             }}
             size="small"
           />
-          <h3>{element.constraint_name}</h3>
-          <TextField
-            label="Enter distance"
-            defaultValue={element.user_input_integer}
-            name="user_input_integer"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">nm</InputAdornment>,
-            }}
-            onChange={(event) =>
-              handleDataSet(index, event.target.name, event.target.value)
-            }
-          />
+        </Box>
+
+          <Box sx={{ml:4}}>
+            <h3>{element.constraint_name}</h3>
+          </Box>
+
+          {/* DISTANCE INPUT */}
+
+          <Box sx={{ml:3}}>
+            <TextField
+              label="Enter distance"
+              defaultValue={element.user_input_integer}
+              name="user_input_integer"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">nm</InputAdornment>,
+              }}
+              sx={{
+                width: "125px",
+              }}
+              onChange={(event) =>
+                handleDataSet(index, event.target.name, event.target.value)
+              }
+            />
+          </Box>
+        </Box>
+
+
         </div>
       );
     } else if (
@@ -321,21 +354,36 @@ export default function ModalGeneric({
       return (
         <div key={index} className={element.logic_group.split(",").slice(-1)}>
           <Divider />
-          <h3>{element.constraint_name}</h3>
+
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
+
+          <Box
+            sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mt: 2
+                }}
+                >
               <TextField
                 label="ID"
                 defaultValue={element.id}
                 sx={{
                   color: "blue",
-                  bgcolor: "#CCCCCC",
-                  width: "100px",
+
+                  width: "50px",
                   padding: "5px",
                   margin: "5px",
                 }}
                 size="small"
               />
+
+        <Box sx={{ml:5}}>
+          <h3>{element.constraint_name}</h3>
+        </Box>
+                {/* DATE PICKER */}
+
+          <Box sx={{width: "180px", ml:3}} >
               <DateTimePicker
                 label="Date & Time"
                 value={+element.user_input_integer}
@@ -345,6 +393,9 @@ export default function ModalGeneric({
                   handleDataSet(index, "user_input_integer", Date.parse(event))
                 }
               />
+          </Box>
+        </Box>
+
             </Stack>
           </LocalizationProvider>
         </div>

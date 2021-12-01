@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import ReportIcon from '@mui/icons-material/Report';
 import IconButton from "@mui/material/IconButton";
 import Modal from '@mui/material/Modal';
+import Tooltip from '@mui/material/Tooltip';
 
 
 const style = {
@@ -17,11 +18,11 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 450,
-  height: 450,
+  height: 425,
   bgcolor: 'background.paper',
-  border: '2px solid  #123540',
+  border: '4px solid  #123540',
   boxShadow: 24,
-  p: 4,
+
 };
 
 
@@ -69,7 +70,9 @@ function Home() {
 
           <Button onClick={handleOpen}>
             <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
-              <ReportIcon  />
+              <Tooltip title="Legend">
+                <ReportIcon  />
+              </Tooltip>
             </IconButton>
           </Button>
 
@@ -80,11 +83,17 @@ function Home() {
             aria-describedby="modal-modal-description">
 
         <Box sx={style}>
+          <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
 
-
+                  }}>
             <Legend/>
+          </Box>
         </Box>
-      </Modal>
+
+          </Modal>
 
 
 
@@ -93,7 +102,7 @@ function Home() {
           sx={{
             display: "flex",
             justifyContent: "center",
-            mt: 4,
+            mt: 2,
             ml: 4,
             mr:4
         }}>

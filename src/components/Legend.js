@@ -71,7 +71,9 @@ export default function Legend() {
                     />
                 </Box>
 
-                <Box>
+                <Box
+                sx={{color: "#212121" }}
+                >
                   <Box
                   sx={{ width: 75, height:75, mb: 1,}}
                   >
@@ -116,7 +118,9 @@ export default function Legend() {
 
                 </Box>
 
-                <Box>
+                <Box
+                sx={{color: "#212121" }}
+                >
 
                   <Box
                   sx={{ width: 75, height:75, mb: 1}}

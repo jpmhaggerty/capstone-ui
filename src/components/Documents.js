@@ -1,14 +1,11 @@
 import PdfViewer from "../components/PdfViewer.js";
 
-
-
-function Charts() {
+function Documents() {
   return (
     <div>
-                <PdfViewer/>
+      <PdfViewer />
     </div>
-
   );
 }
 
-export default Charts;
+export default Documents;

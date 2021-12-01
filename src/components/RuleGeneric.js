@@ -30,6 +30,7 @@ import sefmCon from "../images/sefmCon.png";
 import timeCon from "../images/timeCon.png";
 import Skeleton from "@mui/material/Skeleton";
 import { useState, useEffect } from "react";
+import Tooltip from '@mui/material/Tooltip';
 
 var imageObject = {
   lightning: [lightningPic, distanceCon, timeCon, sefmCon],
@@ -523,7 +524,9 @@ export default function RuleGeneric(props) {
           {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
             <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
-              <CreateIcon />
+              <Tooltip title="Complete Rule Form" placement="left">
+                <CreateIcon />
+              </Tooltip>
             </IconButton>
           </Button>
         </CardActions>

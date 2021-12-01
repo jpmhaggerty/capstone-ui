@@ -11,6 +11,7 @@ import TempDrawer from "../components/TempDrawer.js";
 import { useState, useContext } from 'react';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import Tooltip from '@mui/material/Tooltip';
 
 
 export default function ButtonAppBar({ darkMode, setDarkMode }) {
@@ -41,21 +42,21 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
 
           </Typography>
 
+        <Tooltip title="Light/Dark Mode" placement="left">
           <IconButton
             onClick={handleDarkMode}
             color="inherit"
-
-
             >
             {darkMode ? <Brightness4Icon sx={{ fontSize: 15  }} /> : <Brightness7Icon  sx={{ fontSize: 15 }}/>}
           </IconButton>
+        </Tooltip>
 
           <Link to="/" style={{ textDecoration: 'none', color: 'white'}}>
             <Button variant="contained" sx={{ backgroundColor: '#123540', ml:1, mr:1 }} > Home</Button>
           </Link>
 
           <Link to="/charts" style={{ textDecoration: 'none', color: 'white'}}>
-            <Button variant="contained" sx={{ backgroundColor: '#123540', ml: 1}} > Charts</Button>
+            <Button variant="contained" sx={{ backgroundColor: '#123540', ml: 1}} > Documents</Button>
           </Link>
 
 
