@@ -8,11 +8,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
-import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
-
-
+import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 
 export default function TempDrawer() {
   const [state, setState] = React.useState({
@@ -21,11 +19,6 @@ export default function TempDrawer() {
     bottom: false,
     right: false,
   });
-
-
-
-
-
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -46,35 +39,33 @@ export default function TempDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-
-
         <Link to="/" style={{ textDecoration: "none", color: "black" }}>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <HomeIcon  />
+                <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItemButton>
           </ListItem>
         </Link>
 
-
-        <Link to="/documents" style={{ textDecoration: "none", color: "black" }}>
+        <Link
+          to="/documents"
+          style={{ textDecoration: "none", color: "black" }}
+        >
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <DocumentScannerIcon/>
+                <DocumentScannerIcon />
               </ListItemIcon>
               <ListItemText primary="NASA Technical Standard 4010" />
             </ListItemButton>
           </ListItem>
         </Link>
-
       </List>
       <Divider />
     </Box>
-
   );
 
   return (

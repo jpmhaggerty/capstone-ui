@@ -1,24 +1,28 @@
 import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import { grey } from "@mui/material/colors";
-import ModalGeneric from "./ModalGeneric.js";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import fetch from "cross-fetch";
 import CreateIcon from "@mui/icons-material/Create";
-import lightningPic from "../images/lightning.png";
-import sefmPic from "../images/sefm.png";
+import IconButton from "@mui/material/IconButton";
+import ModalGeneric from "./ModalGeneric.js";
+import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { grey } from "@mui/material/colors";
+import { useState, useEffect } from "react";
+import fetch from "cross-fetch";
+
 import attachedPic from "../images/attached.png";
 import cumulusPic from "../images/cumulus.png";
-import detachedPic from "../images/detached.png";
 import debrisPic from "../images/debris.png";
+import detachedPic from "../images/detached.png";
 import disturbedPic from "../images/disturbed.png";
+import lightningPic from "../images/lightning.png";
+import sefmPic from "../images/sefm.png";
 import smokePic from "../images/smoke.png";
 import thickPic from "../images/thick.png";
 import triboPic from "../images/tribo.png";
@@ -28,21 +32,18 @@ import prepCon from "../images/prepCon.png";
 import revCon from "../images/revCon.png";
 import sefmCon from "../images/sefmCon.png";
 import timeCon from "../images/timeCon.png";
-import Skeleton from "@mui/material/Skeleton";
-import { useState, useEffect } from "react";
-import Tooltip from '@mui/material/Tooltip';
 
 var imageObject = {
-  lightning: [lightningPic, distanceCon, timeCon, sefmCon],
-  attached: [attachedPic, cloudTempCon, distanceCon, timeCon],
-  detached: [detachedPic, cloudTempCon, distanceCon, timeCon, sefmCon],
-  disturbed: [disturbedPic, cloudTempCon, prepCon, distanceCon],
-  debris: [debrisPic, cloudTempCon, distanceCon, timeCon, sefmCon],
-  smoke: [smokePic, cloudTempCon, distanceCon, timeCon],
-  thick: [thickPic, cloudTempCon, distanceCon],
-  tribo: [triboPic, revCon, cloudTempCon, distanceCon],
-  cumulus: [cumulusPic, cloudTempCon, distanceCon, sefmCon],
-  sefm: [sefmPic, sefmCon, timeCon, distanceCon],
+  lightning: ["Lightning", lightningPic, distanceCon, timeCon, sefmCon],
+  attached: ["Attached", attachedPic, cloudTempCon, distanceCon, timeCon],
+  detached: ["Detached", detachedPic, cloudTempCon, distanceCon, timeCon, sefmCon,],
+  disturbed: ["Disturbed", disturbedPic, cloudTempCon, prepCon, distanceCon],
+  debris: ["Debris", debrisPic, cloudTempCon, distanceCon, timeCon, sefmCon],
+  smoke: ["Smoke", smokePic, cloudTempCon, distanceCon, timeCon],
+  thick: ["Thick", thickPic, cloudTempCon, distanceCon],
+  tribo: ["Triboelec.", triboPic, revCon, cloudTempCon, distanceCon],
+  cumulus: ["Cumulus", cumulusPic, cloudTempCon, distanceCon, sefmCon],
+  sefm: ["SEFM", sefmPic, sefmCon, timeCon, distanceCon],
 };
 
 export default function RuleGeneric(props) {
@@ -84,10 +85,13 @@ export default function RuleGeneric(props) {
   const [openProMode, setOpenProMode] = React.useState(false);
   const [rule, setRule] = React.useState([stubData]);
   const [clearToLaunch, setClearToLaunch] = React.useState(false);
+  const [altimage, setAltimage] = useState([]);
 
   const handleModal = () => {
     setOpenModal(!openModal);
-    !openModal ? setOpenProMode(false) : console.log("Modal called");
+    if (!openModal) {
+      setOpenProMode(false);
+    }
   };
 
   const handleProMode = () => {
@@ -98,10 +102,6 @@ export default function RuleGeneric(props) {
     let expandedRule = [...rule];
     expandedRule[index][name] = value;
     setRule(expandedRule);
-  };
-
-  const properCase = (stringVal) => {
-    return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
   };
 
   // Test code for hiding children groups
@@ -340,13 +340,12 @@ export default function RuleGeneric(props) {
     getAPIData(ruleName);
   }, []);
 
-  const [altimage, setAltimage] = useState([]);
-
   return (
     <div>
       <ModalGeneric
         openModal={openModal}
         openProMode={openProMode}
+        properRuleName={imageObject[ruleName][0]}
         ruleName={ruleName}
         rule={rule}
         handleModal={handleModal}
@@ -383,7 +382,7 @@ export default function RuleGeneric(props) {
             ) : (
               <Typography sx={{ fontSize: 25 }}>
                 {" "}
-                {properCase(ruleName)}{" "} Rule
+                {imageObject[ruleName][0]} Rule
               </Typography>
             )}
           </Box>
@@ -414,7 +413,7 @@ export default function RuleGeneric(props) {
         ) : (
           <CardMedia
             component="img"
-            image={imageObject[ruleName][0]}
+            image={imageObject[ruleName][1]}
             alt="LCCImg"
           />
         )}
@@ -446,22 +445,6 @@ export default function RuleGeneric(props) {
                   Considerations:
                 </Typography>
               </Box>
-            )}
-
-            {loading ? (
-              <Skeleton variant="rectangular" width="19%">
-                <div style={{ paddingTop: "57%" }} />
-              </Skeleton>
-            ) : (
-              <CardMedia
-                style={{
-                  width: "auto",
-                  maxHeight: "200px",
-                }}
-                component="img"
-                image={imageObject[ruleName][1]}
-                alt={setAltimage}
-              />
             )}
 
             {loading ? (
@@ -511,6 +494,22 @@ export default function RuleGeneric(props) {
                 alt={setAltimage}
               />
             )}
+
+            {loading ? (
+              <Skeleton variant="rectangular" width="19%">
+                <div style={{ paddingTop: "57%" }} />
+              </Skeleton>
+            ) : (
+              <CardMedia
+                style={{
+                  width: "auto",
+                  maxHeight: "200px",
+                }}
+                component="img"
+                image={imageObject[ruleName][5]}
+                alt={setAltimage}
+              />
+            )}
           </Box>
         </CardContent>
 
@@ -524,7 +523,12 @@ export default function RuleGeneric(props) {
           {/* PENCIL */}
           <Button size="small" onClick={() => handleModal()}>
             <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
-              <Tooltip title={<Typography fontSize={18}>Complete Rule Form</Typography>} placement="left">
+              <Tooltip
+                title={
+                  <Typography fontSize={18}>Complete Rule Form</Typography>
+                }
+                placement="left"
+              >
                 <CreateIcon />
               </Tooltip>
             </IconButton>
@@ -534,7 +538,3 @@ export default function RuleGeneric(props) {
     </div>
   );
 }
-
-// RuleGeneric.propTypes = {
-//   loading: PropTypes.bool,
-// };

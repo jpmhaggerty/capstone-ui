@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import pdf from "../pdfs/nasa-std-4010.pdf";
 import Box from "@mui/material/Box";
+import { Document, Page, pdfjs } from "react-pdf";
+import { useState } from "react";
+import pdf from "../pdfs/nasa-std-4010.pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export default function PdfViewer() {
   const [numPages, setNumPages] = useState(null);
@@ -15,7 +15,7 @@ export default function PdfViewer() {
   }
 
   function changePage(offset) {
-    setPageNumber(prevPageNumber => prevPageNumber + offset);
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
   }
 
   function previousPage() {
@@ -27,65 +27,47 @@ export default function PdfViewer() {
   }
 
   return (
-
     <Box
       sx={{
-        mt:10,
-        border: '4px solid  #123540',
+        mt: 10,
+        border: "4px solid  #123540",
       }}
     >
-        <>
-
-
+      <>
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             bgcolor: "#3e5f6b",
           }}
+        >
+          <p>
+            Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+          </p>
+
+          <button
+            type="button"
+            disabled={pageNumber <= 1}
+            onClick={previousPage}
           >
-              <p>
-                Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-              </p>
+            Previous
+          </button>
 
+          <button
+            type="button"
+            disabled={pageNumber >= numPages}
+            onClick={nextPage}
+          >
+            Next
+          </button>
+        </Box>
 
-              <button
-                type="button"
-                disabled={pageNumber <= 1}
-                onClick={previousPage}
-              >
-                Previous
-              </button>
-
-
-              <button
-                type="button"
-                disabled={pageNumber >= numPages}
-                onClick={nextPage}
-              >
-                Next
-              </button>
-
-          </Box>
-
-
-          <Box>
-            <Document
-              file={pdf}
-              onLoadSuccess={onDocumentLoadSuccess}
-            >
-              <Page pageNumber={pageNumber} />
-            </Document>
-          </Box>
-
-
-        </>
-
+        <Box>
+          <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pageNumber} />
+          </Document>
+        </Box>
+      </>
     </Box>
-
   );
 }
-
-
-
-

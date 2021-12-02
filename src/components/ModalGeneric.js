@@ -58,15 +58,187 @@ BootstrapDialogTitle.propTypes = {
 export default function ModalGeneric({
   openModal,
   openProMode,
+  properRuleName,
   ruleName,
   rule,
   handleModal,
   handleProMode,
   handleDataSet,
 }) {
-  const properCase = (stringVal) => {
-    return stringVal.slice(0, 1).toUpperCase() + stringVal.slice(1);
-  };
+  let ruleDialog = rule.map((element, index) => {
+    if (element.constraint_parameter_boolean !== null) {
+      return (
+        <div key={index} className={element.logic_group.split(",").slice(-1)}>
+          <Divider />
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="left"
+            divider={<Divider orientation="vertical" flexItem />}
+          >
+            {/* TWO */}
+            <Box>
+              <TextField
+                label="ID"
+                defaultValue={element.id}
+                fullWidth
+                sx={{
+                  color: "blue",
+                  width: "58px",
+                  padding: "5px",
+                  margin: "5px",
+                }}
+                size="extra-small"
+              />
+            </Box>
+            <FormControlLabel
+              data-testid={`constraint_name${index}`}
+              label={element.constraint_name}
+              control={
+                <div>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography sx={{ padding: "0px 0px 0px 20px" }}>
+                      No
+                    </Typography>
+                    <Switch
+                      checked={element.user_input_boolean}
+                      name="user_input_boolean"
+                      color="success"
+                      onChange={(event) =>
+                        handleDataSet(
+                          index,
+                          event.target.name,
+                          event.target.checked
+                        )
+                      }
+                    />
+                    <Typography sx={{ padding: "0px 20px 0px 0px" }}>
+                      Yes
+                    </Typography>
+                  </Stack>
+                </div>
+              }
+            />
+          </Stack>
+        </div>
+      );
+    } else if (
+      element.constraint_name &&
+      element.constraint_name.includes("distance")
+    ) {
+      return (
+        // THREE
+        <div key={index} className={element.logic_group.split(",").slice(-1)}>
+          <Divider />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              mt: 2,
+            }}
+          >
+            <Box>
+              <TextField
+                label="ID"
+                defaultValue={element.id}
+                sx={{
+                  color: "blue",
+                  width: "58px",
+                  padding: "5px",
+                  margin: "5px",
+                }}
+                size="small"
+              />
+            </Box>
+
+            {/* <Divider orientation="vertical" /> */}
+
+            <Box sx={{ ml: 4 }}>
+              <h3>{element.constraint_name}</h3>
+            </Box>
+
+            {/* DISTANCE INPUT */}
+
+            <Box sx={{ ml: 3 }}>
+              <TextField
+                label="Enter distance"
+                defaultValue={element.user_input_integer}
+                name="user_input_integer"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">nm</InputAdornment>
+                  ),
+                }}
+                sx={{
+                  width: "125px",
+                }}
+                onChange={(event) =>
+                  handleDataSet(index, event.target.name, event.target.value)
+                }
+                size="small"
+              />
+            </Box>
+          </Box>
+        </div>
+      );
+    } else if (
+      element.constraint_name &&
+      element.constraint_name.includes("time")
+    ) {
+      return (
+        <div key={index} className={element.logic_group.split(",").slice(-1)}>
+          <Divider />
+
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Stack spacing={3}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mt: 2,
+                }}
+              >
+                <Box>
+                  <TextField
+                    label="ID"
+                    defaultValue={element.id}
+                    sx={{
+                      color: "blue",
+                      width: "58px",
+                      padding: "5px",
+                      margin: "5px",
+                    }}
+                    size="small"
+                  />
+                </Box>
+                <Box sx={{ ml: 5 }}>
+                  <h3>{element.constraint_name}</h3>
+                </Box>
+
+                {/* DATE PICKER */}
+
+                <Box sx={{ width: "180px", ml: 3 }}>
+                  <DateTimePicker
+                    label="Date & Time"
+                    value={+element.user_input_integer}
+                    openTo="hours"
+                    renderInput={(params) => <TextField {...params} />}
+                    onChange={(event) =>
+                      handleDataSet(
+                        index,
+                        "user_input_integer",
+                        Date.parse(event)
+                      )
+                    }
+                  />
+                </Box>
+              </Box>
+            </Stack>
+          </LocalizationProvider>
+        </div>
+      );
+    }
+  });
 
   let ruleDialogPro = rule.map((element, index) => {
     if (element.constraint_parameter_boolean !== null) {
@@ -79,7 +251,6 @@ export default function ModalGeneric({
               defaultValue={element.id}
               sx={{
                 color: "blue",
-
                 width: "158px",
                 padding: "10px",
                 margin: "5px",
@@ -107,8 +278,6 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
-
-
             <FormControlLabel
               label=""
               labelPlacement="top"
@@ -190,8 +359,6 @@ export default function ModalGeneric({
                 handleDataSet(index, event.target.name, event.target.value)
               }
             />
-
-
             <TextField
               label="Operator"
               defaultValue={element.constraint_operator}
@@ -238,182 +405,6 @@ export default function ModalGeneric({
     }
   });
 
-  let ruleDialog = rule.map((element, index) => {
-    if (element.constraint_parameter_boolean !== null) {
-      return (
-        <div key={index} className={element.logic_group.split(",").slice(-1)}>
-          <Divider />
-          <Stack direction="row" spacing={1} alignItems="left" divider={<Divider orientation="vertical" flexItem />}>
-
-          {/* TWO */}
-          <Box>
-            <TextField
-              label="ID"
-              defaultValue={element.id}
-              fullWidth
-              sx={{
-                color: "blue",
-                width: "58px",
-                padding: "5px",
-                margin: "5px",
-              }}
-              size="extra-small"
-            />
-          </Box>
-            <FormControlLabel
-              data-testid={`constraint_name${index}`}
-              label={element.constraint_name}
-              control={
-                <div>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography sx={{ padding: "0px 0px 0px 20px" }}>
-                      No
-                    </Typography>
-                    <Switch
-                      checked={element.user_input_boolean}
-                      name="user_input_boolean"
-                      color="success"
-                      onChange={(event) =>
-                        handleDataSet(
-                          index,
-                          event.target.name,
-                          event.target.checked
-                        )
-                      }
-                    />
-
-                    <Typography sx={{ padding: "0px 20px 0px 0px" }}>
-                      Yes
-                    </Typography>
-                  </Stack>
-                </div>
-              }
-            />
-          </Stack>
-        </div>
-      );
-    } else if (
-      element.constraint_name &&
-      element.constraint_name.includes("distance")
-    ) {
-      return (
-
-        // THREE
-        <div key={index} className={element.logic_group.split(",").slice(-1)}>
-          <Divider />
-
-          <Box
-            sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  mt: 2
-                }}
-          >
-
-        <Box>
-          <TextField
-            label="ID"
-            defaultValue={element.id}
-            sx={{
-              color: "blue",
-              width: "58px",
-              padding: "5px",
-              margin: "5px",
-            }}
-            size="small"
-          />
-        </Box>
-
-        {/* <Divider orientation="vertical" /> */}
-
-          <Box sx={{ml:4}}>
-            <h3>{element.constraint_name}</h3>
-          </Box>
-
-          {/* DISTANCE INPUT */}
-
-          <Box sx={{ml:3}}>
-            <TextField
-              label="Enter distance"
-              defaultValue={element.user_input_integer}
-              name="user_input_integer"
-              InputProps={{
-                endAdornment: <InputAdornment position="end">nm</InputAdornment>,
-              }}
-              sx={{
-                width: "125px",
-              }}
-              onChange={(event) =>
-                handleDataSet(index, event.target.name, event.target.value)
-              }
-              size="small"
-            />
-          </Box>
-        </Box>
-
-
-        </div>
-      );
-    } else if (
-      element.constraint_name &&
-      element.constraint_name.includes("time")
-    ) {
-      return (
-        <div key={index} className={element.logic_group.split(",").slice(-1)}>
-          <Divider />
-
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-
-          <Box
-            sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  mt: 2
-                }}
-                >
-
-          <Box>
-              <TextField
-                label="ID"
-                defaultValue={element.id}
-                sx={{
-                  color: "blue",
-                  width: "58px",
-                  padding: "5px",
-                  margin: "5px",
-                }}
-                size="small"
-              />
-
-
-          </Box>
-
-        <Box sx={{ml:5}}>
-          <h3>{element.constraint_name}</h3>
-        </Box>
-                {/* DATE PICKER */}
-
-          <Box sx={{width: "180px", ml:3}} >
-              <DateTimePicker
-                label="Date & Time"
-                value={+element.user_input_integer}
-                openTo="hours"
-                renderInput={(params) => <TextField {...params} />}
-                onChange={(event) =>
-                  handleDataSet(index, "user_input_integer", Date.parse(event))
-                }
-              />
-          </Box>
-        </Box>
-
-            </Stack>
-          </LocalizationProvider>
-        </div>
-      );
-    }
-  });
-
   return (
     <BootstrapDialog
       onClose={handleModal}
@@ -425,14 +416,9 @@ export default function ModalGeneric({
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={handleModal}
-        sx={{ minWidth: 1000, bgcolor:"#3e5f6b", color:"white"}}
+        sx={{ minWidth: 1000, bgcolor: "#3e5f6b", color: "white" }}
       >
-
-
-
-        {properCase(ruleName)} Rule
-
-
+        {properRuleName} Rule
       </BootstrapDialogTitle>
       {openProMode ? ruleDialogPro : ruleDialog}
       <br></br>
@@ -467,6 +453,3 @@ export default function ModalGeneric({
     </BootstrapDialog>
   );
 }
-
-
-
