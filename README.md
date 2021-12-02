@@ -1,21 +1,5 @@
-
-
-
-
 This project was created from the create-react-app project which is a ready-made React application starter.
 
-## Get Started
-Install your node modules
-
-`npm i`
-
-Run the app
-
-`npm start`
-
-## run cypress tests locally in container
-
-`docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.4.0 --env configFile=pipeline`
 # 45 SLD Weather App
 
 The purpose of this app is to provide an interactive tool for the weather squadron to utilize as a way to determine whether a weather violation is occurring. There are ten launch commit criteria that must be go for launch prior to T-0. This tool takes in criteria from the NASA 4010 documentation pinpointing the different commit criteria for launch ([NASA 4010](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwilnNOa5qT0AhU1RDABHaWSALcQFnoECAgQAQ&url=https%3A%2F%2Fstandards.nasa.gov%2Fstandard%2Fnasa%2Fnasa-std-4010&usg=AOvVaw0Ha7XD4eqGmsQ5aAiJ-TH0)).
@@ -28,14 +12,39 @@ The purpose of this app is to provide an interactive tool for the weather squadr
 
 * As a user, I want to be able to edit the constraints contained in each of the rules, that way if there are changes to the standards at which weather must be evaluated, the rules of the app can be updated to keep up with those changing standards.
 
-* As a user, I want to
-
 * As a user, I want to be able to easily access the most up-to-date standards in NASA 4010 for clarification on any of the regulations.
 
-* As a user, I want to be able to
-
 # Description
+Upon opening the app, you are placed on the home page with 10 different cards depicting each of the 10 Lightning Launch Commit Criteria.
 
+At the top of the page is the app bar which, going from left to right, has a drop down menu, the Space Force Delta, a small day/night mode icon, and two buttons. The drop down menu is clickable, and will display the two pages of the website. The Space Force symbol is clickable, and will return you to the home page of the website. The light dark mode allows the user to switch between a bright white background, and a dark black background. The two buttons, labeled HOME and NASA TS 4010, link you to the pages of the application. HOME brings you to the home page, and the NASA TS 4010 will link you to the second page of the website where you can find the reference document for all of the Lightning Launch Commit Criteria.
+
+The home page contains 10 cards containing the 10 different rules:
+* The Lightning Rule
+* The Surface Electric Field Rule
+* The Cumulus Cloud Rule
+* The Attached Anvil Cloud Rule
+* The Detached Anvil Cloud Rule
+* The Debris Cloud Rule
+* The Disturbed Weather Rule
+* The Thick Cloud Layers Rule
+* The Smoke Plumes Rule
+* The Triboelectrification Rule
+
+Each card is clickable and when clicked up on, will open up the modal showing all of the questions pertaining to each of the constraints of the rule. Each constraint question will either have a a switch between yes or no, or will have an input for the user to input a value to feed back to the database. At the bottom, there is a toggle switch that allows the user to switch between edit and input modes. Edit mode will allow a user to edit the questions asked in each of the rules, allowing the user to keep up with the changing standards.
+
+Once a user submits a card, the card will change colors depending on whether or not the rule is violated. If the card is green, the rule is not violated. If the card is red, the rule is violated.
+
+Below the app bar at the top left hand side of the home screen, there is a small warning sign icon that denotes the legend for this application. When clicked, this will open up a card showing what the icons on the cards mean:
+
+* The lightning sign denotes that the rule is dependent on Surface Electric Field Mill readings
+* The Clock denotes that rule is time dependent
+* The yellow bar denotes that rule is distance dependent
+* The thermometer denotes that rule is cloud temperature dependent
+* The raindrop denotes that rule is dependent on the intensity of precipitation
+* The speedometer denotes that rule is dependent on the velocity of the launch vehicle
+
+The second page of the application is the PDF viewer page. It displays one page of the NASA Standard 4010 at a time, and has buttons allowing for easy navigation between pages at the top of the document.
 
 
 # Routes to retrieve backend data
@@ -50,6 +59,19 @@ The purpose of this app is to provide an interactive tool for the weather squadr
 * /rules/smoke
 * /rules/thick
 * /rules/tribo
+
+## Get Started
+Install your node modules
+
+`npm i`
+
+Run the app
+
+`npm start`
+
+## run cypress tests locally in container
+
+`docker run -it -v $PWD:/e2e -w /e2e cypress/included:3.4.0 --env configFile=pipeline`
 
 <!-- # Launch Commit Criteria Table Data Rev1
 ## Lightning Rule
