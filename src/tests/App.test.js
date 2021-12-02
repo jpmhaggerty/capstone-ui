@@ -1,13 +1,13 @@
-import RuleGeneric from "../components/RuleGeneric";
-import ModalGeneric from "../components/ModalGeneric";
 import ButtonAppBar from "../components/ButtonAppBar";
-import Home from "../components/Home";
-import { Button } from "@mui/material";
+import ModalGeneric from "../components/ModalGeneric";
 import React from "react";
-import { render, cleanup, fireEvent, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import RuleGeneric from "../components/RuleGeneric";
 import { act } from "react-dom/test-utils";
+import { Button } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
+import { render, cleanup, fireEvent, screen } from "@testing-library/react";
+import Home from "../components/Home";
+import "@testing-library/jest-dom";
 
 const APICallData = [
   //1

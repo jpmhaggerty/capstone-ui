@@ -43,7 +43,7 @@ function Home() {
   ];
 
   return (
-    <body>
+    <div>
       <Button onClick={handleOpen}>
         <IconButton aria-label="fill" sx={{ color: "#9e9e9e" }}>
           <Tooltip title={<Typography fontSize={18}>Legend</Typography>}>
@@ -89,7 +89,7 @@ function Home() {
           ))}
         </Grid>
       </Box>
-    </body>
+    </div>
   );
 }
 
