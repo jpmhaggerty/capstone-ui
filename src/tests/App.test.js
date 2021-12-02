@@ -109,7 +109,7 @@ describe("The RuleGeneric component", () => {
       global.fetch = mockGet(`http://localhost:8080/rules/${rule}`);
     });
 
-    const name = screen.getByText("Smoke");
+    const name = screen.getByText("Smoke Rule");
     expect(name).toBeInTheDocument();
   });
   //2

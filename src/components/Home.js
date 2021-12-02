@@ -52,23 +52,32 @@ function Home() {
         </IconButton>
       </Button>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Legend />
-          </Box>
-        </Box>
-      </Modal>
+    <Grid container sx={{flexShrink: 5}}>
+      <Grid item >
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+
+        <Grid item >
+            <Box sx={style}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  pb:5,
+                  flexShrink: 5
+                }}
+              >
+                <Legend />
+              </Box>
+            </Box>
+          </Grid>
+        </Modal>
+      </Grid>
+    </Grid>
 
       <Box
         data-testid="card-container"
@@ -90,6 +99,7 @@ function Home() {
         </Grid>
       </Box>
     </div>
+
   );
 }
 

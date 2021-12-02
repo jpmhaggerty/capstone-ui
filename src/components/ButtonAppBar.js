@@ -18,7 +18,7 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ overflow: "hidden" }}>
+      <AppBar position="static" sx={{ }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -30,7 +30,7 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
             <TempDrawer />
           </IconButton>
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, mt:1 }}>
             <Link to="/">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/8/86/Patch_of_the_Office_of_the_Chief_of_Space_Operations.png"
@@ -73,7 +73,7 @@ export default function ButtonAppBar({ darkMode, setDarkMode }) {
               sx={{ backgroundColor: "#123540", ml: 1 }}
             >
               {" "}
-              NASA Technical Standard 4010
+              NASA TS 4010
             </Button>
           </Link>
         </Toolbar>

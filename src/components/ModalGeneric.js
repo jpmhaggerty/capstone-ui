@@ -159,7 +159,7 @@ export default function ModalGeneric({
 
             {/* DISTANCE INPUT */}
 
-            <Box sx={{ ml: 3 }}>
+            <Box sx={{ ml: 3, my:1 }}>
               <TextField
                 label="Enter distance"
                 defaultValue={element.user_input_integer}

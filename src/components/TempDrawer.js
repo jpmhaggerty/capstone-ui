@@ -59,7 +59,7 @@ export default function TempDrawer() {
               <ListItemIcon>
                 <DocumentScannerIcon />
               </ListItemIcon>
-              <ListItemText primary="NASA Technical Standard 4010" />
+              <ListItemText primary="NASA TS 4010" />
             </ListItemButton>
           </ListItem>
         </Link>
