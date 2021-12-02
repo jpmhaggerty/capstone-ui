@@ -60,13 +60,13 @@ export default function TempDrawer() {
         </Link>
 
 
-        <Link to="/charts" style={{ textDecoration: "none", color: "black" }}>
+        <Link to="/documents" style={{ textDecoration: "none", color: "black" }}>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <DocumentScannerIcon/>
               </ListItemIcon>
-              <ListItemText primary="Documents" />
+              <ListItemText primary="NASA Technical Standard 4010" />
             </ListItemButton>
           </ListItem>
         </Link>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import pdf from "../pdfs/nasa-std-4010.pdf";
+import Box from "@mui/material/Box";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -27,74 +28,64 @@ export default function PdfViewer() {
 
   return (
 
-    <>
+    <Box
+      sx={{
+        mt:10,
+        border: '4px solid  #123540',
+      }}
+    >
+        <>
 
 
-      <Document
-        file={pdf}
-        onLoadSuccess={onDocumentLoadSuccess}
-      >
-        <Page pageNumber={pageNumber} />
-      </Document>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            bgcolor: "#3e5f6b",
+          }}
+          >
+              <p>
+                Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+              </p>
 
 
-
-      <div>
-        <p>
-          Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-        </p>
-        <button
-          type="button"
-          disabled={pageNumber <= 1}
-          onClick={previousPage}
-        >
-          Previous
-        </button>
-        <button
-          type="button"
-          disabled={pageNumber >= numPages}
-          onClick={nextPage}
-        >
-          Next
-        </button>
-      </div>
+              <button
+                type="button"
+                disabled={pageNumber <= 1}
+                onClick={previousPage}
+              >
+                Previous
+              </button>
 
 
-    </>
+              <button
+                type="button"
+                disabled={pageNumber >= numPages}
+                onClick={nextPage}
+              >
+                Next
+              </button>
+
+          </Box>
+
+
+          <Box>
+            <Document
+              file={pdf}
+              onLoadSuccess={onDocumentLoadSuccess}
+            >
+              <Page pageNumber={pageNumber} />
+            </Document>
+          </Box>
+
+
+        </>
+
+    </Box>
+
   );
 }
 
 
 
-// import { useState } from 'react';
-// import { Document, Page, pdfjs } from 'react-pdf';
-// import pdf from "../pdfs/nasa-std-4010.pdf";
 
-// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
-
-// export default function PdfViewer() {
-//   const [numPages, setNumPages] = useState(null);
-
-//   function onDocumentLoadSuccess({ numPages }) {
-//     setNumPages(numPages);
-//   }
-
-//   return (
-//     <div>
-//       <Document
-//       file={pdf}
-//       onLoadSuccess={onDocumentLoadSuccess}
-//     >
-//       {Array.from(
-//         new Array(numPages),
-//         (el, index) => (
-//           <Page
-//             key={`page_${index + 1}`}
-//             pageNumber={index + 1}
-//           />
-//         ),
-//       )}
-//       </Document>
-//     </div>
-//   );
-// }
